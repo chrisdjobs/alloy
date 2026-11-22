@@ -1,4 +1,4 @@
-package com.example.bars
+package com.dynamjobs.bars
 
 import io.flutter.embedding.android.FlutterActivity
 
