@@ -1,5 +1,6 @@
 import 'package:bars/app/router.dart';
 import 'package:bars/app/theme.dart';
+import 'package:bars/l10n/app_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:material_ui/material_ui.dart';
 
@@ -44,9 +45,15 @@ Future<void> _pumpApp(WidgetTester tester, Size size) async {
 
   await tester.pumpWidget(
     MaterialApp.router(
+      locale: const Locale('en'),
       theme: AppTheme.dark(),
       themeMode: ThemeMode.dark,
       routerConfig: createAppRouter(),
+      localizationsDelegates: const [
+        AppLocalizations.delegate,
+        ...GlobalMaterialLocalizations.delegates,
+      ],
+      supportedLocales: AppLocalizations.supportedLocales,
     ),
   );
   await tester.pumpAndSettle();

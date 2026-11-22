@@ -1,0 +1,39 @@
+{
+  "@@locale": "en",
+  "appTitle": "Bars",
+  "@appTitle": {
+    "description": "Application name"
+  },
+  "libraryTitle": "Library",
+  "@libraryTitle": {
+    "description": "Top-level library destination and screen title"
+  },
+  "settingsTitle": "Settings",
+  "@settingsTitle": {
+    "description": "Top-level settings destination and screen title"
+  },
+  "play": "Play",
+  "@play": {
+    "description": "Playback action"
+  },
+  "pause": "Pause",
+  "@pause": {
+    "description": "Playback action"
+  },
+  "chooseFolder": "Choose folder",
+  "@chooseFolder": {
+    "description": "Action that opens the folder picker"
+  },
+  "scanning": "Scanning…",
+  "@scanning": {
+    "description": "Library scan in progress"
+  },
+  "noTracksFound": "No tracks found",
+  "@noTracksFound": {
+    "description": "Empty library state"
+  },
+  "error": "Error",
+  "@error": {
+    "description": "Generic error title"
+  }
+}

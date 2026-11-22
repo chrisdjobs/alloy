@@ -1,3 +1,4 @@
+import 'package:bars/l10n/app_localizations.dart';
 import 'package:bars/shared/design/app_icons.dart';
 import 'package:bars/shared/design/gradients.dart';
 import 'package:bars/shared/design/text_styles.dart';
@@ -25,6 +26,8 @@ class AdaptiveShell extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final destinations = _destinations(AppLocalizations.of(context));
+
     return LayoutBuilder(
       builder: (context, constraints) {
         final wide = constraints.maxWidth >= shellBreakpoint;
@@ -39,19 +42,19 @@ class AdaptiveShell extends StatelessWidget {
                     selectedIndex: navigationShell.currentIndex,
                     onDestinationSelected: _select,
                     destinations: [
-                      for (var i = 0; i < _destinations.length; i++)
+                      for (var i = 0; i < destinations.length; i++)
                         NavigationRailDestination(
                           icon: _NavPill(
-                            destination: _destinations[i],
+                            destination: destinations[i],
                             selected: false,
                             width: 180,
                           ),
                           selectedIcon: _NavPill(
-                            destination: _destinations[i],
+                            destination: destinations[i],
                             selected: true,
                             width: 180,
                           ),
-                          label: Text(_destinations[i].label.toUpperCase()),
+                          label: Text(destinations[i].label.toUpperCase()),
                         ),
                     ],
                   ),
@@ -68,10 +71,10 @@ class AdaptiveShell extends StatelessWidget {
           bottomNavigationBar: NavigationBar(
             selectedIndex: navigationShell.currentIndex,
             destinations: [
-              for (var i = 0; i < _destinations.length; i++)
+              for (var i = 0; i < destinations.length; i++)
                 Center(
                   child: _NavPill(
-                    destination: _destinations[i],
+                    destination: destinations[i],
                     selected: i == navigationShell.currentIndex,
                     onTap: () => _select(i),
                   ),
@@ -94,18 +97,20 @@ class AdaptiveShell extends StatelessWidget {
   }
 }
 
-const _destinations = [
-  _Destination(
-    label: 'Library',
-    icon: AppIcons.library,
-    selectedIcon: AppIcons.libraryActive,
-  ),
-  _Destination(
-    label: 'Settings',
-    icon: AppIcons.settings,
-    selectedIcon: AppIcons.settingsActive,
-  ),
-];
+List<_Destination> _destinations(AppLocalizations l10n) {
+  return [
+    _Destination(
+      label: l10n.libraryTitle,
+      icon: AppIcons.library,
+      selectedIcon: AppIcons.libraryActive,
+    ),
+    _Destination(
+      label: l10n.settingsTitle,
+      icon: AppIcons.settings,
+      selectedIcon: AppIcons.settingsActive,
+    ),
+  ];
+}
 
 final class _Destination {
   const new({

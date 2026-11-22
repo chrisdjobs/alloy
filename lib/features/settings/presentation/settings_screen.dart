@@ -1,3 +1,4 @@
+import 'package:bars/l10n/app_localizations.dart';
 import 'package:material_ui/material_ui.dart';
 
 /// Settings screen.
@@ -10,6 +11,6 @@ class SettingsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Center(child: Text('Settings'));
+    return Center(child: Text(AppLocalizations.of(context).settingsTitle));
   }
 }

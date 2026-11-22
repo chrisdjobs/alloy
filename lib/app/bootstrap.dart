@@ -1,5 +1,6 @@
 import 'package:bars/app/router.dart';
 import 'package:bars/app/theme.dart';
+import 'package:bars/l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:material_ui/material_ui.dart';
 
@@ -16,10 +17,15 @@ class BarsApp extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return MaterialApp.router(
-      title: 'Bars',
+      onGenerateTitle: (context) => AppLocalizations.of(context).appTitle,
       theme: AppTheme.dark(),
       themeMode: ThemeMode.dark,
       routerConfig: ref.watch(routerProvider),
+      localizationsDelegates: const [
+        AppLocalizations.delegate,
+        ...GlobalMaterialLocalizations.delegates,
+      ],
+      supportedLocales: AppLocalizations.supportedLocales,
       debugShowCheckedModeBanner: false,
     );
   }

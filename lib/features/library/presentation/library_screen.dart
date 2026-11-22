@@ -1,3 +1,4 @@
+import 'package:bars/l10n/app_localizations.dart';
 import 'package:material_ui/material_ui.dart';
 
 /// Library screen.
@@ -9,6 +10,6 @@ class LibraryScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Center(child: Text('Library'));
+    return Center(child: Text(AppLocalizations.of(context).libraryTitle));
   }
 }

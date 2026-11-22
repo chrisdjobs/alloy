@@ -1,0 +1,12 @@
+{
+  "@@locale": "es",
+  "appTitle": "Bars",
+  "libraryTitle": "Biblioteca",
+  "settingsTitle": "Ajustes",
+  "play": "Reproducir",
+  "pause": "Pausar",
+  "chooseFolder": "Elegir carpeta",
+  "scanning": "Escaneando…",
+  "noTracksFound": "No se encontraron pistas",
+  "error": "Error"
+}
