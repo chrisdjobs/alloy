@@ -3,6 +3,7 @@ import 'package:bars/shared/design/app_icons.dart';
 import 'package:bars/shared/design/gradients.dart';
 import 'package:bars/shared/design/text_styles.dart';
 import 'package:bars/shared/design/tokens.dart';
+import 'package:bars/shared/widgets/tbd_placeholder.dart';
 import 'package:go_router/go_router.dart';
 import 'package:material_ui/material_ui.dart';
 
@@ -39,6 +40,10 @@ class AdaptiveShell extends StatelessWidget {
                 SafeArea(
                   right: false,
                   child: NavigationRail(
+                    leading: const Padding(
+                      padding: EdgeInsets.symmetric(vertical: AppSpacing.xl),
+                      child: TbdPlaceholder(width: 48, height: 48),
+                    ),
                     selectedIndex: navigationShell.currentIndex,
                     onDestinationSelected: _select,
                     destinations: [
