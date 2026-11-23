@@ -1,23 +1,22 @@
-# bars
+# Bars
 
-Open source, local-first music player built with Flutter. It plays the music you
-already own, stored on your device. Dark, minimal UI with gradient accents.
-Android and Linux are first-class; the design leaves room for other music
-sources (Jellyfin first) without rewriting the library layer.
+Open source, local-first music player for Android and Linux, built with Flutter.
 
-Working name: `bars` (a codename, it may still change). App id:
-`com.dynamjobs.bars`.
+Bars plays the music you already own: pick one or more folders, scan them, and
+the library lives in a local SQLite database. Dark, minimal UI with gradient
+accents, one identity on every platform.
 
 ## Status
 
-Early scaffold. The app does not play music yet; the skeleton, tooling and
-architecture rules are in place and features are added one at a time.
+Scaffold in progress. The shell, design system and playback engine (Android and
+Linux) are in place; the local library follows. The product definition is in
+[`docs/spec.md`](docs/spec.md).
 
 ## Requirements
 
-- Flutter 3.44+ (Dart 3.12+), stable channel
-- Android: Android SDK and a device or emulator
-- Linux: GTK 3 development headers and CMake
+- Flutter 3.50.x / Dart 3.14 (the toolchain used by the project)
+- Android SDK for Android builds
+- GTK 3 development headers and CMake for Linux builds
 
 ## Setup
 
@@ -30,11 +29,10 @@ flutter gen-l10n
 ## Commands
 
 ```sh
-flutter run -d linux
-flutter run -d <android-device-id>
-flutter test
-flutter analyze
-dart run import_lint
+flutter run -d linux              # run on Linux
+flutter run -d <android-device-id>  # run on Android
+flutter test                      # unit and widget tests
+flutter analyze                   # static analysis
 dart format --set-exit-if-changed .
 ```
 
@@ -46,10 +44,18 @@ dart run build_runner build --delete-conflicting-outputs
 
 ## Architecture
 
-Pragmatic Clean Architecture, feature-first, with domain/data/presentation
-layers inside each feature. The rules are in [`AGENTS.md`](AGENTS.md) and the
-product definition is in [`docs/spec.md`](docs/spec.md). Import rules are
-enforced by `import_lint` (see `analysis_options.yaml`).
+Pragmatic Clean Architecture, feature-first:
+
+- `lib/app/` — bootstrap, router, theme, shell
+- `lib/core/` — shared primitives (`Result`, `Failure`, logger, platform info)
+- `lib/shared/` — design tokens, gradients, reusable widgets
+- `lib/features/<feature>/{domain,data,presentation}` — one folder per feature
+
+Layers point inward: `presentation -> domain <- data`. A feature may import
+another feature's `domain` only. `domain` is pure Dart. Platform differences
+live behind domain interfaces and are wired once in `app/bootstrap`. The rules
+are documented in [`AGENTS.md`](AGENTS.md) and enforced by
+`test/architecture_test.dart`.
 
 ## Contributing
 

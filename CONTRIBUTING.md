@@ -1,56 +1,69 @@
-# Contributing to bars
+# Contributing to Bars
 
-Thanks for helping. Keep changes small and focused, and follow the project
-rules in [`AGENTS.md`](AGENTS.md).
+Thanks for helping. Bars is a small, opinionated Flutter project; reading this
+file before the first pull request saves review time.
 
-## Setup
+## Before you start
+
+- Read [`docs/spec.md`](docs/spec.md) (what the project is) and
+  [`AGENTS.md`](AGENTS.md) (architecture rules and conventions).
+- Android and Linux are first-class. iOS, macOS and Windows are not tested yet:
+  do not block them, but do not spend time on them either.
+- Out of scope: Jellyfin and other remote sources, downloads, metadata
+  enrichment, online lyrics, playlists, favorites, search, equalizer, sync and
+  accounts. Do not add them without an issue that changes the spec first.
+
+## Workflow
+
+1. Open or pick an issue that describes the change.
+2. Create a branch from `main`.
+3. Keep the change small and focused; no drive-by refactors.
+4. Run the checks locally (see below) before pushing.
+5. Open a pull request using Conventional Commits for the title
+   (`feat(player): ...`, `fix(library): ...`, `chore: ...`).
+
+## Commands
 
 ```sh
-flutter pub get
-dart run build_runner build --delete-conflicting-outputs
-flutter gen-l10n
+flutter pub get                                              # dependencies
+dart run build_runner build --delete-conflicting-outputs     # generated code
+flutter gen-l10n                                             # after .arb edits
+dart format --set-exit-if-changed .                          # formatting
+flutter analyze                                              # analyzer
+flutter test                                                 # tests
 ```
 
-## Before you open a PR
-
-Run the same checks as CI, in this order:
-
-```sh
-dart format --set-exit-if-changed .
-flutter analyze
-dart run import_lint
-flutter test
-```
-
-If you touched annotated code (freezed, drift, riverpod_generator), run
-`dart run build_runner build --delete-conflicting-outputs` first. If you
-touched `.arb` files, run `flutter gen-l10n`.
-
-## Architecture rules (summary)
-
-- `presentation` -> `domain` <- `data`; presentation never imports data.
-- A feature may import another feature's `domain` only.
-- `domain` is pure Dart: no Flutter, Drift or platform imports.
-- Platform differences live behind domain interfaces and are wired only in
-  `lib/app/bootstrap.dart`.
-- No hand-written singletons or static mutable state; services are providers.
-- Generated files (`*.g.dart`, `*.freezed.dart`, `*.gr.dart`) are never edited
-  by hand.
-- User-facing strings go through l10n (English and Spanish).
-
-The full list is in [`AGENTS.md`](AGENTS.md).
-
-## Commits
-
-Use [Conventional Commits](https://www.conventionalcommits.org/):
-`feat:`, `fix:`, `docs:`, `test:`, `chore:`, `refactor:`.
+Generated files (`*.g.dart`, `*.freezed.dart`, `*.gr.dart`) are never edited by
+hand; run the generator instead.
 
 ## Pull request checklist
 
-- [ ] `dart format --set-exit-if-changed .` passes
-- [ ] `flutter analyze` passes
-- [ ] `dart run import_lint` passes
+- [ ] `dart format --set-exit-if-changed .` is clean
+- [ ] `flutter analyze` reports no issues
 - [ ] `flutter test` passes
-- [ ] Codegen was re-run if annotated code changed
-- [ ] New user-facing strings are in both `app_en.arb` and `app_es.arb`
-- [ ] No out-of-scope features were added
+- [ ] New behavior has a test (unit test for logic, `testWidgets` for UI)
+- [ ] Architecture rules hold (`test/architecture_test.dart` passes)
+- [ ] User-facing strings go through l10n (`en` and `es`)
+- [ ] Conventional Commits message
+
+## Architecture rules (short version)
+
+- Layers: `presentation -> domain <- data`. Presentation never imports `data`.
+- A feature imports another feature's `domain` only.
+- `domain` is pure Dart: no Flutter, Drift or platform imports.
+- Platform differences live behind domain interfaces and are wired in
+  `app/bootstrap` only.
+- Every music source implements `MusicSource`; library code never assumes a
+  local file path.
+- Domain returns `Result<T>` with sealed `Failure` types, never throws across
+  layer boundaries.
+- State management is Riverpod with code generation. No second approach.
+- No `print`; use the project logger.
+- Colors, spacing, radii and gradients come from `shared/design`.
+
+The full list is in [`AGENTS.md`](AGENTS.md).
+
+## License
+
+By contributing you agree that your contributions are licensed under
+GPL-3.0 (see [`LICENSE`](LICENSE)).
