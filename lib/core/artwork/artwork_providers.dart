@@ -19,12 +19,13 @@ typedef ArtworkRequest = ({ArtworkRef artworkRef, ArtworkSize size});
 
 /// Cover behind [request], loaded off the UI thread and cached.
 ///
-/// Kept alive briefly so scrolling a list does not reload covers it just left,
-/// then released so a large library does not pin every image in memory.
+/// Kept alive for a short scroll window so rows that leave and re-enter the
+/// viewport do not reload; the repository's bounded memory cache absorbs the
+/// rest, so a large library never pins every image in memory.
 @riverpod
 Future<ArtworkVisual?> artworkVisual(Ref ref, ArtworkRequest request) {
   final link = ref.keepAlive();
-  final timer = Timer(const Duration(minutes: 5), link.close);
+  final timer = Timer(const Duration(seconds: 30), link.close);
   ref.onDispose(timer.cancel);
   return ref
       .watch(artworkRepositoryProvider)
