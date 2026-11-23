@@ -12,7 +12,7 @@ void main() {
 
   tearDown(() => database.close());
 
-  test('schema version 1 creates the library tables', () async {
+  test('schema version 2 creates the library tables and index', () async {
     final rows = await database
         .customSelect(
           "SELECT name FROM sqlite_master WHERE type = 'table' ORDER BY name",
@@ -21,6 +21,14 @@ void main() {
     final names = rows.map((row) => row.read<String>('name'));
 
     expect(names, containsAll(['tracks', 'artists', 'albums']));
+
+    final indexes = await database
+        .customSelect(
+          'SELECT name FROM sqlite_master '
+          "WHERE type = 'index' AND name = 'tracks_artwork_ref_idx'",
+        )
+        .get();
+    expect(indexes, hasLength(1));
   });
 
   test('inserts a track and applies date_added default', () async {

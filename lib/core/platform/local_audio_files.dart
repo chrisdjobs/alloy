@@ -14,6 +14,7 @@ class LocalAudioTags {
     this.sampleRateHz,
     this.bitrateKbps,
     this.format,
+    this.artworkRef,
   });
 
   /// Absolute path of the audio file.
@@ -42,6 +43,12 @@ class LocalAudioTags {
 
   /// Container format such as `MP3` or `FLAC`.
   final String? format;
+
+  /// SHA-256 of the embedded or folder cover, when the file has one.
+  ///
+  /// The hash is the opaque artwork reference stored on the track; it lets all
+  /// tracks of one album share a single cached image.
+  final String? artworkRef;
 }
 
 /// Reads tags from local audio files.

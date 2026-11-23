@@ -1,4 +1,4 @@
-import 'package:bars/features/library/domain/artwork_ref.dart';
+import 'package:bars/core/artwork/artwork_ref.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'track.freezed.dart';

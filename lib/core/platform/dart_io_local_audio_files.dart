@@ -1,8 +1,11 @@
 import 'dart:io';
 import 'dart:isolate';
+import 'dart:typed_data';
 
 import 'package:audio_metadata_reader/audio_metadata_reader.dart';
+import 'package:bars/core/platform/cover_files.dart';
 import 'package:bars/core/platform/local_audio_files.dart';
+import 'package:crypto/crypto.dart';
 import 'package:path/path.dart' as p;
 
 /// [LocalAudioFiles] backed by `dart:io` and `audio_metadata_reader`.
@@ -50,14 +53,19 @@ final class DartIoLocalAudioFiles implements LocalAudioFiles {
 }
 
 List<LocalAudioTags> _readTagsInIsolate(List<String> paths) {
-  return [for (final path in paths) _readTags(path)];
+  // Folder fallbacks are read once per folder instead of once per track.
+  final folderCovers = <String, Uint8List?>{};
+  return [for (final path in paths) _readTags(path, folderCovers)];
 }
 
-LocalAudioTags _readTags(String path) {
+LocalAudioTags _readTags(String path, Map<String, Uint8List?> folderCovers) {
   final format = p.extension(path).replaceFirst('.', '').toUpperCase();
   try {
     final metadata = readMetadata(File(path));
     final title = metadata.title?.trim();
+    final cover =
+        embeddedCover(metadata.pictures) ??
+        folderCoverBytes(path, cache: folderCovers);
     return LocalAudioTags(
       path: path,
       title: title == null || title.isEmpty
@@ -73,6 +81,7 @@ LocalAudioTags _readTags(String path) {
           ? null
           : (metadata.bitrate! / 1000).round(),
       format: format.isEmpty ? null : format,
+      artworkRef: _hash(cover),
     );
   } on Exception {
     // Damaged files stay in the library under their file name.
@@ -80,8 +89,13 @@ LocalAudioTags _readTags(String path) {
       path: path,
       title: p.basenameWithoutExtension(path),
       format: format.isEmpty ? null : format,
+      artworkRef: _hash(folderCoverBytes(path, cache: folderCovers)),
     );
   }
+}
+
+String? _hash(Uint8List? cover) {
+  return cover == null ? null : sha256.convert(cover).toString();
 }
 
 String? _clean(String? value) {

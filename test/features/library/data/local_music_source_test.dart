@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:bars/core/artwork/artwork_ref.dart';
 import 'package:bars/core/platform/local_audio_files.dart';
 import 'package:bars/features/library/data/database/app_database.dart';
 import 'package:bars/features/library/data/local_music_source.dart';
@@ -45,6 +46,17 @@ void main() {
     expect(tracks.first.format, 'MP3');
     expect(tracks.first.artworkRef, isNull);
     expect(tracks.last.sampleRateHz, 96000);
+  });
+
+  test('stores the artwork hash read from the tags', () async {
+    files.folders['/music'] = [
+      _tags('/music/a.mp3', title: 'A', artworkRef: 'cover-hash'),
+    ];
+
+    await source.scan('/music').drain<void>();
+    final track = (await source.listTracks().first).single;
+
+    expect(track.artworkRef, const ArtworkRef('cover-hash'));
   });
 
   test('rescanning updates rows instead of duplicating them', () async {
@@ -105,6 +117,7 @@ LocalAudioTags _tags(
   required String title,
   int? trackNumber,
   int? sampleRateHz,
+  String? artworkRef,
 }) {
   return LocalAudioTags(
     path: path,
@@ -116,6 +129,7 @@ LocalAudioTags _tags(
     sampleRateHz: sampleRateHz ?? 44100,
     bitrateKbps: 320,
     format: path.endsWith('.flac') ? 'FLAC' : 'MP3',
+    artworkRef: artworkRef,
   );
 }
 

@@ -19,3 +19,7 @@ CREATE TABLE tracks (
     date_added DATETIME NOT NULL DEFAULT (unixepoch()),
     UNIQUE (source_id, source_item_id)
 ) AS TrackRow;
+
+-- Covers are resolved by hash, so all tracks of one album share one cache
+-- entry. Added in schema version 2; older databases create it in the upgrade.
+CREATE INDEX tracks_artwork_ref_idx ON tracks (artwork_ref);

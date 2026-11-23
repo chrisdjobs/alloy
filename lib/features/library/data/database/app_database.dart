@@ -24,7 +24,7 @@ final class AppDatabase extends _$AppDatabase {
   new withExecutor(super.e);
 
   @override
-  int get schemaVersion => 1;
+  int get schemaVersion => 2;
 
   @override
   MigrationStrategy get migration => buildMigrationStrategy();

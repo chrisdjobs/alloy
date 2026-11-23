@@ -14,3 +14,4 @@ analyzer:
     - windows/**
     - macos/**
     - linux/**
+    - test/generated_migrations/**

@@ -2,15 +2,21 @@ import 'dart:async';
 
 import 'package:bars/app/router.dart';
 import 'package:bars/app/theme.dart';
+import 'package:bars/core/artwork/artwork_providers.dart';
 import 'package:bars/core/logger.dart';
 import 'package:bars/core/platform/audio_permission.dart';
+import 'package:bars/core/platform/dart_io_artwork_store.dart';
 import 'package:bars/core/platform/dart_io_local_audio_files.dart';
+import 'package:bars/core/platform/dart_io_local_cover_reader.dart';
 import 'package:bars/core/platform/dart_io_platform_info.dart';
 import 'package:bars/core/platform/folder_picker.dart';
 import 'package:bars/core/platform/permission_handler_audio_permission.dart';
 import 'package:bars/core/platform/platform_info.dart';
+import 'package:bars/features/library/data/artwork_cache.dart';
+import 'package:bars/features/library/data/artwork_repository_impl.dart';
 import 'package:bars/features/library/data/database/app_database.dart';
 import 'package:bars/features/library/data/library_repository_impl.dart';
+import 'package:bars/features/library/data/local_artwork_source.dart';
 import 'package:bars/features/library/data/local_music_source.dart';
 import 'package:bars/features/library/presentation/library_notifier.dart';
 import 'package:bars/features/player/data/android_playback_engine.dart';
@@ -43,6 +49,13 @@ Future<void> bootstrap() async {
         ? const PermissionHandlerAudioPermission()
         : const GrantedAudioPermission(),
   );
+  final artworkRepository = ArtworkRepositoryImpl(
+    cache: ArtworkCache(store: DartIoArtworkStore()),
+    loadBytes: LocalArtworkSource(
+      database: database,
+      reader: const DartIoLocalCoverReader(),
+    ).coverBytes,
+  );
 
   final engine = await _createEngine(platform, resolveUri: source.resolveUri);
 
@@ -50,6 +63,7 @@ Future<void> bootstrap() async {
     ProviderScope(
       overrides: [
         playbackEngineProvider.overrideWithValue(engine),
+        artworkRepositoryProvider.overrideWithValue(artworkRepository),
         libraryRepositoryProvider.overrideWith((ref) {
           ref.onDispose(() {
             unawaited(libraryRepository.dispose());
