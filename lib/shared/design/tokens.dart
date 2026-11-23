@@ -88,6 +88,11 @@ abstract final class AppRadii {
     Radius.circular(artworkTile),
   );
 
+  /// Large artwork used by the now-playing screen.
+  static const BorderRadius artworkLarge = BorderRadius.all(
+    Radius.circular(lg),
+  );
+
   /// Fully rounded pill.
   static const BorderRadius pill = BorderRadius.all(Radius.circular(999));
 }
@@ -102,4 +107,25 @@ abstract final class AppSizing {
 
   /// Maximum width of the now-playing content on wide layouts.
   static const double nowPlayingMaxWidth = 520;
+
+  /// Diameter of the round play/pause button.
+  static const double nowPlayingPlayButton = 64;
+
+  /// Width of a square icon button in a header row.
+  static const double iconButton = 48;
+
+  /// Vertical distance a downward swipe needs to close the player.
+  static const double nowPlayingDismissDistance = 96;
+
+  /// Thickness of the accent seek bar.
+  static const double seekBarHeight = 3;
+
+  /// Touch target around the seek bar.
+  static const double seekBarTouchHeight = 24;
+}
+
+/// Motion durations shared by the app.
+abstract final class AppDurations {
+  /// Cross-fade of the cover-derived gradient when the track changes.
+  static const Duration gradientFade = Duration(milliseconds: 350);
 }

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:bars/features/player/presentation/mini_player.dart';
 import 'package:bars/l10n/app_localizations.dart';
 import 'package:bars/shared/design/app_icons.dart';
@@ -66,14 +68,14 @@ class AdaptiveShell extends StatelessWidget {
                   ),
                 ),
                 const VerticalDivider(width: 1),
-                Expanded(child: _content()),
+                Expanded(child: _content(context)),
               ],
             ),
           );
         }
 
         return Scaffold(
-          body: _content(),
+          body: _content(context),
           bottomNavigationBar: NavigationBar(
             selectedIndex: navigationShell.currentIndex,
             destinations: [
@@ -92,11 +94,11 @@ class AdaptiveShell extends StatelessWidget {
     );
   }
 
-  Widget _content() {
+  Widget _content(BuildContext context) {
     return Column(
       children: [
         Expanded(child: navigationShell),
-        const MiniPlayer(),
+        MiniPlayer(onOpen: () => unawaited(context.push<void>('/now-playing'))),
       ],
     );
   }

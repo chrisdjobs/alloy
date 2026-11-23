@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:bars/app/shell.dart';
 import 'package:bars/features/library/presentation/library_screen.dart';
+import 'package:bars/features/player/presentation/now_playing_screen.dart';
 import 'package:bars/features/player/presentation/player_notifier.dart';
 import 'package:bars/features/settings/presentation/settings_screen.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -48,6 +49,12 @@ GoRouter createAppRouter() {
             ],
           ),
         ],
+      ),
+      // Above the shell so the mini-player stays put underneath and both
+      // covers can share one Hero.
+      GoRoute(
+        path: '/now-playing',
+        builder: (context, state) => const NowPlayingScreen(),
       ),
     ],
   );

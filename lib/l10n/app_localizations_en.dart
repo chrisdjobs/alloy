@@ -45,6 +45,18 @@ class AppLocalizationsEn extends AppLocalizations {
   String get retry => 'Retry';
 
   @override
+  String get close => 'Close';
+
+  @override
+  String get previous => 'Previous';
+
+  @override
+  String get stopPlayback => 'Stop playback';
+
+  @override
+  String get moreOptions => 'More options';
+
+  @override
   String get nowPlaying => 'Now playing';
 
   @override

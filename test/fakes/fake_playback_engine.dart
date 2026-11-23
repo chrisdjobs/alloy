@@ -74,6 +74,7 @@ final class FakePlaybackEngine implements PlaybackEngine {
       _state.copyWith(
         processingState: PlaybackProcessingState.ready,
         queueIndex: initialIndex,
+        queueLength: tracks.length,
         track: track,
         duration: track.duration,
         position: Duration.zero,

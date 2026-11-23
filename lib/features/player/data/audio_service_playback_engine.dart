@@ -107,6 +107,7 @@ base class AudioServicePlaybackEngine implements PlaybackEngine {
         LoopMode.one => RepeatMode.one,
       },
       queueIndex: index,
+      queueLength: _queue.isEmpty ? null : _queue.length,
       duration: _player.duration ?? track?.duration,
       track: track,
     );

@@ -44,6 +44,22 @@
   "@retry": {
     "description": "Action that tries the failed operation again"
   },
+  "close": "Close",
+  "@close": {
+    "description": "Closes the full-screen player"
+  },
+  "previous": "Previous",
+  "@previous": {
+    "description": "Playback action that goes back to the previous track"
+  },
+  "stopPlayback": "Stop playback",
+  "@stopPlayback": {
+    "description": "Overflow action that stops playback and clears the player"
+  },
+  "moreOptions": "More options",
+  "@moreOptions": {
+    "description": "Opens the menu with secondary player actions"
+  },
   "nowPlaying": "Now playing",
   "@nowPlaying": {
     "description": "Title of the full-screen player"

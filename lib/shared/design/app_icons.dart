@@ -41,6 +41,18 @@ abstract final class AppIcons {
   /// Rescan the library.
   static const IconData refresh = Icons.refresh_rounded;
 
+  /// Collapse the now-playing screen.
+  static const IconData collapse = Icons.keyboard_arrow_down_rounded;
+
+  /// Repeat the queue.
+  static const IconData repeat = Icons.repeat_rounded;
+
+  /// Repeat the current track.
+  static const IconData repeatOne = Icons.repeat_one_rounded;
+
+  /// Stop playback.
+  static const IconData stop = Icons.stop_rounded;
+
   /// Track row overflow menu.
   static const IconData more = Icons.more_vert_rounded;
 }

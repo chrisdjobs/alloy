@@ -165,6 +165,30 @@ abstract class AppLocalizations {
   /// **'Retry'**
   String get retry;
 
+  /// Closes the full-screen player
+  ///
+  /// In en, this message translates to:
+  /// **'Close'**
+  String get close;
+
+  /// Playback action that goes back to the previous track
+  ///
+  /// In en, this message translates to:
+  /// **'Previous'**
+  String get previous;
+
+  /// Overflow action that stops playback and clears the player
+  ///
+  /// In en, this message translates to:
+  /// **'Stop playback'**
+  String get stopPlayback;
+
+  /// Opens the menu with secondary player actions
+  ///
+  /// In en, this message translates to:
+  /// **'More options'**
+  String get moreOptions;
+
   /// Title of the full-screen player
   ///
   /// In en, this message translates to:
