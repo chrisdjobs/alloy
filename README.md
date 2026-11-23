@@ -8,9 +8,10 @@ accents, one identity on every platform.
 
 ## Status
 
-Scaffold in progress. The shell, design system and playback engine (Android and
-Linux) are in place; the local library follows. The product definition is in
-[`docs/spec.md`](docs/spec.md).
+Early development. The shell, design system, playback engine (Android and
+Linux) and the local library (folder scan, SQLite, browse and shuffle all) are
+in place; cover art and the now-playing screen follow. The product definition
+is in [`docs/spec.md`](docs/spec.md).
 
 ## Requirements
 
@@ -22,7 +23,7 @@ Linux) are in place; the local library follows. The product definition is in
 
 ```sh
 flutter pub get
-dart run build_runner build --delete-conflicting-outputs
+dart run build_runner build
 flutter gen-l10n
 ```
 
@@ -32,6 +33,7 @@ flutter gen-l10n
 flutter run -d linux              # run on Linux
 flutter run -d <android-device-id>  # run on Android
 flutter test                      # unit and widget tests
+flutter test --coverage           # tests plus coverage/lcov.info
 flutter analyze                   # static analysis
 dart format --set-exit-if-changed .
 ```
@@ -39,8 +41,12 @@ dart format --set-exit-if-changed .
 Codegen (freezed, drift, riverpod) after changing annotated code:
 
 ```sh
-dart run build_runner build --delete-conflicting-outputs
+dart run build_runner build
+dart run build_runner watch       # keep regenerating while editing
 ```
+
+Generated files are gitignored: run the generator after cloning and in CI.
+After editing `.arb` files, run `flutter gen-l10n` (its output is committed).
 
 ## Architecture
 
@@ -56,6 +62,20 @@ another feature's `domain` only. `domain` is pure Dart. Platform differences
 live behind domain interfaces and are wired once in `app/bootstrap`. The rules
 are documented in [`AGENTS.md`](AGENTS.md) and enforced by
 `test/architecture_test.dart`.
+
+Tests use fakes (playback engine, folder picker, permissions, file tags) and
+in-memory SQLite; they never touch real files, network or time.
+
+## Continuous integration
+
+[`.github/workflows/ci.yaml`](.github/workflows/ci.yaml) runs on pushes and pull
+requests to `main`:
+
+- format check, `flutter analyze` and `flutter test` (which includes the
+  architecture rules)
+- release builds for Linux and the Android APK, uploaded as artifacts
+
+Generated code is not committed, so every job runs `build_runner` first.
 
 ## Contributing
 

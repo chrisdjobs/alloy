@@ -25,16 +25,19 @@ file before the first pull request saves review time.
 ## Commands
 
 ```sh
-flutter pub get                                              # dependencies
-dart run build_runner build --delete-conflicting-outputs     # generated code
-flutter gen-l10n                                             # after .arb edits
-dart format --set-exit-if-changed .                          # formatting
-flutter analyze                                              # analyzer
-flutter test                                                 # tests
+flutter pub get                          # dependencies
+dart run build_runner build              # generated code
+dart run build_runner watch              # regenerate while editing
+flutter gen-l10n                         # after .arb edits
+dart format --set-exit-if-changed .      # formatting
+flutter analyze                          # analyzer
+flutter test                             # tests (includes architecture rules)
+flutter test --coverage                  # tests plus coverage/lcov.info
 ```
 
 Generated files (`*.g.dart`, `*.freezed.dart`, `*.gr.dart`) are never edited by
-hand; run the generator instead.
+hand; they are gitignored, so run the generator after cloning and let CI
+regenerate them.
 
 ## Pull request checklist
 
@@ -45,6 +48,7 @@ hand; run the generator instead.
 - [ ] Architecture rules hold (`test/architecture_test.dart` passes)
 - [ ] User-facing strings go through l10n (`en` and `es`)
 - [ ] Conventional Commits message
+- [ ] The CI workflow is green (format, analyze, tests, Linux and Android builds)
 
 ## Architecture rules (short version)
 
