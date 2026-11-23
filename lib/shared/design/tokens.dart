@@ -31,6 +31,12 @@ abstract final class AppColors {
 
   /// Errors and destructive actions.
   static const Color error = Color(0xFFFF6B6B);
+
+  /// Minimum contrast ratio for text drawn over a cover-derived background.
+  ///
+  /// Not a color, but it belongs with the palette: Phase 6 derives gradients
+  /// from artwork and must keep text readable (WCAG AA for normal text).
+  static const double minCoverTextContrast = 4.5;
 }
 
 /// Spacing scale in logical pixels.
@@ -65,9 +71,35 @@ abstract final class AppRadii {
   /// Large radius, 24 px.
   static const double lg = 24;
 
+  /// Rounded-square artwork tiles (library rows, mini-player, now-playing).
+  static const double artworkTile = 12;
+
   /// Rounded rectangle used by cards.
   static const BorderRadius card = BorderRadius.all(Radius.circular(md));
 
+  /// Rounded rectangle used by artwork tiles.
+  static const BorderRadius artwork = BorderRadius.all(
+    Radius.circular(artworkTile),
+  );
+
   /// Fully rounded pill.
   static const BorderRadius pill = BorderRadius.all(Radius.circular(999));
+}
+
+/// Fixed sizes shared by the player and library surfaces.
+abstract final class AppSizing {
+  /// Cover thumbnail in a library row.
+  static const double coverRow = 56;
+
+  /// Cover thumbnail in the mini-player.
+  static const double coverMiniPlayer = 44;
+
+  /// Maximum width of the now-playing content on wide layouts.
+  static const double nowPlayingMaxWidth = 520;
+
+  /// Blur sigma applied to the tiny cover behind the mini-player.
+  ///
+  /// The cover is pre-blurred once and scaled up; a live `BackdropFilter` over
+  /// scrolling lists is not allowed.
+  static const double miniPlayerBlurRadius = 24;
 }

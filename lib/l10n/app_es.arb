@@ -8,5 +8,16 @@
   "chooseFolder": "Elegir carpeta",
   "scanning": "Escaneando…",
   "noTracksFound": "No se encontraron pistas",
-  "error": "Error"
+  "error": "Error",
+  "next": "Siguiente",
+  "retry": "Reintentar",
+  "nowPlaying": "Reproduciendo ahora",
+  "shuffle": "Aleatorio",
+  "repeat": "Repetir",
+  "repeatOne": "Repetir una",
+  "repeatOff": "Repetir desactivado",
+  "playNext": "Reproducir a continuación",
+  "addToQueue": "Añadir a la cola",
+  "queuePosition": "{position} de {total}",
+  "audioQuality": "{sampleRate} kHz · {bitrate} kbps · {format}"
 }

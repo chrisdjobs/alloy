@@ -37,4 +37,41 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get error => 'Error';
+
+  @override
+  String get next => 'Siguiente';
+
+  @override
+  String get retry => 'Reintentar';
+
+  @override
+  String get nowPlaying => 'Reproduciendo ahora';
+
+  @override
+  String get shuffle => 'Aleatorio';
+
+  @override
+  String get repeat => 'Repetir';
+
+  @override
+  String get repeatOne => 'Repetir una';
+
+  @override
+  String get repeatOff => 'Repetir desactivado';
+
+  @override
+  String get playNext => 'Reproducir a continuación';
+
+  @override
+  String get addToQueue => 'Añadir a la cola';
+
+  @override
+  String queuePosition(int position, int total) {
+    return '$position de $total';
+  }
+
+  @override
+  String audioQuality(String sampleRate, String bitrate, String format) {
+    return '$sampleRate kHz · $bitrate kbps · $format';
+  }
 }

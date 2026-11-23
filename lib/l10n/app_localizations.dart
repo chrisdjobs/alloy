@@ -152,6 +152,72 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Error'**
   String get error;
+
+  /// Playback action that skips to the next track
+  ///
+  /// In en, this message translates to:
+  /// **'Next'**
+  String get next;
+
+  /// Action that tries the failed operation again
+  ///
+  /// In en, this message translates to:
+  /// **'Retry'**
+  String get retry;
+
+  /// Title of the full-screen player
+  ///
+  /// In en, this message translates to:
+  /// **'Now playing'**
+  String get nowPlaying;
+
+  /// Tooltip for the shuffle toggle
+  ///
+  /// In en, this message translates to:
+  /// **'Shuffle'**
+  String get shuffle;
+
+  /// Tooltip for the repeat mode toggle
+  ///
+  /// In en, this message translates to:
+  /// **'Repeat'**
+  String get repeat;
+
+  /// Repeat mode that loops the current track
+  ///
+  /// In en, this message translates to:
+  /// **'Repeat one'**
+  String get repeatOne;
+
+  /// Repeat mode that stops after the queue
+  ///
+  /// In en, this message translates to:
+  /// **'Repeat off'**
+  String get repeatOff;
+
+  /// Queue action that inserts the track after the current one
+  ///
+  /// In en, this message translates to:
+  /// **'Play next'**
+  String get playNext;
+
+  /// Queue action that appends the track to the end
+  ///
+  /// In en, this message translates to:
+  /// **'Add to queue'**
+  String get addToQueue;
+
+  /// Position of the current track inside the queue
+  ///
+  /// In en, this message translates to:
+  /// **'{position} of {total}'**
+  String queuePosition(int position, int total);
+
+  /// Technical line under the seek bar of the now-playing screen
+  ///
+  /// In en, this message translates to:
+  /// **'{sampleRate} kHz · {bitrate} kbps · {format}'**
+  String audioQuality(String sampleRate, String bitrate, String format);
 }
 
 class _AppLocalizationsDelegate

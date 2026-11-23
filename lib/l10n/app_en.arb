@@ -35,5 +35,68 @@
   "error": "Error",
   "@error": {
     "description": "Generic error title"
+  },
+  "next": "Next",
+  "@next": {
+    "description": "Playback action that skips to the next track"
+  },
+  "retry": "Retry",
+  "@retry": {
+    "description": "Action that tries the failed operation again"
+  },
+  "nowPlaying": "Now playing",
+  "@nowPlaying": {
+    "description": "Title of the full-screen player"
+  },
+  "shuffle": "Shuffle",
+  "@shuffle": {
+    "description": "Tooltip for the shuffle toggle"
+  },
+  "repeat": "Repeat",
+  "@repeat": {
+    "description": "Tooltip for the repeat mode toggle"
+  },
+  "repeatOne": "Repeat one",
+  "@repeatOne": {
+    "description": "Repeat mode that loops the current track"
+  },
+  "repeatOff": "Repeat off",
+  "@repeatOff": {
+    "description": "Repeat mode that stops after the queue"
+  },
+  "playNext": "Play next",
+  "@playNext": {
+    "description": "Queue action that inserts the track after the current one"
+  },
+  "addToQueue": "Add to queue",
+  "@addToQueue": {
+    "description": "Queue action that appends the track to the end"
+  },
+  "queuePosition": "{position} of {total}",
+  "@queuePosition": {
+    "description": "Position of the current track inside the queue",
+    "placeholders": {
+      "position": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "audioQuality": "{sampleRate} kHz · {bitrate} kbps · {format}",
+  "@audioQuality": {
+    "description": "Technical line under the seek bar of the now-playing screen",
+    "placeholders": {
+      "sampleRate": {
+        "type": "String"
+      },
+      "bitrate": {
+        "type": "String"
+      },
+      "format": {
+        "type": "String"
+      }
+    }
   }
 }
