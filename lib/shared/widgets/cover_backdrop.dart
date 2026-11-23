@@ -37,23 +37,26 @@ class CoverBackdrop extends ConsumerWidget {
     if (visual == null) return fallback;
 
     final color = Color(visual.backdropColorArgb);
-    return Stack(
-      fit: StackFit.expand,
-      children: [
-        ColoredBox(color: color),
-        ExcludeSemantics(
-          child: ColorFiltered(
-            colorFilter: ColorFilter.mode(color, BlendMode.multiply),
+    // Image.color blends per draw call. ColorFiltered would open a saveLayer
+    // that Impeller expands to the whole clip, painting the fill over the app.
+    return ClipRect(
+      child: Stack(
+        fit: StackFit.expand,
+        children: [
+          ColoredBox(color: color),
+          ExcludeSemantics(
             child: Image.memory(
               visual.backdrop,
               fit: BoxFit.cover,
               gaplessPlayback: true,
               filterQuality: FilterQuality.low,
+              color: color,
+              colorBlendMode: BlendMode.multiply,
             ),
           ),
-        ),
-        const ColoredBox(color: AppColors.backdropScrim),
-      ],
+          const ColoredBox(color: AppColors.backdropScrim),
+        ],
+      ),
     );
   }
 }
