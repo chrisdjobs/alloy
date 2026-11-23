@@ -35,6 +35,12 @@ final class FakePlaybackEngine implements PlaybackEngine {
   /// Number of [skipPrevious] calls.
   int skipPreviousCalls = 0;
 
+  /// Values received by [setShuffle], in order.
+  final List<bool> shuffles = [];
+
+  /// Values received by [setRepeatMode], in order.
+  final List<RepeatMode> repeatModes = [];
+
   /// Positions received by [seek], in order.
   final List<Duration> seeks = [];
 
@@ -139,6 +145,26 @@ final class FakePlaybackEngine implements PlaybackEngine {
 
     skipPreviousCalls++;
     _moveTo((_state.queueIndex ?? 0) - 1);
+    return const Ok<void>(null);
+  }
+
+  @override
+  Future<Result<void>> setShuffle(bool enabled) async {
+    final failure = _takeFailure();
+    if (failure != null) return failure;
+
+    shuffles.add(enabled);
+    _emit(_state.copyWith(shuffle: enabled));
+    return const Ok<void>(null);
+  }
+
+  @override
+  Future<Result<void>> setRepeatMode(RepeatMode mode) async {
+    final failure = _takeFailure();
+    if (failure != null) return failure;
+
+    repeatModes.add(mode);
+    _emit(_state.copyWith(repeatMode: mode));
     return const Ok<void>(null);
   }
 

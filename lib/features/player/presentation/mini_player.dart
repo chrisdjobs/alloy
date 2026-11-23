@@ -1,0 +1,199 @@
+import 'package:bars/features/player/domain/playback_state.dart';
+import 'package:bars/features/player/presentation/player_notifier.dart';
+import 'package:bars/l10n/app_localizations.dart';
+import 'package:bars/shared/design/app_icons.dart';
+import 'package:bars/shared/design/text_styles.dart';
+import 'package:bars/shared/design/tokens.dart';
+import 'package:bars/shared/widgets/no_cover_tile.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:material_ui/material_ui.dart';
+
+/// Compact player pinned to the bottom of the shell.
+///
+/// Hidden while nothing is loaded, so the shell keeps its full height.
+class MiniPlayer extends ConsumerWidget {
+  /// Creates the mini-player.
+  ///
+  /// [leading] and [backdrop] are slots for the artwork pipeline: Phase 6
+  /// passes a cover thumbnail and a pre-blurred cover background. Until then
+  /// they fall back to the no-cover tile and an accent tint.
+  const new({this.leading, this.backdrop, super.key});
+
+  /// Cover slot on the left of the bar.
+  final Widget? leading;
+
+  /// Background slot behind the whole bar.
+  final Widget? backdrop;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final playback = ref.watch(playerProvider);
+
+    return switch (playback) {
+      AsyncValue<PlaybackState>(hasError: true) => _ErrorBar(
+        onRetry: () => ref.invalidate(playerProvider),
+      ),
+      AsyncValue<PlaybackState>(:final value?) when value.track != null =>
+        _PlayerBar(state: value, leading: leading, backdrop: backdrop),
+      _ => const SizedBox.shrink(),
+    };
+  }
+}
+
+class _PlayerBar extends ConsumerWidget {
+  const new({
+    required this.state,
+    required this.leading,
+    required this.backdrop,
+  });
+
+  final PlaybackState state;
+  final Widget? leading;
+  final Widget? backdrop;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context);
+    final notifier = ref.read(playerProvider.notifier);
+    final track = state.track!;
+    final accent = Theme.of(context).colorScheme.primary;
+
+    return DecoratedBox(
+      decoration: const BoxDecoration(
+        border: Border(top: BorderSide(color: AppColors.outline)),
+      ),
+      child: Stack(
+        children: [
+          Positioned.fill(
+            child:
+                backdrop ??
+                DecoratedBox(
+                  decoration: BoxDecoration(
+                    // No real cover blur yet: Phase 6 replaces this slot with
+                    // a pre-blurred cover-derived backdrop.
+                    gradient: LinearGradient(
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                      colors: [
+                        accent.withValues(alpha: 0.16),
+                        AppColors.surfaceHigh,
+                      ],
+                    ),
+                  ),
+                ),
+          ),
+          Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              SizedBox(
+                height: 2,
+                child: LinearProgressIndicator(
+                  value: _progress(state),
+                  backgroundColor: Colors.transparent,
+                  color: accent,
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: AppSpacing.lg,
+                  vertical: AppSpacing.sm,
+                ),
+                child: Row(
+                  children: [
+                    leading ??
+                        const NoCoverTile(size: AppSizing.coverMiniPlayer),
+                    const SizedBox(width: AppSpacing.md),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(
+                            track.title,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: AppTextStyles.body.copyWith(
+                              color: AppColors.textPrimary,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                          if (track.artist != null)
+                            Text(
+                              track.artist!,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: AppTextStyles.label.copyWith(
+                                color: AppColors.textSecondary,
+                                letterSpacing: 0.4,
+                              ),
+                            ),
+                        ],
+                      ),
+                    ),
+                    IconButton.filled(
+                      onPressed: () async {
+                        await notifier.togglePlayPause();
+                      },
+                      tooltip: state.playing ? l10n.pause : l10n.play,
+                      icon: Icon(
+                        state.playing ? AppIcons.pause : AppIcons.play,
+                      ),
+                    ),
+                    IconButton(
+                      onPressed: () async {
+                        await notifier.next();
+                      },
+                      tooltip: l10n.next,
+                      icon: const Icon(AppIcons.next),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  double _progress(PlaybackState state) {
+    final duration = state.duration;
+    if (duration == null || duration.inMilliseconds <= 0) return 0;
+    return (state.position.inMilliseconds / duration.inMilliseconds).clamp(
+      0.0,
+      1.0,
+    );
+  }
+}
+
+class _ErrorBar extends StatelessWidget {
+  const new({required this.onRetry});
+
+  final VoidCallback onRetry;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+
+    return Container(
+      color: AppColors.surfaceHigh,
+      padding: const EdgeInsets.symmetric(
+        horizontal: AppSpacing.lg,
+        vertical: AppSpacing.sm,
+      ),
+      child: Row(
+        children: [
+          const Icon(AppIcons.error, color: AppColors.error, size: 20),
+          const SizedBox(width: AppSpacing.sm),
+          Expanded(
+            child: Text(
+              l10n.error,
+              style: AppTextStyles.body.copyWith(color: AppColors.textPrimary),
+            ),
+          ),
+          TextButton(onPressed: onRetry, child: Text(l10n.retry)),
+        ],
+      ),
+    );
+  }
+}

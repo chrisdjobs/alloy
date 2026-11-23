@@ -1,3 +1,4 @@
+import 'package:bars/features/player/presentation/mini_player.dart';
 import 'package:bars/l10n/app_localizations.dart';
 import 'package:bars/shared/design/app_icons.dart';
 import 'package:bars/shared/design/gradients.dart';
@@ -95,8 +96,7 @@ class AdaptiveShell extends StatelessWidget {
     return Column(
       children: [
         Expanded(child: navigationShell),
-        // The mini-player is inserted here in Phase 3.
-        const SizedBox.shrink(key: Key('mini-player-slot')),
+        const MiniPlayer(),
       ],
     );
   }

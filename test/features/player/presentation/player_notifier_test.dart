@@ -93,6 +93,22 @@ void main() {
     expect(container.read(playerProvider).requireValue.queueIndex, 0);
   });
 
+  test('shuffle and repeat reach the engine and update the state', () async {
+    await container.read(playerProvider.future);
+    final notifier = container.read(playerProvider.notifier);
+
+    await notifier.setShuffle(true);
+    await notifier.setRepeatMode(RepeatMode.one);
+    await pumpEventQueue();
+
+    expect(engine.shuffles, [true]);
+    expect(engine.repeatModes, [RepeatMode.one]);
+
+    final state = container.read(playerProvider).requireValue;
+    expect(state.shuffle, isTrue);
+    expect(state.repeatMode, RepeatMode.one);
+  });
+
   test('a failing command surfaces an AsyncError', () async {
     await container.read(playerProvider.future);
     engine.nextFailure = const Failure.unknown(message: 'broken');

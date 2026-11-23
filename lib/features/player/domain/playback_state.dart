@@ -34,8 +34,22 @@ abstract class PlaybackState with _$PlaybackState {
     @Default(Duration.zero) Duration position,
     @Default(Duration.zero) Duration buffered,
     @Default(1) double speed,
+    @Default(false) bool shuffle,
+    @Default(RepeatMode.off) RepeatMode repeatMode,
     int? queueIndex,
     Duration? duration,
     Track? track,
   }) = _PlaybackState;
+}
+
+/// How the queue behaves after the current track ends.
+enum RepeatMode {
+  /// Stop after the last track.
+  off,
+
+  /// Loop the whole queue.
+  all,
+
+  /// Loop the current track.
+  one,
 }

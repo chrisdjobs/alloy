@@ -42,6 +42,12 @@ abstract interface class PlaybackEngine {
   /// Skips to the previous track in the queue.
   Future<Result<void>> skipPrevious();
 
+  /// Enables or disables shuffle for the current queue.
+  Future<Result<void>> setShuffle(bool enabled);
+
+  /// Sets how playback continues after the current track.
+  Future<Result<void>> setRepeatMode(RepeatMode mode);
+
   /// Releases the platform player.
   Future<void> dispose();
 }

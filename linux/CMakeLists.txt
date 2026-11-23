@@ -74,6 +74,10 @@ set_target_properties(${BINARY_NAME}
 # them to the application.
 include(flutter/generated_plugins.cmake)
 
+# media_kit links mimalloc to avoid its memory leaks; the library package
+# exposes the object file as MIMALLOC_LIB.
+target_link_libraries(${BINARY_NAME} PRIVATE ${MIMALLOC_LIB})
+
 
 # === Installation ===
 # By default, "installing" just makes a relocatable bundle in the build

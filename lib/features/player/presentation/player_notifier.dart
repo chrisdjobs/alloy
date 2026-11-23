@@ -88,6 +88,16 @@ class PlayerNotifier extends _$PlayerNotifier {
     _report(await ref.read(playbackEngineProvider).seek(position));
   }
 
+  /// Enables or disables shuffle for the queue.
+  Future<void> setShuffle(bool enabled) async {
+    _report(await ref.read(playbackEngineProvider).setShuffle(enabled));
+  }
+
+  /// Changes how the queue repeats.
+  Future<void> setRepeatMode(RepeatMode mode) async {
+    _report(await ref.read(playbackEngineProvider).setRepeatMode(mode));
+  }
+
   /// Stops playback.
   Future<void> stop() async {
     _report(await ref.read(playbackEngineProvider).stop());
