@@ -1,9 +1,18 @@
+import 'dart:async';
+
 import 'package:bars/app/router.dart';
 import 'package:bars/app/theme.dart';
 import 'package:bars/core/logger.dart';
+import 'package:bars/core/platform/audio_permission.dart';
+import 'package:bars/core/platform/dart_io_local_audio_files.dart';
 import 'package:bars/core/platform/dart_io_platform_info.dart';
+import 'package:bars/core/platform/folder_picker.dart';
+import 'package:bars/core/platform/permission_handler_audio_permission.dart';
 import 'package:bars/core/platform/platform_info.dart';
-import 'package:bars/features/library/domain/track.dart';
+import 'package:bars/features/library/data/database/app_database.dart';
+import 'package:bars/features/library/data/library_repository_impl.dart';
+import 'package:bars/features/library/data/local_music_source.dart';
+import 'package:bars/features/library/presentation/library_notifier.dart';
 import 'package:bars/features/player/data/android_playback_engine.dart';
 import 'package:bars/features/player/data/audio_handler.dart';
 import 'package:bars/features/player/data/audio_service_playback_engine.dart';
@@ -21,11 +30,34 @@ Future<void> bootstrap() async {
   // Registers media_kit on Linux and Windows; a no-op elsewhere.
   JustAudioMediaKit.ensureInitialized();
 
-  final engine = await _createEngine(const DartIoPlatformInfo());
+  const platform = DartIoPlatformInfo();
+  final database = AppDatabase();
+  final source = LocalMusicSource(
+    database: database,
+    files: const DartIoLocalAudioFiles(),
+  );
+  final libraryRepository = LibraryRepositoryImpl(
+    source: source,
+    folderPicker: const FilePickerFolderPicker(),
+    permission: platform.isAndroid
+        ? const PermissionHandlerAudioPermission()
+        : const GrantedAudioPermission(),
+  );
+
+  final engine = await _createEngine(platform, resolveUri: source.resolveUri);
 
   runApp(
     ProviderScope(
-      overrides: [playbackEngineProvider.overrideWithValue(engine)],
+      overrides: [
+        playbackEngineProvider.overrideWithValue(engine),
+        libraryRepositoryProvider.overrideWith((ref) {
+          ref.onDispose(() {
+            unawaited(libraryRepository.dispose());
+            unawaited(database.close());
+          });
+          return libraryRepository;
+        }),
+      ],
       child: const BarsApp(),
     ),
   );
@@ -35,10 +67,10 @@ Future<void> bootstrap() async {
 ///
 /// If the platform media session cannot start, playback still works without
 /// notification controls instead of failing the whole app.
-Future<PlaybackEngine> _createEngine(PlatformInfo platform) async {
-  // Phase 4 replaces this with MusicSource.resolveUri.
-  Uri resolveUri(Track track) => Uri.file(track.sourceItemId);
-
+Future<PlaybackEngine> _createEngine(
+  PlatformInfo platform, {
+  required TrackUriResolver resolveUri,
+}) async {
   try {
     return switch (platform.platform) {
       AppPlatform.android => await AndroidPlaybackEngine.connect(
