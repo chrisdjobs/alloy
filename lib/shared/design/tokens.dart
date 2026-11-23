@@ -32,6 +32,12 @@ abstract final class AppColors {
   /// Errors and destructive actions.
   static const Color error = Color(0xFFFF6B6B);
 
+  /// Black scrim over a blurred cover.
+  ///
+  /// Darkening the backdrop only improves text contrast, so secondary text
+  /// stays readable on bright covers.
+  static const Color backdropScrim = Color(0x73000000);
+
   /// Minimum contrast ratio for text drawn over a cover-derived background.
   ///
   /// Not a color, but it belongs with the palette: Phase 6 derives gradients
@@ -96,10 +102,4 @@ abstract final class AppSizing {
 
   /// Maximum width of the now-playing content on wide layouts.
   static const double nowPlayingMaxWidth = 520;
-
-  /// Blur sigma applied to the tiny cover behind the mini-player.
-  ///
-  /// The cover is pre-blurred once and scaled up; a live `BackdropFilter` over
-  /// scrolling lists is not allowed.
-  static const double miniPlayerBlurRadius = 24;
 }

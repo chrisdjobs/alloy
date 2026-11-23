@@ -1,17 +1,21 @@
 import 'package:bars/app/theme.dart';
 import 'package:bars/core/artwork/artwork_providers.dart';
 import 'package:bars/core/artwork/artwork_ref.dart';
+import 'package:bars/core/artwork/artwork_visual.dart';
 import 'package:bars/core/failure.dart';
 import 'package:bars/features/library/domain/track.dart';
 import 'package:bars/features/player/presentation/mini_player.dart';
 import 'package:bars/features/player/presentation/player_notifier.dart';
 import 'package:bars/l10n/app_localizations.dart';
+import 'package:bars/shared/design/cover_colors.dart';
 import 'package:bars/shared/widgets/artwork_image.dart';
+import 'package:bars/shared/widgets/cover_backdrop.dart';
 import 'package:bars/shared/widgets/no_cover_tile.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:material_ui/material_ui.dart';
 
+import '../../../fakes/cover_test_image.dart';
 import '../../../fakes/fake_artwork_repository.dart';
 import '../../../fakes/fake_playback_engine.dart';
 
@@ -38,6 +42,27 @@ void main() {
     expect(find.text('Artist'), findsOneWidget);
     expect(find.byType(LinearProgressIndicator), findsOneWidget);
     expect(find.byType(NoCoverTile), findsOneWidget);
+  });
+
+  testWidgets('uses a pre-blurred cover backdrop, not a live filter', (
+    tester,
+  ) async {
+    final artwork = FakeArtworkRepository()
+      ..visuals[const ArtworkRef('cover-hash')] = {
+        ArtworkSize.small: ArtworkVisual(
+          cover: testCoverBytes,
+          backdrop: testCoverBytes,
+          backdropColorArgb: CoverColors.backdropFor(0xFFE0D0B0),
+        ),
+      };
+    await _pump(tester, engine, artworkRepository: artwork);
+    engine.emitTrack(
+      _track().copyWith(artworkRef: const ArtworkRef('cover-hash')),
+    );
+    await tester.pumpAndSettle();
+
+    expect(find.byType(CoverBackdrop), findsOneWidget);
+    expect(find.byType(BackdropFilter), findsNothing);
   });
 
   testWidgets('renders the track cover through ArtworkImage', (tester) async {
@@ -108,12 +133,15 @@ Future<void> _pump(
   FakePlaybackEngine engine, {
   Widget? leading,
   Widget? backdrop,
+  FakeArtworkRepository? artworkRepository,
 }) async {
   await tester.pumpWidget(
     ProviderScope(
       overrides: [
         playbackEngineProvider.overrideWithValue(engine),
-        artworkRepositoryProvider.overrideWithValue(FakeArtworkRepository()),
+        artworkRepositoryProvider.overrideWithValue(
+          artworkRepository ?? FakeArtworkRepository(),
+        ),
       ],
       child: MaterialApp(
         locale: const Locale('en'),

@@ -5,6 +5,7 @@ import 'package:bars/shared/design/app_icons.dart';
 import 'package:bars/shared/design/text_styles.dart';
 import 'package:bars/shared/design/tokens.dart';
 import 'package:bars/shared/widgets/artwork_image.dart';
+import 'package:bars/shared/widgets/cover_backdrop.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:material_ui/material_ui.dart';
 
@@ -66,17 +67,18 @@ class _PlayerBar extends ConsumerWidget {
           Positioned.fill(
             child:
                 backdrop ??
-                DecoratedBox(
-                  decoration: BoxDecoration(
-                    // No real cover blur yet: Phase 6 replaces this slot with
-                    // a pre-blurred cover-derived backdrop.
-                    gradient: LinearGradient(
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                      colors: [
-                        accent.withValues(alpha: 0.16),
-                        AppColors.surfaceHigh,
-                      ],
+                CoverBackdrop(
+                  artworkRef: track.artworkRef,
+                  fallback: DecoratedBox(
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                        colors: [
+                          accent.withValues(alpha: 0.16),
+                          AppColors.surfaceHigh,
+                        ],
+                      ),
                     ),
                   ),
                 ),

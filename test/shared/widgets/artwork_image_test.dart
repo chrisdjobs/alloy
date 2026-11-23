@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:bars/core/artwork/artwork_providers.dart';
 import 'package:bars/core/artwork/artwork_ref.dart';
 import 'package:bars/core/artwork/artwork_visual.dart';
@@ -10,13 +8,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:material_ui/material_ui.dart';
 
+import '../../fakes/cover_test_image.dart';
 import '../../fakes/fake_artwork_repository.dart';
 
 void main() {
-  final cover = base64Decode(
-    'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGA'
-    'hKmMIQAAAABJRU5ErkJggg==',
-  );
+  final cover = testCoverBytes;
 
   testWidgets('a null reference renders the no-cover tile', (tester) async {
     await tester.pumpWidget(
