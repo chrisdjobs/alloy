@@ -1,0 +1,21 @@
+-- Tracks discovered in a music source.
+--
+-- `artwork_ref` is a content hash, never a file path: the artwork pipeline
+-- (Phase 6) populates it and the UI resolves it through the artwork
+-- repository, so a remote source can supply covers later.
+CREATE TABLE tracks (
+    id TEXT NOT NULL PRIMARY KEY,
+    source_id TEXT NOT NULL,
+    source_item_id TEXT NOT NULL,
+    title TEXT NOT NULL,
+    artist TEXT,
+    album TEXT,
+    track_number INTEGER,
+    duration_ms INTEGER,
+    artwork_ref TEXT,
+    sample_rate_hz INTEGER,
+    bitrate_kbps INTEGER,
+    format TEXT,
+    date_added DATETIME NOT NULL DEFAULT (unixepoch()),
+    UNIQUE (source_id, source_item_id)
+) AS TrackRow;

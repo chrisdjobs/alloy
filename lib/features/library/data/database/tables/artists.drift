@@ -1,0 +1,8 @@
+-- Artists derived from track tags.
+--
+-- Kept minimal on purpose: albums and artists become browsable in a later
+-- phase, and migrations 2+ extend this table instead of reshaping tracks.
+CREATE TABLE artists (
+    id TEXT NOT NULL PRIMARY KEY,
+    name TEXT NOT NULL UNIQUE
+) AS ArtistRow;

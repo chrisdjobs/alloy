@@ -1,0 +1,10 @@
+-- Albums derived from track tags.
+--
+-- Kept minimal on purpose: album browsing arrives in a later phase, and
+-- migrations 2+ extend this table instead of reshaping tracks.
+CREATE TABLE albums (
+    id TEXT NOT NULL PRIMARY KEY,
+    title TEXT NOT NULL,
+    artist_name TEXT,
+    UNIQUE (title, artist_name)
+) AS AlbumRow;
