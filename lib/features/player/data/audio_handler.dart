@@ -31,9 +31,6 @@ final class BarsAudioHandler extends BaseAudioHandler
           artist: track.artist,
           album: track.album,
           duration: track.duration,
-          artUri: track.artworkPath == null
-              ? null
-              : Uri.file(track.artworkPath!),
         ),
     ]);
     await player.setAudioSources([

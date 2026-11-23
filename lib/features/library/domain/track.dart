@@ -1,3 +1,4 @@
+import 'package:bars/features/library/domain/artwork_ref.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'track.freezed.dart';
@@ -20,7 +21,10 @@ abstract class Track with _$Track {
     String? album,
     int? trackNumber,
     int? durationMs,
-    String? artworkPath,
+    ArtworkRef? artworkRef,
+    int? sampleRateHz,
+    int? bitrateKbps,
+    String? format,
   }) = _Track;
 }
 
