@@ -3,13 +3,13 @@ import 'package:bars/l10n/app_localizations.dart';
 import 'package:bars/shared/design/app_icons.dart';
 import 'package:bars/shared/design/text_styles.dart';
 import 'package:bars/shared/design/tokens.dart';
-import 'package:bars/shared/widgets/no_cover_tile.dart';
+import 'package:bars/shared/widgets/artwork_image.dart';
 import 'package:material_ui/material_ui.dart';
 
 /// One row of the library list.
 ///
-/// [leading] is the artwork slot: Phase 6 passes an `ArtworkImage` here; until
-/// then it renders the shared no-cover tile.
+/// [leading] is the artwork slot; it defaults to the track's cover and falls
+/// back to the shared no-cover tile.
 class TrackTile extends StatelessWidget {
   /// Creates a row for [track] that calls [onTap] when activated.
   const new({
@@ -25,7 +25,7 @@ class TrackTile extends StatelessWidget {
   /// Opens the track in the player.
   final VoidCallback onTap;
 
-  /// Cover slot; defaults to a [NoCoverTile].
+  /// Cover slot; defaults to the track's [ArtworkImage].
   final Widget? leading;
 
   @override
@@ -42,7 +42,7 @@ class TrackTile extends StatelessWidget {
         ),
         child: Row(
           children: [
-            leading ?? const NoCoverTile(),
+            leading ?? ArtworkImage(artworkRef: track.artworkRef),
             const SizedBox(width: AppSpacing.md),
             Expanded(
               child: Column(

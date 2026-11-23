@@ -1,15 +1,18 @@
 import 'package:bars/app/theme.dart';
+import 'package:bars/core/artwork/artwork_providers.dart';
 import 'package:bars/features/library/domain/music_source.dart';
 import 'package:bars/features/library/domain/track.dart';
 import 'package:bars/features/library/presentation/library_notifier.dart';
 import 'package:bars/features/library/presentation/library_screen.dart';
 import 'package:bars/l10n/app_localizations.dart';
+import 'package:bars/shared/widgets/artwork_image.dart';
 import 'package:bars/shared/widgets/no_cover_tile.dart';
 import 'package:bars/shared/widgets/tbd_placeholder.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:material_ui/material_ui.dart';
 
+import '../../../fakes/fake_artwork_repository.dart';
 import '../../../fakes/fake_library_repository.dart';
 
 void main() {
@@ -73,6 +76,7 @@ void main() {
     expect(find.text('Shuffle all'), findsOneWidget);
     expect(find.text('Alpha'), findsOneWidget);
     expect(find.text('Beta'), findsOneWidget);
+    expect(find.byType(ArtworkImage), findsNWidgets(2));
     expect(find.byType(NoCoverTile), findsNWidgets(2));
   });
 
@@ -155,7 +159,10 @@ Future<void> _pump(
 ) async {
   await tester.pumpWidget(
     ProviderScope(
-      overrides: [libraryRepositoryProvider.overrideWithValue(repository)],
+      overrides: [
+        libraryRepositoryProvider.overrideWithValue(repository),
+        artworkRepositoryProvider.overrideWithValue(FakeArtworkRepository()),
+      ],
       child: MaterialApp(
         locale: const Locale('en'),
         theme: AppTheme.dark(),

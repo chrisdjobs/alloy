@@ -1,14 +1,18 @@
 import 'package:bars/app/theme.dart';
+import 'package:bars/core/artwork/artwork_providers.dart';
+import 'package:bars/core/artwork/artwork_ref.dart';
 import 'package:bars/core/failure.dart';
 import 'package:bars/features/library/domain/track.dart';
 import 'package:bars/features/player/presentation/mini_player.dart';
 import 'package:bars/features/player/presentation/player_notifier.dart';
 import 'package:bars/l10n/app_localizations.dart';
+import 'package:bars/shared/widgets/artwork_image.dart';
 import 'package:bars/shared/widgets/no_cover_tile.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:material_ui/material_ui.dart';
 
+import '../../../fakes/fake_artwork_repository.dart';
 import '../../../fakes/fake_playback_engine.dart';
 
 void main() {
@@ -34,6 +38,16 @@ void main() {
     expect(find.text('Artist'), findsOneWidget);
     expect(find.byType(LinearProgressIndicator), findsOneWidget);
     expect(find.byType(NoCoverTile), findsOneWidget);
+  });
+
+  testWidgets('renders the track cover through ArtworkImage', (tester) async {
+    await _pump(tester, engine);
+    engine.emitTrack(
+      _track().copyWith(artworkRef: const ArtworkRef('cover-hash')),
+    );
+    await tester.pumpAndSettle();
+
+    expect(find.byType(ArtworkImage), findsOneWidget);
   });
 
   testWidgets('custom artwork and backdrop slots are rendered', (tester) async {
@@ -97,7 +111,10 @@ Future<void> _pump(
 }) async {
   await tester.pumpWidget(
     ProviderScope(
-      overrides: [playbackEngineProvider.overrideWithValue(engine)],
+      overrides: [
+        playbackEngineProvider.overrideWithValue(engine),
+        artworkRepositoryProvider.overrideWithValue(FakeArtworkRepository()),
+      ],
       child: MaterialApp(
         locale: const Locale('en'),
         theme: AppTheme.dark(),

@@ -4,7 +4,7 @@ import 'package:bars/l10n/app_localizations.dart';
 import 'package:bars/shared/design/app_icons.dart';
 import 'package:bars/shared/design/text_styles.dart';
 import 'package:bars/shared/design/tokens.dart';
-import 'package:bars/shared/widgets/no_cover_tile.dart';
+import 'package:bars/shared/widgets/artwork_image.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:material_ui/material_ui.dart';
 
@@ -14,9 +14,8 @@ import 'package:material_ui/material_ui.dart';
 class MiniPlayer extends ConsumerWidget {
   /// Creates the mini-player.
   ///
-  /// [leading] and [backdrop] are slots for the artwork pipeline: Phase 6
-  /// passes a cover thumbnail and a pre-blurred cover background. Until then
-  /// they fall back to the no-cover tile and an accent tint.
+  /// [leading] and [backdrop] are slots for the artwork pipeline: they default
+  /// to the track's cover thumbnail and an accent-tinted placeholder.
   const new({this.leading, this.backdrop, super.key});
 
   /// Cover slot on the left of the bar.
@@ -101,7 +100,10 @@ class _PlayerBar extends ConsumerWidget {
                 child: Row(
                   children: [
                     leading ??
-                        const NoCoverTile(size: AppSizing.coverMiniPlayer),
+                        ArtworkImage(
+                          artworkRef: track.artworkRef,
+                          size: AppSizing.coverMiniPlayer,
+                        ),
                     const SizedBox(width: AppSpacing.md),
                     Expanded(
                       child: Column(
