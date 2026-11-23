@@ -15,11 +15,12 @@ Project spec: `docs/spec.md` (what the project is). Read it before planning or c
 
 If the step touches annotated code (freezed, json_serializable, riverpod_generator, drift...): run `dart run build_runner build --delete-conflicting-outputs` first.
 If the step touches `.arb` files: run `flutter gen-l10n`.
-Do not run `flutter run` or release builds (long-running). Ask the user.
 
 ## Environment / network
 - Never use download mirrors (no `FLUTTER_STORAGE_BASE_URL`, no pub mirrors). If pub.dev or Flutter's artifact host is blocked, stop and ask the user; they fix network access with a VPN.
 - Toolchain: Flutter 3.50.1 / Dart 3.14, installed at `~/flutter` (not on `PATH`). Add `~/flutter/bin` per command.
+- Visual work is the exception to the long-running rule: the agent may boot the `Pixel_10_Pro` AVD (`flutter emulators --launch Pixel_10_Pro`) and run `flutter run -d emulator-5554 --pid-file /tmp/opencode/bars.pid --no-devtools` in the background; reload with `kill -USR1 $(cat /tmp/opencode/bars.pid)` (`-USR2` = hot restart) and capture with `tool/visual/shot.sh`. Stop the run when the work is over; never leave it alive.
+- Still ask before release builds and before running anything on the physical phone.
 
 ## Project-specific
 - State management: Riverpod with code generation (`@riverpod`). `Notifier` / `AsyncNotifier` = ViewModel.
@@ -36,6 +37,7 @@ Pragmatic Clean Architecture: feature-first folders, with domain/data/presentati
 - `lib/shared/`: design tokens, reusable widgets
 - `lib/features/<feature>/{data,domain,presentation}`
 - `test/` mirrors `lib/`
+- `tool/visual/`: capture and reload scripts for visual review, not app code
 
 ## Architecture rules
 1. `domain` is pure Dart. No Flutter, Drift or platform imports.
@@ -67,13 +69,16 @@ Layout adapts to width: bottom navigation when compact, sidebar when wide.
 No Cupertino theme. On iOS, only platform behaviors (scroll physics, back swipe).
 Assets that are not designed yet (logo, intro animation, illustrations, custom icons) use the `TbdPlaceholder` widget showing `TBD`. Do not invent brand assets. Functional icons come from `shared/design/app_icons.dart`.
 If `memory/references/` exists, UI tasks start with its `INDEX.md` (and `design-notes.md`). Open screenshots only when needed, and only the relevant ones. Never copy names, logos, icons or assets from them.
+The emulator is the visual source of truth. Every visual change is proven with a before/after capture compared against `memory/references/`, not from memory.
+Visual polish targets Android on the emulator in portrait. Linux and the wide (sidebar) layout wait until the user opens them.
 
 ## Tests
-- Unit tests for logic, widget tests (`testWidgets`) for UI behavior. Name: `<file>_test.dart`.
+- Tests are written on request only. A phase, a feature or a bug fix does not come with tests; the user asks for them explicitly, and the `test` agent writes them. The build agent never adds test files, cases or fakes.
+- `flutter test` stays in Verify as a regression gate. If a layout or visual change breaks an existing assertion, update or remove that assertion; never add cases to make a step look defended.
 - Prefer fakes over mocks. A `FakePlaybackEngine` for player tests, in-memory Drift for repositories. No real network or real time.
-- Bug fixes get a regression test when feasible.
 
 ## Don't
+- Do not write tests unless asked.
 - Do not implement features that were not requested. Do not refactor outside the task.
 - Do not add Jellyfin, downloads, or metadata and online-lyrics services unless asked.
 - Do not build anything related to Sync, even if it appears in the reference screenshots.
