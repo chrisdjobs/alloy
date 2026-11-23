@@ -218,6 +218,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{sampleRate} kHz · {bitrate} kbps · {format}'**
   String audioQuality(String sampleRate, String bitrate, String format);
+
+  /// Library action that plays the whole library in random order
+  ///
+  /// In en, this message translates to:
+  /// **'Shuffle all'**
+  String get shuffleAll;
+
+  /// Tooltip for the action that scans the last folder again
+  ///
+  /// In en, this message translates to:
+  /// **'Rescan library'**
+  String get rescanLibrary;
 }
 
 class _AppLocalizationsDelegate

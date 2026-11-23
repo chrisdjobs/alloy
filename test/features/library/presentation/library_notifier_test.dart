@@ -69,6 +69,17 @@ void main() {
     expect(state.error, isA<PermissionFailure>());
   });
 
+  test('a build error surfaces an error state', () async {
+    repository.initialError = StateError('database gone');
+
+    await expectLater(
+      container.read(libraryProvider.future),
+      throwsA(isA<StateError>()),
+    );
+    await pumpEventQueue();
+    expect(container.read(libraryProvider).hasError, isTrue);
+  });
+
   test('a track stream error surfaces an error state', () async {
     await container.read(libraryProvider.future);
 

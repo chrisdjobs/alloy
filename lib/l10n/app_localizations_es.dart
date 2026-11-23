@@ -74,4 +74,10 @@ class AppLocalizationsEs extends AppLocalizations {
   String audioQuality(String sampleRate, String bitrate, String format) {
     return '$sampleRate kHz · $bitrate kbps · $format';
   }
+
+  @override
+  String get shuffleAll => 'Aleatorio';
+
+  @override
+  String get rescanLibrary => 'Volver a escanear la biblioteca';
 }

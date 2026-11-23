@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math';
 
 import 'package:bars/core/logger.dart';
 import 'package:bars/core/result.dart';
@@ -62,6 +63,20 @@ class PlayerNotifier extends _$PlayerNotifier {
     final loaded = await engine.loadQueue(tracks, initialIndex: index);
     _report(loaded);
     if (loaded.isErr) return;
+    _report(await engine.play());
+  }
+
+  /// Loads [tracks] in shuffle mode, starting at a random track.
+  Future<void> shuffleAll(List<Track> tracks) async {
+    if (tracks.isEmpty) return;
+    final engine = ref.read(playbackEngineProvider);
+    final loaded = await engine.loadQueue(
+      tracks,
+      initialIndex: Random().nextInt(tracks.length),
+    );
+    _report(loaded);
+    if (loaded.isErr) return;
+    _report(await engine.setShuffle(true));
     _report(await engine.play());
   }
 

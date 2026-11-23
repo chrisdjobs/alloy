@@ -19,5 +19,7 @@
   "playNext": "Reproducir a continuación",
   "addToQueue": "Añadir a la cola",
   "queuePosition": "{position} de {total}",
-  "audioQuality": "{sampleRate} kHz · {bitrate} kbps · {format}"
+  "audioQuality": "{sampleRate} kHz · {bitrate} kbps · {format}",
+  "shuffleAll": "Aleatorio",
+  "rescanLibrary": "Volver a escanear la biblioteca"
 }

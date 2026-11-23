@@ -34,4 +34,13 @@ abstract final class AppIcons {
 
   /// Error state.
   static const IconData error = Icons.error_outline_rounded;
+
+  /// Shuffle playback.
+  static const IconData shuffle = Icons.shuffle_rounded;
+
+  /// Rescan the library.
+  static const IconData refresh = Icons.refresh_rounded;
+
+  /// Track row overflow menu.
+  static const IconData more = Icons.more_vert_rounded;
 }

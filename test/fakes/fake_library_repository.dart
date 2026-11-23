@@ -28,9 +28,19 @@ final class FakeLibraryRepository implements LibraryRepository {
   /// Whether [dispose] ran.
   bool disposed = false;
 
+  /// When true, [tracksStream] never emits the initial tracks.
+  bool neverEmits = false;
+
+  /// When set, [tracksStream] fails before emitting anything.
+  Object? initialError;
+
   @override
   Stream<List<Track>> tracksStream() async* {
-    yield tracks;
+    if (initialError != null) {
+      yield* Stream.error(initialError!);
+      return;
+    }
+    if (!neverEmits) yield tracks;
     yield* _tracks.stream;
   }
 

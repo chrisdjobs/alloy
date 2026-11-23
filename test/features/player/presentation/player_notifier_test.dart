@@ -45,6 +45,30 @@ void main() {
     expect(state.track?.id, 'b');
   });
 
+  test('shuffleAll loads the queue, enables shuffle and plays', () async {
+    await container.read(playerProvider.future);
+    final tracks = [_track('a'), _track('b'), _track('c')];
+
+    await container.read(playerProvider.notifier).shuffleAll(tracks);
+    await pumpEventQueue();
+
+    expect(engine.queue, tracks);
+    expect(engine.initialIndex, inInclusiveRange(0, tracks.length - 1));
+    expect(engine.shuffles, [true]);
+    expect(engine.playCalls, 1);
+  });
+
+  test('shuffleAll ignores an empty library', () async {
+    await container.read(playerProvider.future);
+
+    await container.read(playerProvider.notifier).shuffleAll([]);
+    await pumpEventQueue();
+
+    expect(engine.queue, isEmpty);
+    expect(engine.shuffles, isEmpty);
+    expect(engine.playCalls, 0);
+  });
+
   test('merges position and track events into the state', () async {
     await container.read(playerProvider.future);
 

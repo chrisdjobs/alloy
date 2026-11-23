@@ -1,5 +1,8 @@
+import 'dart:async';
+
 import 'package:bars/app/shell.dart';
 import 'package:bars/features/library/presentation/library_screen.dart';
+import 'package:bars/features/player/presentation/player_notifier.dart';
 import 'package:bars/features/settings/presentation/settings_screen.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -17,7 +20,22 @@ GoRouter createAppRouter() {
             routes: [
               GoRoute(
                 path: '/library',
-                builder: (context, state) => const LibraryScreen(),
+                builder: (context, state) => Consumer(
+                  builder: (context, ref, _) => LibraryScreen(
+                    onPlay: (tracks, index) {
+                      unawaited(
+                        ref
+                            .read(playerProvider.notifier)
+                            .loadQueueAndPlay(tracks, index),
+                      );
+                    },
+                    onShuffleAll: (tracks) {
+                      unawaited(
+                        ref.read(playerProvider.notifier).shuffleAll(tracks),
+                      );
+                    },
+                  ),
+                ),
               ),
             ],
           ),

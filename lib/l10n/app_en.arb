@@ -98,5 +98,13 @@
         "type": "String"
       }
     }
+  },
+  "shuffleAll": "Shuffle all",
+  "@shuffleAll": {
+    "description": "Library action that plays the whole library in random order"
+  },
+  "rescanLibrary": "Rescan library",
+  "@rescanLibrary": {
+    "description": "Tooltip for the action that scans the last folder again"
   }
 }
