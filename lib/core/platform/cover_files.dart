@@ -24,7 +24,10 @@ Uint8List? embeddedCover(List<Picture> pictures) {
 /// Failures are expected for damaged files and simply mean "no cover".
 Uint8List? readEmbeddedCover(String audioFilePath) {
   try {
-    return embeddedCover(readMetadata(File(audioFilePath)).pictures);
+    // The reader skips embedded images unless asked, and covers are the point.
+    return embeddedCover(
+      readMetadata(File(audioFilePath), getImage: true).pictures,
+    );
   } on Exception {
     return null;
   }

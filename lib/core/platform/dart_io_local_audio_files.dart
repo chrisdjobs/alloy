@@ -61,7 +61,8 @@ List<LocalAudioTags> _readTagsInIsolate(List<String> paths) {
 LocalAudioTags _readTags(String path, Map<String, Uint8List?> folderCovers) {
   final format = p.extension(path).replaceFirst('.', '').toUpperCase();
   try {
-    final metadata = readMetadata(File(path));
+    // Covers are the reason to read tags; the reader skips images by default.
+    final metadata = readMetadata(File(path), getImage: true);
     final title = metadata.title?.trim();
     final cover =
         embeddedCover(metadata.pictures) ??
