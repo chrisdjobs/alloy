@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:bars/core/failure.dart';
 import 'package:bars/core/platform/audio_permission.dart';
 import 'package:bars/core/platform/folder_picker.dart';
+import 'package:bars/core/platform/folder_store.dart';
 import 'package:bars/core/result.dart';
 import 'package:bars/features/library/domain/library_repository.dart';
 import 'package:bars/features/library/domain/music_source.dart';
@@ -15,6 +16,7 @@ final class LibraryRepositoryImpl implements LibraryRepository {
     required this.source,
     required this.folderPicker,
     required this.permission,
+    required this.folderStore,
   });
 
   /// Source that scans and stores tracks.
@@ -25,6 +27,9 @@ final class LibraryRepositoryImpl implements LibraryRepository {
 
   /// Runtime permission needed before reading audio files.
   final AudioPermission permission;
+
+  /// Remembers the scanned folder, so a restart can rescan without the picker.
+  final FolderStore folderStore;
 
   final _scanProgress = StreamController<ScanProgress>.broadcast();
   String? _lastFolder;
@@ -55,10 +60,17 @@ final class LibraryRepositoryImpl implements LibraryRepository {
   }
 
   @override
-  Future<Result<void>> triggerScan() {
-    final folder = _lastFolder;
-    if (folder == null) return scanFolder();
-    return _scan(folder);
+  Future<Result<void>> triggerScan() async {
+    final remembered = _lastFolder ?? await folderStore.read();
+    if (remembered == null) return await scanFolder();
+    final result = await _scan(remembered);
+    // A folder that no longer exists must not trap every rescan; forget it so
+    // the next tap opens the picker again.
+    if (result.failureOrNull is IoFailure) {
+      _lastFolder = null;
+      await folderStore.clear();
+    }
+    return result;
   }
 
   /// Releases the progress stream.
@@ -85,6 +97,7 @@ final class LibraryRepositoryImpl implements LibraryRepository {
       }
 
       _lastFolder = folder;
+      await folderStore.save(folder);
       var latest = const ScanProgress(filesFound: 0, filesRead: 0);
       try {
         await for (final progress in source.scan(folder)) {

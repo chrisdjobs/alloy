@@ -6,6 +6,7 @@ import 'package:bars/core/artwork/artwork_providers.dart';
 import 'package:bars/core/logger.dart';
 import 'package:bars/core/platform/audio_permission.dart';
 import 'package:bars/core/platform/dart_io_artwork_store.dart';
+import 'package:bars/core/platform/dart_io_folder_store.dart';
 import 'package:bars/core/platform/dart_io_local_audio_files.dart';
 import 'package:bars/core/platform/dart_io_local_cover_reader.dart';
 import 'package:bars/core/platform/dart_io_platform_info.dart';
@@ -48,6 +49,7 @@ Future<void> bootstrap() async {
     permission: platform.isAndroid
         ? const PermissionHandlerAudioPermission()
         : const GrantedAudioPermission(),
+    folderStore: const DartIoFolderStore(),
   );
   final artworkRepository = ArtworkRepositoryImpl(
     cache: ArtworkCache(store: DartIoArtworkStore()),

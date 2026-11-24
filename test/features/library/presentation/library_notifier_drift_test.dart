@@ -1,3 +1,4 @@
+import 'package:bars/core/platform/folder_store.dart';
 import 'package:bars/core/platform/local_audio_files.dart';
 import 'package:bars/features/library/data/database/app_database.dart';
 import 'package:bars/features/library/data/library_repository_impl.dart';
@@ -27,6 +28,7 @@ void main() {
       source: LocalMusicSource(database: database, files: files),
       folderPicker: picker,
       permission: FakeAudioPermission(),
+      folderStore: const NoopFolderStore(),
     );
     container = ProviderContainer.test(
       overrides: [libraryRepositoryProvider.overrideWithValue(repository)],
