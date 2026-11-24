@@ -86,6 +86,9 @@ abstract final class AppRadii {
   /// Rounded rectangle used by cards.
   static const BorderRadius card = BorderRadius.all(Radius.circular(md));
 
+  /// Larger corner radius for floating cards, such as the mini-player.
+  static const BorderRadius cardLarge = BorderRadius.all(Radius.circular(lg));
+
   /// Rounded rectangle used by artwork tiles.
   static const BorderRadius artwork = BorderRadius.all(
     Radius.circular(artworkTile),
@@ -103,7 +106,10 @@ abstract final class AppRadii {
 /// Fixed sizes shared by the player and library surfaces.
 abstract final class AppSizing {
   /// Cover thumbnail in a library row.
-  static const double coverRow = 56;
+  static const double coverRow = 48;
+
+  /// Height of a library row, cover included.
+  static const double trackRow = 58;
 
   /// Cover thumbnail in the mini-player.
   static const double coverMiniPlayer = 44;

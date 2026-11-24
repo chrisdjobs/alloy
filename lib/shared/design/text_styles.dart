@@ -33,6 +33,22 @@ abstract final class AppTextStyles {
     fontWeight: FontWeight.w400,
   );
 
+  /// Title of a track in a list row.
+  static const TextStyle trackTitle = TextStyle(
+    fontSize: 16,
+    height: 1.25,
+    fontWeight: FontWeight.w600,
+    letterSpacing: -0.1,
+  );
+
+  /// Artist line under a track title.
+  static const TextStyle trackArtist = TextStyle(
+    fontSize: 13,
+    height: 1.3,
+    fontWeight: FontWeight.w400,
+    letterSpacing: 0.2,
+  );
+
   /// Uppercase labels and captions.
   static const TextStyle label = TextStyle(
     fontSize: 11,

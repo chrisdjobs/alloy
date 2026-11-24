@@ -36,58 +36,56 @@ class TrackTile extends StatelessWidget {
     return InkWell(
       onTap: onTap,
       child: Padding(
-        padding: const EdgeInsets.symmetric(
-          horizontal: AppSpacing.lg,
-          vertical: AppSpacing.sm,
-        ),
-        child: Row(
-          children: [
-            leading ?? ArtworkImage(artworkRef: track.artworkRef),
-            const SizedBox(width: AppSpacing.md),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    track.title,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: AppTextStyles.body.copyWith(
-                      color: AppColors.textPrimary,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                  if (track.artist != null)
+        padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg),
+        child: SizedBox(
+          height: AppSizing.trackRow,
+          child: Row(
+            children: [
+              leading ?? ArtworkImage(artworkRef: track.artworkRef),
+              const SizedBox(width: AppSpacing.md),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
                     Text(
-                      track.artist!,
+                      track.title,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
-                      style: AppTextStyles.label.copyWith(
-                        color: AppColors.textSecondary,
-                        letterSpacing: 0.4,
+                      style: AppTextStyles.trackTitle.copyWith(
+                        color: AppColors.textPrimary,
                       ),
                     ),
+                    if (track.artist != null)
+                      Text(
+                        track.artist!,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: AppTextStyles.trackArtist.copyWith(
+                          color: AppColors.textSecondary,
+                        ),
+                      ),
+                  ],
+                ),
+              ),
+              PopupMenuButton<_TrackAction>(
+                icon: const Icon(AppIcons.more),
+                onSelected: (_) => onTap(),
+                itemBuilder: (context) => [
+                  PopupMenuItem(
+                    value: _TrackAction.play,
+                    child: Row(
+                      children: [
+                        Icon(AppIcons.play, size: 18, color: accent),
+                        const SizedBox(width: AppSpacing.sm),
+                        Text(l10n.play),
+                      ],
+                    ),
+                  ),
                 ],
               ),
-            ),
-            PopupMenuButton<_TrackAction>(
-              icon: const Icon(AppIcons.more),
-              onSelected: (_) => onTap(),
-              itemBuilder: (context) => [
-                PopupMenuItem(
-                  value: _TrackAction.play,
-                  child: Row(
-                    children: [
-                      Icon(AppIcons.play, size: 18, color: accent),
-                      const SizedBox(width: AppSpacing.sm),
-                      Text(l10n.play),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
