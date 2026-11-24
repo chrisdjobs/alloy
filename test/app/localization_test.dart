@@ -38,6 +38,6 @@ void main() {
 
     expect(find.text('Biblioteca'), findsOneWidget);
     expect(find.text('BIBLIOTECA'), findsOneWidget);
-    expect(find.text('AJUSTES'), findsOneWidget);
+    expect(find.text('YO'), findsOneWidget);
   });
 }

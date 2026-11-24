@@ -3,6 +3,7 @@ import 'package:bars/app/theme.dart';
 import 'package:bars/features/player/presentation/mini_player.dart';
 import 'package:bars/features/player/presentation/player_notifier.dart';
 import 'package:bars/l10n/app_localizations.dart';
+import 'package:bars/shared/design/app_icons.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:material_ui/material_ui.dart';
@@ -18,11 +19,14 @@ void main() {
   testWidgets('uses bottom navigation when compact', (tester) async {
     await _pumpApp(tester, const Size(400, 800), engine);
 
-    expect(find.byType(NavigationBar), findsOneWidget);
+    expect(find.byType(NavigationBar), findsNothing);
     expect(find.byType(NavigationRail), findsNothing);
     expect(find.text('Library'), findsOneWidget);
     expect(find.text('LIBRARY'), findsOneWidget);
-    expect(find.text('SETTINGS'), findsOneWidget);
+    expect(find.byIcon(AppIcons.home), findsOneWidget);
+    expect(find.byIcon(AppIcons.discover), findsOneWidget);
+    expect(find.byIcon(AppIcons.library), findsOneWidget);
+    expect(find.byIcon(AppIcons.me), findsOneWidget);
     expect(find.byType(MiniPlayer), findsOneWidget);
   });
 
@@ -32,14 +36,14 @@ void main() {
     expect(find.byType(NavigationRail), findsOneWidget);
     expect(find.byType(NavigationBar), findsNothing);
     expect(find.text('LIBRARY'), findsWidgets);
-    expect(find.text('SETTINGS'), findsWidgets);
+    expect(find.text('ME'), findsWidgets);
     expect(find.byType(MiniPlayer), findsOneWidget);
   });
 
   testWidgets('switches to the settings branch', (tester) async {
     await _pumpApp(tester, const Size(400, 800), engine);
 
-    await tester.tap(find.text('SETTINGS'));
+    await tester.tap(find.byIcon(AppIcons.me));
     await tester.pumpAndSettle();
 
     expect(find.text('Settings'), findsOneWidget);

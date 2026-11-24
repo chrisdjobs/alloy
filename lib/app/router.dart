@@ -1,6 +1,8 @@
 import 'dart:async';
 
 import 'package:bars/app/shell.dart';
+import 'package:bars/features/discover/presentation/discover_screen.dart';
+import 'package:bars/features/home/presentation/home_screen.dart';
 import 'package:bars/features/library/presentation/library_screen.dart';
 import 'package:bars/features/player/presentation/now_playing_screen.dart';
 import 'package:bars/features/player/presentation/player_notifier.dart';
@@ -9,14 +11,33 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 /// Builds the app router with one branch per top-level destination.
-GoRouter createAppRouter() {
+///
+/// Branches follow `AppTab.values` order, so the shell can map a tab to its
+/// branch index.
+GoRouter createAppRouter({String initialLocation = '/library'}) {
   return GoRouter(
-    initialLocation: '/library',
+    initialLocation: initialLocation,
     routes: [
       StatefulShellRoute.indexedStack(
         builder: (context, state, navigationShell) =>
             AdaptiveShell(navigationShell: navigationShell),
         branches: [
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: '/home',
+                builder: (context, state) => const HomeScreen(),
+              ),
+            ],
+          ),
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: '/discover',
+                builder: (context, state) => const DiscoverScreen(),
+              ),
+            ],
+          ),
           StatefulShellBranch(
             routes: [
               GoRoute(

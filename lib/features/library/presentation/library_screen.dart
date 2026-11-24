@@ -2,9 +2,10 @@ import 'package:bars/features/library/domain/track.dart';
 import 'package:bars/features/library/presentation/library_notifier.dart';
 import 'package:bars/features/library/presentation/track_tile.dart';
 import 'package:bars/l10n/app_localizations.dart';
-import 'package:bars/shared/design/app_icons.dart';
 import 'package:bars/shared/design/text_styles.dart';
 import 'package:bars/shared/design/tokens.dart';
+import 'package:bars/shared/design/visual_theme.dart';
+import 'package:bars/shared/widgets/bars_page_header.dart';
 import 'package:bars/shared/widgets/tbd_placeholder.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:material_ui/material_ui.dart';
@@ -41,27 +42,17 @@ class LibraryScreen extends ConsumerWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Padding(
-            padding: const EdgeInsets.fromLTRB(
-              AppSpacing.page,
-              AppSpacing.md,
-              AppSpacing.page,
-              AppSpacing.lg,
-            ),
-            child: Row(
-              children: [
-                Expanded(
-                  child: Text(l10n.libraryTitle, style: AppTextStyles.headline),
-                ),
-                IconButton(
-                  onPressed: () async {
-                    await notifier.triggerScan();
-                  },
-                  tooltip: l10n.rescanLibrary,
-                  icon: const Icon(AppIcons.refresh),
-                ),
-              ],
-            ),
+          BarsPageHeader(
+            title: l10n.libraryTitle,
+            actions: [
+              IconButton(
+                onPressed: () async {
+                  await notifier.triggerScan();
+                },
+                tooltip: l10n.rescanLibrary,
+                icon: Icon(context.icons.refresh),
+              ),
+            ],
           ),
           const _LibraryTabs(),
           if (scanning) const _ScanBanner(),
