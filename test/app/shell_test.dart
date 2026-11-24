@@ -46,7 +46,7 @@ void main() {
     await tester.tap(find.byIcon(AppIcons.me));
     await tester.pumpAndSettle();
 
-    expect(find.text('Settings'), findsOneWidget);
+    expect(find.text('Appearance'), findsOneWidget);
     expect(find.text('Library'), findsNothing);
   });
 }

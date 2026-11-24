@@ -134,6 +134,16 @@ class AppLocalizationsEs extends AppLocalizations {
   }
 
   @override
+  String libraryStats(String tracks, String albums) {
+    return '$tracks · $albums';
+  }
+
+  @override
+  String musicFoldersSummary(String tracks) {
+    return 'Carpetas · $tracks';
+  }
+
+  @override
   String get meTitle => 'Yo';
 
   @override

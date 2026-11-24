@@ -151,6 +151,27 @@
       }
     }
   },
+  "libraryStats": "{tracks} · {albums}",
+  "@libraryStats": {
+    "description": "Line under the app name with the size of the library",
+    "placeholders": {
+      "tracks": {
+        "type": "String"
+      },
+      "albums": {
+        "type": "String"
+      }
+    }
+  },
+  "musicFoldersSummary": "Folders · {tracks}",
+  "@musicFoldersSummary": {
+    "description": "Subtitle of the music and storage row",
+    "placeholders": {
+      "tracks": {
+        "type": "String"
+      }
+    }
+  },
   "meTitle": "Me",
   "@meTitle": {
     "description": "Label of the settings hub destination in the navigation bar"

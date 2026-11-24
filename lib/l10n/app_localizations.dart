@@ -303,6 +303,18 @@ abstract class AppLocalizations {
   /// **'{count, plural, =0{No albums} =1{1 album} other{{count} albums}}'**
   String albumCount(int count);
 
+  /// Line under the app name with the size of the library
+  ///
+  /// In en, this message translates to:
+  /// **'{tracks} · {albums}'**
+  String libraryStats(String tracks, String albums);
+
+  /// Subtitle of the music and storage row
+  ///
+  /// In en, this message translates to:
+  /// **'Folders · {tracks}'**
+  String musicFoldersSummary(String tracks);
+
   /// Label of the settings hub destination in the navigation bar
   ///
   /// In en, this message translates to:

@@ -134,7 +134,10 @@ GoRouter createAppRouter({String initialLocation = '/library'}) {
             routes: [
               GoRoute(
                 path: '/settings',
-                builder: (context, state) => const SettingsScreen(),
+                builder: (context, state) => Consumer(
+                  builder: (context, ref, _) =>
+                      SettingsScreen(tracks: ref.watch(libraryProvider)),
+                ),
                 routes: [
                   GoRoute(
                     path: 'appearance',
