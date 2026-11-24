@@ -4,10 +4,10 @@ import 'package:bars/features/home/presentation/widgets/home_header.dart';
 import 'package:bars/features/home/presentation/widgets/media_carousel.dart';
 import 'package:bars/features/library/domain/track.dart';
 import 'package:bars/l10n/app_localizations.dart';
-import 'package:bars/shared/design/text_styles.dart';
 import 'package:bars/shared/design/tokens.dart';
 import 'package:bars/shared/design/visual_theme.dart';
-import 'package:bars/shared/widgets/tbd_placeholder.dart';
+import 'package:bars/shared/widgets/no_tracks_state.dart';
+import 'package:bars/shared/widgets/retry_message.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:material_ui/material_ui.dart';
 
@@ -97,14 +97,14 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
         ...switch (widget.tracks) {
           AsyncValue(hasError: true) => [
-            _HomeMessage(
+            RetryMessage(
               message: l10n.error,
               actionLabel: l10n.retry,
               onAction: widget.onRetry,
             ),
           ],
           AsyncValue(:final value?) when value.isEmpty => [
-            _EmptyHome(onChooseFolder: widget.onChooseFolder),
+            NoTracksState(onChooseFolder: widget.onChooseFolder),
           ],
           AsyncValue(hasValue: true) => [
             SectionHeader(key: _recentKey, title: l10n.recentlyAdded),
@@ -126,72 +126,6 @@ class _HomeScreenState extends State<HomeScreen> {
           ],
         },
       ],
-    );
-  }
-}
-
-class _EmptyHome extends StatelessWidget {
-  const new({required this.onChooseFolder});
-
-  final VoidCallback onChooseFolder;
-
-  @override
-  Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context);
-
-    return Padding(
-      padding: const EdgeInsets.all(AppSpacing.xl),
-      child: Column(
-        children: [
-          const TbdPlaceholder(width: 132, height: 132),
-          const SizedBox(height: AppSpacing.lg),
-          Text(
-            l10n.noTracksFound,
-            textAlign: TextAlign.center,
-            style: AppTextStyles.title.copyWith(color: AppColors.textPrimary),
-          ),
-          const SizedBox(height: AppSpacing.lg),
-          FilledButton.icon(
-            onPressed: onChooseFolder,
-            icon: Icon(context.icons.folder),
-            label: Text(l10n.chooseFolder),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _HomeMessage extends StatelessWidget {
-  const new({
-    required this.message,
-    required this.actionLabel,
-    required this.onAction,
-  });
-
-  final String message;
-  final String actionLabel;
-  final VoidCallback onAction;
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(AppSpacing.xl),
-      child: Column(
-        children: [
-          Text(
-            message,
-            textAlign: TextAlign.center,
-            style: AppTextStyles.title.copyWith(color: AppColors.textPrimary),
-          ),
-          const SizedBox(height: AppSpacing.md),
-          TextButton.icon(
-            onPressed: onAction,
-            icon: Icon(context.icons.refresh),
-            label: Text(actionLabel),
-          ),
-        ],
-      ),
     );
   }
 }

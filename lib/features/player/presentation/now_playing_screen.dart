@@ -6,12 +6,12 @@ import 'package:bars/features/player/presentation/player_hero.dart';
 import 'package:bars/features/player/presentation/player_notifier.dart';
 import 'package:bars/features/player/presentation/widgets/cover_gradient.dart';
 import 'package:bars/features/player/presentation/widgets/overflow_menu.dart';
-import 'package:bars/features/player/presentation/widgets/seek_bar.dart';
 import 'package:bars/l10n/app_localizations.dart';
 import 'package:bars/shared/design/app_icons.dart';
 import 'package:bars/shared/design/text_styles.dart';
 import 'package:bars/shared/design/tokens.dart';
 import 'package:bars/shared/widgets/artwork_image.dart';
+import 'package:bars/shared/widgets/seek_bar.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 // Flutter also exports a RepeatMode; playback has the one that matters here.
 import 'package:material_ui/material_ui.dart' hide RepeatMode;
