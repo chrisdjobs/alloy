@@ -115,7 +115,13 @@ abstract final class AppSizing {
   static const double coverRow = 48;
 
   /// Height of a library row, cover included.
-  static const double trackRow = 58;
+  static const double trackRow = 60;
+
+  /// Width of the underline under the active library tab.
+  static const double tabUnderlineWidth = 38;
+
+  /// Thickness of the underline under the active library tab.
+  static const double tabUnderlineHeight = 2;
 
   /// Cover thumbnail in the mini-player.
   static const double coverMiniPlayer = 44;

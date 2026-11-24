@@ -157,22 +157,22 @@ class _LibraryTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.only(bottom: AppSpacing.sm),
-      decoration: BoxDecoration(
-        border: Border(
-          bottom: BorderSide(
-            color: active ? AppColors.textPrimary : Colors.transparent,
-            width: 2,
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Text(
+          label.toUpperCase(),
+          style: AppTextStyles.action.copyWith(
+            color: active ? AppColors.textPrimary : AppColors.textMuted,
           ),
         ),
-      ),
-      child: Text(
-        label.toUpperCase(),
-        style: AppTextStyles.label.copyWith(
-          color: active ? AppColors.textPrimary : AppColors.textMuted,
+        const SizedBox(height: AppSpacing.sm),
+        Container(
+          width: AppSizing.tabUnderlineWidth,
+          height: AppSizing.tabUnderlineHeight,
+          color: active ? AppColors.textPrimary : Colors.transparent,
         ),
-      ),
+      ],
     );
   }
 }
@@ -269,15 +269,15 @@ class _ShuffleAllRow extends StatelessWidget {
         onTap: onTap,
         borderRadius: AppRadii.card,
         child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: AppSpacing.md),
+          padding: const EdgeInsets.symmetric(vertical: AppSpacing.xl),
           child: Row(
             children: [
               const Icon(
                 AppIcons.shuffle,
                 color: AppColors.textPrimary,
-                size: 22,
+                size: 20,
               ),
-              const SizedBox(width: AppSpacing.page),
+              const SizedBox(width: AppSpacing.xl),
               Text(
                 l10n.shuffleAll.toUpperCase(),
                 style: AppTextStyles.action.copyWith(
