@@ -104,6 +104,9 @@ abstract final class AppRadii {
 
   /// Fully rounded pill.
   static const BorderRadius pill = BorderRadius.all(Radius.circular(999));
+
+  /// Caps of the bars of the playing indicator.
+  static const BorderRadius playingBar = BorderRadius.all(Radius.circular(2));
 }
 
 /// Fixed sizes shared by the player and library surfaces.
@@ -176,6 +179,18 @@ abstract final class AppSizing {
 
   /// Icon size inside a filter chip.
   static const double chipIcon = 16;
+
+  /// Shortest bar of the playing indicator drawn over a library cover.
+  static const double playingBarMinHeight = 6;
+
+  /// Tallest bar of the playing indicator drawn over a library cover.
+  static const double playingBarMaxHeight = 18;
+
+  /// Width of one bar of the playing indicator.
+  static const double playingBarWidth = 3;
+
+  /// Space on each side of a playing-indicator bar.
+  static const double playingBarGap = 2;
 }
 
 /// Motion durations shared by the app.

@@ -25,13 +25,25 @@ typedef ShuffleTracksCallback = void Function(List<Track> tracks);
 /// the player feature's presentation layer.
 class LibraryScreen extends ConsumerWidget {
   /// Creates the library screen.
-  const new({required this.onPlay, required this.onShuffleAll, super.key});
+  const new({
+    required this.onPlay,
+    required this.onShuffleAll,
+    this.currentTrackId,
+    this.isPlaying = false,
+    super.key,
+  });
 
   /// Opens a track from the list.
   final PlayTracksCallback onPlay;
 
   /// Starts the whole library in shuffle mode.
   final ShuffleTracksCallback onShuffleAll;
+
+  /// Id of the track loaded in the player; its row marks itself.
+  final String? currentTrackId;
+
+  /// Whether the loaded track is playing.
+  final bool isPlaying;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -79,6 +91,8 @@ class LibraryScreen extends ConsumerWidget {
               AsyncValue(:final value?) => _TrackList(
                 tracks: sortTracks(value, options.sort),
                 showDuration: options.showDuration,
+                currentTrackId: currentTrackId,
+                isPlaying: isPlaying,
                 onPlay: onPlay,
                 onShuffleAll: onShuffleAll,
               ),
@@ -204,12 +218,16 @@ class _TrackList extends StatelessWidget {
   const new({
     required this.tracks,
     required this.showDuration,
+    required this.currentTrackId,
+    required this.isPlaying,
     required this.onPlay,
     required this.onShuffleAll,
   });
 
   final List<Track> tracks;
   final bool showDuration;
+  final String? currentTrackId;
+  final bool isPlaying;
   final PlayTracksCallback onPlay;
   final ShuffleTracksCallback onShuffleAll;
 
@@ -223,9 +241,12 @@ class _TrackList extends StatelessWidget {
           return _ShuffleAllRow(onTap: () => onShuffleAll(tracks));
         }
         final trackIndex = index - 1;
+        final track = tracks[trackIndex];
         return TrackTile(
-          track: tracks[trackIndex],
+          track: track,
           showDuration: showDuration,
+          isCurrent: track.id == currentTrackId,
+          isPlaying: isPlaying,
           onTap: () => onPlay(tracks, trackIndex),
         );
       },

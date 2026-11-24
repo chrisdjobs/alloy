@@ -96,20 +96,32 @@ GoRouter createAppRouter({String initialLocation = '/library'}) {
               GoRoute(
                 path: '/library',
                 builder: (context, state) => Consumer(
-                  builder: (context, ref, _) => LibraryScreen(
-                    onPlay: (tracks, index) {
-                      unawaited(
-                        ref
-                            .read(playerProvider.notifier)
-                            .loadQueueAndPlay(tracks, index),
-                      );
-                    },
-                    onShuffleAll: (tracks) {
-                      unawaited(
-                        ref.read(playerProvider.notifier).shuffleAll(tracks),
-                      );
-                    },
-                  ),
+                  builder: (context, ref, _) {
+                    final currentTrackId = ref.watch(
+                      playerProvider.select((state) => state.value?.track?.id),
+                    );
+                    final isPlaying = ref.watch(
+                      playerProvider.select(
+                        (state) => state.value?.playing ?? false,
+                      ),
+                    );
+                    return LibraryScreen(
+                      currentTrackId: currentTrackId,
+                      isPlaying: isPlaying,
+                      onPlay: (tracks, index) {
+                        unawaited(
+                          ref
+                              .read(playerProvider.notifier)
+                              .loadQueueAndPlay(tracks, index),
+                        );
+                      },
+                      onShuffleAll: (tracks) {
+                        unawaited(
+                          ref.read(playerProvider.notifier).shuffleAll(tracks),
+                        );
+                      },
+                    );
+                  },
                 ),
               ),
             ],

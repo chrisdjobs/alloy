@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:bars/core/utils/duration_format.dart';
 import 'package:bars/features/library/domain/track.dart';
 import 'package:bars/l10n/app_localizations.dart';
@@ -18,6 +20,8 @@ class TrackTile extends StatelessWidget {
     required this.onTap,
     this.leading,
     this.showDuration = false,
+    this.isCurrent = false,
+    this.isPlaying = false,
     super.key,
   });
 
@@ -33,10 +37,17 @@ class TrackTile extends StatelessWidget {
   /// Whether the track length is written before the overflow button.
   final bool showDuration;
 
+  /// Whether this row is the track loaded in the player.
+  final bool isCurrent;
+
+  /// Whether the loaded track is playing; only read when [isCurrent].
+  final bool isPlaying;
+
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
     final accent = Theme.of(context).colorScheme.primary;
+    final cover = leading ?? ArtworkImage(artworkRef: track.artworkRef);
 
     return InkWell(
       onTap: onTap,
@@ -46,7 +57,18 @@ class TrackTile extends StatelessWidget {
           height: AppSizing.trackRow,
           child: Row(
             children: [
-              leading ?? ArtworkImage(artworkRef: track.artworkRef),
+              ClipRRect(
+                borderRadius: AppRadii.artwork,
+                child: Stack(
+                  children: [
+                    cover,
+                    if (isCurrent)
+                      Positioned.fill(
+                        child: _PlayingIndicator(playing: isPlaying),
+                      ),
+                  ],
+                ),
+              ),
               const SizedBox(width: AppSpacing.md),
               Expanded(
                 child: Column(
@@ -108,3 +130,106 @@ class TrackTile extends StatelessWidget {
 }
 
 enum _TrackAction { play }
+
+/// Equalizer drawn over the cover of the track loaded in the player.
+///
+/// The bars animate only while playback runs; a paused track keeps them still
+/// so the row still says which track is loaded.
+class _PlayingIndicator extends StatefulWidget {
+  const new({required this.playing});
+
+  final bool playing;
+
+  @override
+  State<_PlayingIndicator> createState() => _PlayingIndicatorState();
+}
+
+class _PlayingIndicatorState extends State<_PlayingIndicator>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _controller = AnimationController(
+    vsync: this,
+    duration: const Duration(milliseconds: 1200),
+  );
+
+  /// Height of each bar between the shortest and the tallest one while paused.
+  static const List<double> _paused = [0.2, 1, 0.45, 0.75];
+
+  @override
+  void initState() {
+    super.initState();
+    _syncAnimation();
+  }
+
+  @override
+  void didUpdateWidget(_PlayingIndicator oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.playing != widget.playing) _syncAnimation();
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  void _syncAnimation() {
+    if (widget.playing) {
+      _controller.repeat();
+    } else {
+      _controller
+        ..stop()
+        ..value = 0;
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final accent = Theme.of(context).colorScheme.primary;
+
+    return ColoredBox(
+      color: AppColors.backdropScrim,
+      child: Center(
+        child: AnimatedBuilder(
+          animation: _controller,
+          builder: (context, _) => Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              for (var bar = 0; bar < _paused.length; bar++) _bar(bar, accent),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _bar(int index, Color accent) {
+    final height =
+        AppSizing.playingBarMinHeight +
+        (AppSizing.playingBarMaxHeight - AppSizing.playingBarMinHeight) *
+            _factor(index);
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(
+        horizontal: AppSizing.playingBarGap / 2,
+      ),
+      child: SizedBox(
+        width: AppSizing.playingBarWidth,
+        height: height,
+        child: DecoratedBox(
+          decoration: BoxDecoration(
+            color: accent,
+            borderRadius: AppRadii.playingBar,
+          ),
+        ),
+      ),
+    );
+  }
+
+  double _factor(int index) {
+    if (!widget.playing) return _paused[index];
+    final wave = math.sin(
+      _controller.value * 2 * math.pi + index * math.pi / 3,
+    );
+    return (wave + 1) / 2;
+  }
+}
