@@ -1,14 +1,16 @@
-import 'package:bars/shared/design/gradients.dart';
+import 'package:bars/shared/design/gradient_presets_provider.dart';
 import 'package:bars/shared/design/text_styles.dart';
 import 'package:bars/shared/design/tokens.dart';
 import 'package:bars/shared/widgets/bars_page_header.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:material_ui/material_ui.dart';
 
-/// Home header: the page title over an accent glow, then the quick actions.
+/// Home header: the page title over the active preset's glow, then quick
+/// actions.
 ///
-/// The glow is generated from the accent color and scrolls away with the
-/// content, like the reference.
-class HomeHeader extends StatelessWidget {
+/// The glow is part of the scrollable content, so it scrolls away with the
+/// content; its stops end in the preset's base color, so it needs no mask.
+class HomeHeader extends ConsumerWidget {
   /// Creates the header with [quickActions] under the title.
   const new({required this.title, this.quickActions = const [], super.key});
 
@@ -19,18 +21,14 @@ class HomeHeader extends StatelessWidget {
   final List<Widget> quickActions;
 
   @override
-  Widget build(BuildContext context) {
-    final accent = Theme.of(context).colorScheme.primary;
+  Widget build(BuildContext context, WidgetRef ref) {
+    final gradient = ref.watch(activeGradientPresetProvider).home;
 
     return Stack(
       children: [
         Positioned.fill(
           child: IgnorePointer(
-            child: DecoratedBox(
-              decoration: BoxDecoration(
-                gradient: AppGradients.accentGlow(accent),
-              ),
-            ),
+            child: DecoratedBox(decoration: BoxDecoration(gradient: gradient)),
           ),
         ),
         Column(

@@ -1,4 +1,5 @@
 import 'package:bars/app/theme.dart';
+import 'package:bars/shared/design/gradient_presets.dart';
 import 'package:bars/shared/design/gradients.dart';
 import 'package:bars/shared/design/text_styles.dart';
 import 'package:bars/shared/design/tokens.dart';
@@ -12,7 +13,7 @@ void main() {
     expect(theme.brightness, Brightness.dark);
     expect(theme.useMaterial3, isTrue);
     expect(theme.colorScheme.primary, AppColors.accent);
-    expect(theme.scaffoldBackgroundColor, AppColors.background);
+    expect(theme.scaffoldBackgroundColor, AppGradientPresets.active.base);
     expect(theme.colorScheme.surfaceContainer, AppColors.surface);
     expect(theme.cardTheme.color, AppColors.surface);
     expect(
