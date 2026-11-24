@@ -148,6 +148,7 @@ class _PlayerBody extends ConsumerWidget {
                 SeekBar(
                   position: state.position,
                   duration: state.duration,
+                  seed: track.id.hashCode,
                   onSeek: (position) => unawaited(notifier.seek(position)),
                 ),
                 const SizedBox(height: AppSpacing.xs),
@@ -180,12 +181,12 @@ class _PlayerBody extends ConsumerWidget {
           ),
         ),
         const SizedBox(height: AppSpacing.sm),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            // More secondary actions (favorite, lyrics, sharing) join this row.
-            NowPlayingOverflowMenu(onStop: () => unawaited(notifier.stop())),
-          ],
+        // The reference keeps its secondary actions at the bottom right.
+        Align(
+          alignment: Alignment.centerRight,
+          child: NowPlayingOverflowMenu(
+            onStop: () => unawaited(notifier.stop()),
+          ),
         ),
       ],
     );
@@ -311,9 +312,8 @@ class _Header extends StatelessWidget {
             maxLines: 1,
             textAlign: TextAlign.center,
             overflow: TextOverflow.ellipsis,
-            style: AppTextStyles.body.copyWith(
+            style: AppTextStyles.playerHeader.copyWith(
               color: AppColors.textPrimary,
-              fontWeight: FontWeight.w600,
             ),
           ),
         ),
@@ -343,9 +343,8 @@ class _EmptyPlayer extends StatelessWidget {
   }
 }
 
-final TextStyle _timeStyle = AppTextStyles.label.copyWith(
+final TextStyle _timeStyle = AppTextStyles.playerMeta.copyWith(
   color: AppColors.textSecondary,
-  letterSpacing: 0.4,
 );
 
 String _formatDuration(Duration? duration) {

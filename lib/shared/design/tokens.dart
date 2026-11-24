@@ -130,10 +130,13 @@ abstract final class AppSizing {
   static const double nowPlayingDismissDistance = 96;
 
   /// Thickness of the accent seek bar.
-  static const double seekBarHeight = 3;
+  static const double waveformHeight = 40;
 
-  /// Touch target around the seek bar.
-  static const double seekBarTouchHeight = 24;
+  /// Width of one bar of the waveform seek bar.
+  static const double waveformBarWidth = 2;
+
+  /// Gap between two bars of the waveform seek bar.
+  static const double waveformBarGap = 2;
 
   /// Height of the compact bottom bar.
   static const double navBarHeight = 68;

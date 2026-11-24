@@ -109,14 +109,6 @@ class _PlayerBar extends ConsumerWidget {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    SizedBox(
-                      height: 2,
-                      child: LinearProgressIndicator(
-                        value: _progress(state),
-                        backgroundColor: Colors.transparent,
-                        color: accent,
-                      ),
-                    ),
                     Padding(
                       padding: const EdgeInsets.fromLTRB(
                         AppSpacing.md,
@@ -181,6 +173,14 @@ class _PlayerBar extends ConsumerWidget {
                             ),
                           ),
                         ],
+                      ),
+                    ),
+                    SizedBox(
+                      height: 2,
+                      child: LinearProgressIndicator(
+                        value: _progress(state),
+                        backgroundColor: Colors.transparent,
+                        color: accent,
                       ),
                     ),
                   ],

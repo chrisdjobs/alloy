@@ -49,6 +49,22 @@ abstract final class AppTextStyles {
     letterSpacing: -0.3,
   );
 
+  /// Album name in the now-playing header.
+  static const TextStyle playerHeader = TextStyle(
+    fontSize: 17,
+    height: 1.3,
+    fontWeight: FontWeight.w600,
+    letterSpacing: -0.1,
+  );
+
+  /// Times and technical line under the now-playing seek bar.
+  static const TextStyle playerMeta = TextStyle(
+    fontSize: 13,
+    height: 1.3,
+    fontWeight: FontWeight.w500,
+    letterSpacing: 0.1,
+  );
+
   /// Artist line under a track title.
   static const TextStyle trackArtist = TextStyle(
     fontSize: 13,
