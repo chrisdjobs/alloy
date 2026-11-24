@@ -243,6 +243,30 @@ abstract class AppLocalizations {
   /// **'Material'**
   String get iconPackMaterial;
 
+  /// Settings screen with the language override
+  ///
+  /// In en, this message translates to:
+  /// **'Language'**
+  String get languageTitle;
+
+  /// Language option that follows the phone's locale
+  ///
+  /// In en, this message translates to:
+  /// **'System language'**
+  String get systemLanguage;
+
+  /// English language option
+  ///
+  /// In en, this message translates to:
+  /// **'English'**
+  String get languageEnglish;
+
+  /// Spanish language option, written in Spanish
+  ///
+  /// In en, this message translates to:
+  /// **'Español'**
+  String get languageSpanish;
+
   /// Label of the settings hub destination in the navigation bar
   ///
   /// In en, this message translates to:

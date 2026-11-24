@@ -101,6 +101,22 @@
   "@iconPackMaterial": {
     "description": "Name of the Material icon pack"
   },
+  "languageTitle": "Language",
+  "@languageTitle": {
+    "description": "Settings screen with the language override"
+  },
+  "systemLanguage": "System language",
+  "@systemLanguage": {
+    "description": "Language option that follows the phone's locale"
+  },
+  "languageEnglish": "English",
+  "@languageEnglish": {
+    "description": "English language option"
+  },
+  "languageSpanish": "Español",
+  "@languageSpanish": {
+    "description": "Spanish language option, written in Spanish"
+  },
   "meTitle": "Me",
   "@meTitle": {
     "description": "Label of the settings hub destination in the navigation bar"

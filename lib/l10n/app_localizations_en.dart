@@ -86,6 +86,18 @@ class AppLocalizationsEn extends AppLocalizations {
   String get iconPackMaterial => 'Material';
 
   @override
+  String get languageTitle => 'Language';
+
+  @override
+  String get systemLanguage => 'System language';
+
+  @override
+  String get languageEnglish => 'English';
+
+  @override
+  String get languageSpanish => 'Español';
+
+  @override
   String get meTitle => 'Me';
 
   @override

@@ -10,6 +10,7 @@ import 'package:bars/features/player/presentation/now_playing_screen.dart';
 import 'package:bars/features/player/presentation/player_notifier.dart';
 import 'package:bars/features/settings/presentation/appearance_screen.dart';
 import 'package:bars/features/settings/presentation/general_screen.dart';
+import 'package:bars/features/settings/presentation/language_screen.dart';
 import 'package:bars/features/settings/presentation/settings_screen.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -143,6 +144,10 @@ GoRouter createAppRouter({String initialLocation = '/library'}) {
                         builder: (context, state) => const GeneralScreen(),
                       ),
                     ],
+                  ),
+                  GoRoute(
+                    path: 'language',
+                    builder: (context, state) => const LanguageScreen(),
                   ),
                 ],
               ),
