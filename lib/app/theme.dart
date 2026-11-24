@@ -1,11 +1,15 @@
 import 'package:bars/shared/design/text_styles.dart';
 import 'package:bars/shared/design/tokens.dart';
+import 'package:bars/shared/design/visual_theme.dart';
 import 'package:material_ui/material_ui.dart';
 
 /// Builds the single Material 3 dark theme used on every platform.
 abstract final class AppTheme {
-  /// Dark theme with [accent] as the primary color.
-  static ThemeData dark({Color accent = AppColors.accent}) {
+  /// Dark theme with [accent] as the primary color and [icons] in the theme.
+  static ThemeData dark({
+    Color accent = AppColors.accent,
+    AppIconSet icons = AppIcons.lucide,
+  }) {
     final colorScheme =
         ColorScheme.dark(
           primary: accent,
@@ -78,6 +82,7 @@ abstract final class AppTheme {
         labelType: NavigationRailLabelType.none,
         minWidth: 220,
       ),
+      extensions: [BarsVisualTheme(icons: icons)],
     );
   }
 }

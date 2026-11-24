@@ -31,9 +31,7 @@ class SettingsNotifier extends _$SettingsNotifier {
 
   /// Persists [settings]; a failure is logged and leaves the state untouched.
   Future<void> replace(AppSettings settings) async {
-    final failure = (await ref
-            .read(settingsRepositoryProvider)
-            .save(settings))
+    final failure = (await ref.read(settingsRepositoryProvider).save(settings))
         .failureOrNull;
     if (failure == null) return;
     Logger.error(

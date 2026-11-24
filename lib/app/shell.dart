@@ -106,29 +106,16 @@ class AdaptiveShell extends StatelessWidget {
 
 List<_Destination> _destinations(AppLocalizations l10n) {
   return [
-    _Destination(
-      label: l10n.libraryTitle,
-      icon: AppIcons.library,
-      selectedIcon: AppIcons.libraryActive,
-    ),
-    _Destination(
-      label: l10n.settingsTitle,
-      icon: AppIcons.settings,
-      selectedIcon: AppIcons.settingsActive,
-    ),
+    _Destination(label: l10n.libraryTitle, icon: AppIcons.library),
+    _Destination(label: l10n.settingsTitle, icon: AppIcons.settings),
   ];
 }
 
 final class _Destination {
-  const new({
-    required this.label,
-    required this.icon,
-    required this.selectedIcon,
-  });
+  const new({required this.label, required this.icon});
 
   final String label;
   final IconData icon;
-  final IconData selectedIcon;
 }
 
 class _NavPill extends StatelessWidget {
@@ -165,11 +152,7 @@ class _NavPill extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(
-            selected ? destination.selectedIcon : destination.icon,
-            size: 18,
-            color: foreground,
-          ),
+          Icon(destination.icon, size: 18, color: foreground),
           const SizedBox(width: AppSpacing.xs),
           Text(
             destination.label.toUpperCase(),

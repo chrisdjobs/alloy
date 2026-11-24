@@ -99,6 +99,9 @@ abstract final class AppRadii {
     Radius.circular(md),
   );
 
+  /// Active pill of the bottom bar: a rounded square, not a capsule.
+  static const BorderRadius navPill = BorderRadius.all(Radius.circular(sm));
+
   /// Fully rounded pill.
   static const BorderRadius pill = BorderRadius.all(Radius.circular(999));
 }
@@ -131,10 +134,25 @@ abstract final class AppSizing {
 
   /// Touch target around the seek bar.
   static const double seekBarTouchHeight = 24;
+
+  /// Height of the compact bottom bar.
+  static const double navBarHeight = 68;
+
+  /// Width of the active pill in the compact bottom bar.
+  static const double navPillWidth = 56;
+
+  /// Height of the active pill in the compact bottom bar.
+  static const double navPillHeight = 32;
+
+  /// Icon size inside the bottom bar.
+  static const double navIcon = 20;
 }
 
 /// Motion durations shared by the app.
 abstract final class AppDurations {
   /// Cross-fade of the cover-derived gradient when the track changes.
   static const Duration gradientFade = Duration(milliseconds: 350);
+
+  /// Highlight change of the bottom bar.
+  static const Duration navPill = Duration(milliseconds: 180);
 }
