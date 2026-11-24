@@ -58,6 +58,28 @@ abstract final class AppGradientPresets {
         stops: [0.0, 0.45, 1.0],
       ),
     ),
+    GradientPreset(
+      id: 'neon-dusk',
+      name: 'neon-dusk',
+      base: Color(0xFF120B0A),
+      home: RadialGradient(
+        center: Alignment(-0.224, -0.544),
+        radius: 1.02,
+        colors: [
+          Color(0x6E7B2FF7),
+          Color(0x257B2FF7),
+          Color(0xFF120B0A),
+          Color(0xFF120B0A),
+        ],
+        stops: [0.0, 0.28, 0.425, 1.0],
+      ),
+      pill: RadialGradient(
+        center: Alignment(-0.235, -0.849),
+        radius: 2.01,
+        colors: [Color(0xFF7B2FF7), Color(0xFFFF5A1F), Color(0xFFFF5A1F)],
+        stops: [0.0, 0.475, 1.0],
+      ),
+    ),
   ];
 
   /// The preset with [id], or null when it was never applied.
@@ -68,7 +90,7 @@ abstract final class AppGradientPresets {
     return null;
   }
 
-  static const String _activeId = 'bars-default';
+  static const String _activeId = 'neon-dusk';
 
   /// Preset selected by the active id in `assets/icon/presets.json`.
   static final GradientPreset active = byId(_activeId)!;

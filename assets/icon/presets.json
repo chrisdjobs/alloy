@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "active": "bars-default",
+  "active": "neon-dusk",
   "presets": {
     "bars-default": {
       "schema": 1,
@@ -119,6 +119,127 @@
         "dir": "assets/icon/presets/bars-default",
         "legacy": "assets/icon/presets/bars-default/icon_legacy_1024.png",
         "adaptive_background": "assets/icon/presets/bars-default/icon_adaptive_background.png",
+        "foreground": "assets/icon/ic_launcher_foreground.png",
+        "monochrome": "assets/icon/ic_launcher_monochrome.png"
+      }
+    },
+    "neon-dusk": {
+      "schema": 1,
+      "id": "neon-dusk",
+      "name": "neon-dusk",
+      "approximate": false,
+      "base": "#120B0A",
+      "layers": [
+        {
+          "center": [
+            -0.211,
+            -0.22
+          ],
+          "radius": 0.981,
+          "stops": [
+            {
+              "color": "#7B2FF7",
+              "position": 0.0,
+              "alpha": 0.901
+            },
+            {
+              "color": "#7B2FF7",
+              "position": 0.578,
+              "alpha": 0.294
+            },
+            {
+              "color": "#7B2FF7",
+              "position": 1.0,
+              "alpha": 0.0
+            }
+          ]
+        },
+        {
+          "center": [
+            0.499,
+            -0.175
+          ],
+          "radius": 0.713,
+          "stops": [
+            {
+              "color": "#FF5A1F",
+              "position": 0.0,
+              "alpha": 0.532
+            },
+            {
+              "color": "#FF5A1F",
+              "position": 0.55,
+              "alpha": 0.186
+            },
+            {
+              "color": "#FF5A1F",
+              "position": 1.0,
+              "alpha": 0.0
+            }
+          ]
+        }
+      ],
+      "home": {
+        "center": [
+          -0.224,
+          -0.544
+        ],
+        "radius": 1.02,
+        "stops": [
+          {
+            "color": "#7B2FF7",
+            "position": 0.0,
+            "alpha": 0.431
+          },
+          {
+            "color": "#7B2FF7",
+            "position": 0.28,
+            "alpha": 0.147
+          },
+          {
+            "color": "#120B0A",
+            "position": 0.425,
+            "alpha": 1.0
+          },
+          {
+            "color": "#120B0A",
+            "position": 1.0,
+            "alpha": 1.0
+          }
+        ]
+      },
+      "pill": {
+        "center": [
+          -0.235,
+          -0.849
+        ],
+        "radius": 2.01,
+        "stops": [
+          {
+            "color": "#7B2FF7",
+            "position": 0.0,
+            "alpha": 1.0
+          },
+          {
+            "color": "#FF5A1F",
+            "position": 0.475,
+            "alpha": 1.0
+          },
+          {
+            "color": "#FF5A1F",
+            "position": 1.0,
+            "alpha": 1.0
+          }
+        ]
+      },
+      "render": {
+        "grain": 0.0121,
+        "seed": 2004182514
+      },
+      "icon": {
+        "dir": "assets/icon/presets/neon-dusk",
+        "legacy": "assets/icon/presets/neon-dusk/icon_legacy_1024.png",
+        "adaptive_background": "assets/icon/presets/neon-dusk/icon_adaptive_background.png",
         "foreground": "assets/icon/ic_launcher_foreground.png",
         "monochrome": "assets/icon/ic_launcher_monochrome.png"
       }
