@@ -8,6 +8,8 @@ import 'package:bars/features/library/presentation/library_notifier.dart';
 import 'package:bars/features/library/presentation/library_screen.dart';
 import 'package:bars/features/player/presentation/now_playing_screen.dart';
 import 'package:bars/features/player/presentation/player_notifier.dart';
+import 'package:bars/features/settings/presentation/appearance_screen.dart';
+import 'package:bars/features/settings/presentation/general_screen.dart';
 import 'package:bars/features/settings/presentation/settings_screen.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -131,6 +133,18 @@ GoRouter createAppRouter({String initialLocation = '/library'}) {
               GoRoute(
                 path: '/settings',
                 builder: (context, state) => const SettingsScreen(),
+                routes: [
+                  GoRoute(
+                    path: 'appearance',
+                    builder: (context, state) => const AppearanceScreen(),
+                    routes: [
+                      GoRoute(
+                        path: 'general',
+                        builder: (context, state) => const GeneralScreen(),
+                      ),
+                    ],
+                  ),
+                ],
               ),
             ],
           ),

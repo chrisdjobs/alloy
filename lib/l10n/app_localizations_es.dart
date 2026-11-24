@@ -63,6 +63,29 @@ class AppLocalizationsEs extends AppLocalizations {
   String get showDuration => 'Mostrar duración';
 
   @override
+  String get appearanceTitle => 'Apariencia';
+
+  @override
+  String get generalTitle => 'General';
+
+  @override
+  String get accentColor => 'Color de acento';
+
+  @override
+  String get iconsSection => 'Iconos';
+
+  @override
+  String appearanceSummary(String iconPack) {
+    return 'Color de acento · $iconPack';
+  }
+
+  @override
+  String get iconPackLucide => 'Lucide';
+
+  @override
+  String get iconPackMaterial => 'Material';
+
+  @override
   String get meTitle => 'Yo';
 
   @override

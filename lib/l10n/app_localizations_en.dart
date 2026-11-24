@@ -63,6 +63,29 @@ class AppLocalizationsEn extends AppLocalizations {
   String get showDuration => 'Show duration';
 
   @override
+  String get appearanceTitle => 'Appearance';
+
+  @override
+  String get generalTitle => 'General';
+
+  @override
+  String get accentColor => 'Accent color';
+
+  @override
+  String get iconsSection => 'Icons';
+
+  @override
+  String appearanceSummary(String iconPack) {
+    return 'Accent color · $iconPack';
+  }
+
+  @override
+  String get iconPackLucide => 'Lucide';
+
+  @override
+  String get iconPackMaterial => 'Material';
+
+  @override
   String get meTitle => 'Me';
 
   @override

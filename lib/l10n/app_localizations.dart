@@ -201,6 +201,48 @@ abstract class AppLocalizations {
   /// **'Show duration'**
   String get showDuration;
 
+  /// Settings screen with the look of the app
+  ///
+  /// In en, this message translates to:
+  /// **'Appearance'**
+  String get appearanceTitle;
+
+  /// Settings screen with the accent color and the icon pack
+  ///
+  /// In en, this message translates to:
+  /// **'General'**
+  String get generalTitle;
+
+  /// Section of the general settings with the accent swatches
+  ///
+  /// In en, this message translates to:
+  /// **'Accent color'**
+  String get accentColor;
+
+  /// Section of the general settings with the icon pack choices
+  ///
+  /// In en, this message translates to:
+  /// **'Icons'**
+  String get iconsSection;
+
+  /// Subtitle of the appearance row; names the active icon pack
+  ///
+  /// In en, this message translates to:
+  /// **'Accent color · {iconPack}'**
+  String appearanceSummary(String iconPack);
+
+  /// Name of the Lucide icon pack
+  ///
+  /// In en, this message translates to:
+  /// **'Lucide'**
+  String get iconPackLucide;
+
+  /// Name of the Material icon pack
+  ///
+  /// In en, this message translates to:
+  /// **'Material'**
+  String get iconPackMaterial;
+
   /// Label of the settings hub destination in the navigation bar
   ///
   /// In en, this message translates to:

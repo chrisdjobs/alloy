@@ -68,6 +68,39 @@
   "@showDuration": {
     "description": "Toggle that shows the track length in every library row"
   },
+  "appearanceTitle": "Appearance",
+  "@appearanceTitle": {
+    "description": "Settings screen with the look of the app"
+  },
+  "generalTitle": "General",
+  "@generalTitle": {
+    "description": "Settings screen with the accent color and the icon pack"
+  },
+  "accentColor": "Accent color",
+  "@accentColor": {
+    "description": "Section of the general settings with the accent swatches"
+  },
+  "iconsSection": "Icons",
+  "@iconsSection": {
+    "description": "Section of the general settings with the icon pack choices"
+  },
+  "appearanceSummary": "Accent color · {iconPack}",
+  "@appearanceSummary": {
+    "description": "Subtitle of the appearance row; names the active icon pack",
+    "placeholders": {
+      "iconPack": {
+        "type": "String"
+      }
+    }
+  },
+  "iconPackLucide": "Lucide",
+  "@iconPackLucide": {
+    "description": "Name of the Lucide icon pack"
+  },
+  "iconPackMaterial": "Material",
+  "@iconPackMaterial": {
+    "description": "Name of the Material icon pack"
+  },
   "meTitle": "Me",
   "@meTitle": {
     "description": "Label of the settings hub destination in the navigation bar"

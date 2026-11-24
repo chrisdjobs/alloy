@@ -197,6 +197,21 @@ abstract final class AppSizing {
 
   /// Space on each side of a playing-indicator bar.
   static const double playingBarGap = 2;
+
+  /// Diameter of an accent swatch in the appearance settings.
+  static const double accentSwatch = 36;
+
+  /// Box of an accent swatch, selected ring included.
+  static const double accentSwatchBox = 44;
+
+  /// Thickness of the ring around the selected accent swatch.
+  static const double accentSwatchRing = 2;
+
+  /// Diameter of the identity avatar on the Me screen.
+  static const double profileAvatar = 68;
+
+  /// Icon size of a row in the settings screens.
+  static const double settingsRowIcon = 24;
 }
 
 /// Motion durations shared by the app.
