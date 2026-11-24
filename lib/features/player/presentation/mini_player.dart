@@ -2,9 +2,9 @@ import 'package:bars/features/player/domain/playback_state.dart';
 import 'package:bars/features/player/presentation/player_hero.dart';
 import 'package:bars/features/player/presentation/player_notifier.dart';
 import 'package:bars/l10n/app_localizations.dart';
-import 'package:bars/shared/design/app_icons.dart';
 import 'package:bars/shared/design/text_styles.dart';
 import 'package:bars/shared/design/tokens.dart';
+import 'package:bars/shared/design/visual_theme.dart';
 import 'package:bars/shared/widgets/artwork_image.dart';
 import 'package:bars/shared/widgets/cover_backdrop.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -158,7 +158,9 @@ class _PlayerBar extends ConsumerWidget {
                             },
                             tooltip: state.playing ? l10n.pause : l10n.play,
                             icon: Icon(
-                              state.playing ? AppIcons.pause : AppIcons.play,
+                              state.playing
+                                  ? context.icons.pause
+                                  : context.icons.play,
                               color: accent,
                             ),
                           ),
@@ -167,8 +169,8 @@ class _PlayerBar extends ConsumerWidget {
                               await notifier.next();
                             },
                             tooltip: l10n.next,
-                            icon: const Icon(
-                              AppIcons.next,
+                            icon: Icon(
+                              context.icons.next,
                               color: AppColors.textPrimary,
                             ),
                           ),
@@ -220,7 +222,7 @@ class _ErrorBar extends StatelessWidget {
       ),
       child: Row(
         children: [
-          const Icon(AppIcons.error, color: AppColors.error, size: 20),
+          Icon(context.icons.error, color: AppColors.error, size: 20),
           const SizedBox(width: AppSpacing.sm),
           Expanded(
             child: Text(

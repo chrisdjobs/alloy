@@ -8,9 +8,9 @@ import 'package:bars/features/player/presentation/player_notifier.dart';
 import 'package:bars/features/player/presentation/widgets/cover_gradient.dart';
 import 'package:bars/features/player/presentation/widgets/overflow_menu.dart';
 import 'package:bars/l10n/app_localizations.dart';
-import 'package:bars/shared/design/app_icons.dart';
 import 'package:bars/shared/design/text_styles.dart';
 import 'package:bars/shared/design/tokens.dart';
+import 'package:bars/shared/design/visual_theme.dart';
 import 'package:bars/shared/widgets/artwork_image.dart';
 import 'package:bars/shared/widgets/seek_bar.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -237,20 +237,20 @@ class _Controls extends ConsumerWidget {
         IconButton(
           onPressed: () => unawaited(notifier.setShuffle(!state.shuffle)),
           tooltip: l10n.shuffle,
-          icon: const Icon(AppIcons.shuffle),
+          icon: Icon(context.icons.shuffle),
           color: state.shuffle ? accent : AppColors.textSecondary,
         ),
         IconButton(
           onPressed: () => unawaited(notifier.previous()),
           tooltip: l10n.previous,
-          icon: const Icon(AppIcons.previous),
+          icon: Icon(context.icons.previous),
           iconSize: AppSpacing.xxl,
           color: AppColors.textPrimary,
         ),
         IconButton.filled(
           onPressed: () => unawaited(notifier.togglePlayPause()),
           tooltip: state.playing ? l10n.pause : l10n.play,
-          icon: Icon(state.playing ? AppIcons.pause : AppIcons.play),
+          icon: Icon(state.playing ? context.icons.pause : context.icons.play),
           iconSize: AppSpacing.xxl,
           style: IconButton.styleFrom(
             fixedSize: const Size.square(AppSizing.nowPlayingPlayButton),
@@ -259,7 +259,7 @@ class _Controls extends ConsumerWidget {
         IconButton(
           onPressed: () => unawaited(notifier.next()),
           tooltip: l10n.next,
-          icon: const Icon(AppIcons.next),
+          icon: Icon(context.icons.next),
           iconSize: AppSpacing.xxl,
           color: AppColors.textPrimary,
         ),
@@ -269,8 +269,8 @@ class _Controls extends ConsumerWidget {
           tooltip: _repeatTooltip(l10n, state.repeatMode),
           icon: Icon(
             state.repeatMode == RepeatMode.one
-                ? AppIcons.repeatOne
-                : AppIcons.repeat,
+                ? context.icons.repeatOne
+                : context.icons.repeat,
           ),
           color: state.repeatMode == RepeatMode.off
               ? AppColors.textSecondary
@@ -311,7 +311,7 @@ class _Header extends StatelessWidget {
           onPressed: onClose ?? () => Navigator.of(context).maybePop(),
           tooltip: l10n.close,
           color: AppColors.textPrimary,
-          icon: const Icon(AppIcons.collapse),
+          icon: Icon(context.icons.collapse),
         ),
         Expanded(
           child: Text(

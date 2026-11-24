@@ -272,8 +272,8 @@ class _ShuffleAllRow extends StatelessWidget {
           padding: const EdgeInsets.symmetric(vertical: AppSpacing.xl),
           child: Row(
             children: [
-              const Icon(
-                AppIcons.shuffle,
+              Icon(
+                context.icons.shuffle,
                 color: AppColors.textPrimary,
                 size: 20,
               ),
@@ -313,7 +313,7 @@ class _EmptyState extends StatelessWidget {
             const SizedBox(height: AppSpacing.lg),
             FilledButton.icon(
               onPressed: onChooseFolder,
-              icon: const Icon(AppIcons.folder),
+              icon: Icon(context.icons.folder),
               label: Text(l10n.chooseFolder),
             ),
           ],
@@ -341,13 +341,13 @@ class _ErrorState extends StatelessWidget {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                const Icon(AppIcons.error, color: AppColors.error, size: 32),
+                Icon(context.icons.error, color: AppColors.error, size: 32),
                 const SizedBox(height: AppSpacing.md),
                 Text(l10n.error, style: AppTextStyles.title),
                 const SizedBox(height: AppSpacing.md),
                 TextButton.icon(
                   onPressed: onRetry,
-                  icon: const Icon(AppIcons.refresh),
+                  icon: Icon(context.icons.refresh),
                   label: Text(l10n.retry),
                 ),
               ],

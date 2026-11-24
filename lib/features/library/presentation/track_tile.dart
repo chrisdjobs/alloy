@@ -3,9 +3,9 @@ import 'dart:math' as math;
 import 'package:bars/core/utils/duration_format.dart';
 import 'package:bars/features/library/domain/track.dart';
 import 'package:bars/l10n/app_localizations.dart';
-import 'package:bars/shared/design/app_icons.dart';
 import 'package:bars/shared/design/text_styles.dart';
 import 'package:bars/shared/design/tokens.dart';
+import 'package:bars/shared/design/visual_theme.dart';
 import 'package:bars/shared/widgets/artwork_image.dart';
 import 'package:material_ui/material_ui.dart';
 
@@ -106,14 +106,14 @@ class TrackTile extends StatelessWidget {
                   ),
                 ),
               PopupMenuButton<_TrackAction>(
-                icon: const Icon(AppIcons.more),
+                icon: Icon(context.icons.more),
                 onSelected: (_) => onTap(),
                 itemBuilder: (context) => [
                   PopupMenuItem(
                     value: _TrackAction.play,
                     child: Row(
                       children: [
-                        Icon(AppIcons.play, size: 18, color: accent),
+                        Icon(context.icons.play, size: 18, color: accent),
                         const SizedBox(width: AppSpacing.sm),
                         Text(l10n.play),
                       ],

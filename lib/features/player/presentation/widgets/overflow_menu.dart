@@ -1,6 +1,6 @@
 import 'package:bars/l10n/app_localizations.dart';
-import 'package:bars/shared/design/app_icons.dart';
 import 'package:bars/shared/design/tokens.dart';
+import 'package:bars/shared/design/visual_theme.dart';
 import 'package:material_ui/material_ui.dart';
 
 /// Secondary actions of the now-playing screen.
@@ -20,7 +20,7 @@ class NowPlayingOverflowMenu extends StatelessWidget {
     final accent = Theme.of(context).colorScheme.primary;
 
     return PopupMenuButton<_NowPlayingAction>(
-      icon: const Icon(AppIcons.more),
+      icon: Icon(context.icons.more),
       tooltip: l10n.moreOptions,
       onSelected: (action) {
         switch (action) {
@@ -33,7 +33,7 @@ class NowPlayingOverflowMenu extends StatelessWidget {
           value: _NowPlayingAction.stop,
           child: Row(
             children: [
-              Icon(AppIcons.stop, size: 18, color: accent),
+              Icon(context.icons.stop, size: 18, color: accent),
               const SizedBox(width: AppSpacing.sm),
               Text(l10n.stopPlayback),
             ],
