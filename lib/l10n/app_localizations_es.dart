@@ -98,6 +98,42 @@ class AppLocalizationsEs extends AppLocalizations {
   String get languageSpanish => 'Español';
 
   @override
+  String get musicAndStorageTitle => 'Música y almacenamiento';
+
+  @override
+  String get musicFolders => 'Carpetas de música';
+
+  @override
+  String get chooseFolderHint => 'Dónde busca Bars tu música';
+
+  @override
+  String get rescanLibraryHint => 'Busca archivos nuevos en la misma carpeta';
+
+  @override
+  String trackCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count pistas',
+      one: '1 pista',
+      zero: 'Sin pistas',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String albumCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count álbumes',
+      one: '1 álbum',
+      zero: 'Sin álbumes',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String get meTitle => 'Yo';
 
   @override

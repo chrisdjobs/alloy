@@ -11,6 +11,7 @@ import 'package:bars/features/player/presentation/player_notifier.dart';
 import 'package:bars/features/settings/presentation/appearance_screen.dart';
 import 'package:bars/features/settings/presentation/general_screen.dart';
 import 'package:bars/features/settings/presentation/language_screen.dart';
+import 'package:bars/features/settings/presentation/music_storage_screen.dart';
 import 'package:bars/features/settings/presentation/settings_screen.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -148,6 +149,24 @@ GoRouter createAppRouter({String initialLocation = '/library'}) {
                   GoRoute(
                     path: 'language',
                     builder: (context, state) => const LanguageScreen(),
+                  ),
+                  GoRoute(
+                    path: 'storage',
+                    builder: (context, state) => Consumer(
+                      builder: (context, ref, _) => MusicStorageScreen(
+                        tracks: ref.watch(libraryProvider),
+                        onChooseFolder: () {
+                          unawaited(
+                            ref.read(libraryProvider.notifier).scanFolder(),
+                          );
+                        },
+                        onRescan: () {
+                          unawaited(
+                            ref.read(libraryProvider.notifier).triggerScan(),
+                          );
+                        },
+                      ),
+                    ),
                   ),
                 ],
               ),

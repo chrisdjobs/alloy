@@ -267,6 +267,42 @@ abstract class AppLocalizations {
   /// **'Español'**
   String get languageSpanish;
 
+  /// Settings screen with the library folder and its size
+  ///
+  /// In en, this message translates to:
+  /// **'Music and storage'**
+  String get musicAndStorageTitle;
+
+  /// Section of the storage settings that lists the library folder
+  ///
+  /// In en, this message translates to:
+  /// **'Music folders'**
+  String get musicFolders;
+
+  /// Subtitle of the folder picker row in the storage settings
+  ///
+  /// In en, this message translates to:
+  /// **'Where Bars looks for your music'**
+  String get chooseFolderHint;
+
+  /// Subtitle of the rescan row in the storage settings
+  ///
+  /// In en, this message translates to:
+  /// **'Look for new files in the same folder'**
+  String get rescanLibraryHint;
+
+  /// Number of tracks in the library
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =0{No tracks} =1{1 track} other{{count} tracks}}'**
+  String trackCount(int count);
+
+  /// Number of albums in the library
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =0{No albums} =1{1 album} other{{count} albums}}'**
+  String albumCount(int count);
+
   /// Label of the settings hub destination in the navigation bar
   ///
   /// In en, this message translates to:

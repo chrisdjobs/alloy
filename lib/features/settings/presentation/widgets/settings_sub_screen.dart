@@ -110,10 +110,13 @@ class SettingsRow extends StatelessWidget {
 /// Uppercase section title of a settings screen.
 class SettingsSection extends StatelessWidget {
   /// Creates the section title.
-  const new({required this.title, super.key});
+  const new({required this.title, this.accent = false, super.key});
 
   /// Title, rendered in uppercase.
   final String title;
+
+  /// Whether the title takes the accent color, as in the storage reference.
+  final bool accent;
 
   @override
   Widget build(BuildContext context) {
@@ -124,7 +127,14 @@ class SettingsSection extends StatelessWidget {
         AppSpacing.page,
         AppSpacing.md,
       ),
-      child: Text(title.toUpperCase(), style: AppTextStyles.sectionHeader),
+      child: Text(
+        title.toUpperCase(),
+        style: accent
+            ? AppTextStyles.sectionHeader.copyWith(
+                color: Theme.of(context).colorScheme.primary,
+              )
+            : AppTextStyles.sectionHeader,
+      ),
     );
   }
 }
