@@ -105,6 +105,18 @@ abstract class AppLocalizations {
   /// **'Bars'**
   String get appTitle;
 
+  /// Top-level home destination and screen title
+  ///
+  /// In en, this message translates to:
+  /// **'Home'**
+  String get homeTitle;
+
+  /// Top-level discover destination and screen title
+  ///
+  /// In en, this message translates to:
+  /// **'Discover'**
+  String get discoverTitle;
+
   /// Top-level library destination and screen title
   ///
   /// In en, this message translates to:
@@ -135,11 +147,23 @@ abstract class AppLocalizations {
   /// **'Albums'**
   String get libraryAlbums;
 
+  /// Label of the settings hub destination in the navigation bar
+  ///
+  /// In en, this message translates to:
+  /// **'Me'**
+  String get meTitle;
+
   /// Top-level settings destination and screen title
   ///
   /// In en, this message translates to:
   /// **'Settings'**
   String get settingsTitle;
+
+  /// Caption of a destination that is designed but not built yet
+  ///
+  /// In en, this message translates to:
+  /// **'Coming soon'**
+  String get comingSoon;
 
   /// Playback action
   ///

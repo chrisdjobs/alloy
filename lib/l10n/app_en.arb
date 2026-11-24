@@ -4,6 +4,14 @@
   "@appTitle": {
     "description": "Application name"
   },
+  "homeTitle": "Home",
+  "@homeTitle": {
+    "description": "Top-level home destination and screen title"
+  },
+  "discoverTitle": "Discover",
+  "@discoverTitle": {
+    "description": "Top-level discover destination and screen title"
+  },
   "libraryTitle": "Library",
   "@libraryTitle": {
     "description": "Top-level library destination and screen title"
@@ -24,9 +32,17 @@
   "@libraryAlbums": {
     "description": "Library tab for albums; not implemented yet"
   },
+  "meTitle": "Me",
+  "@meTitle": {
+    "description": "Label of the settings hub destination in the navigation bar"
+  },
   "settingsTitle": "Settings",
   "@settingsTitle": {
     "description": "Top-level settings destination and screen title"
+  },
+  "comingSoon": "Coming soon",
+  "@comingSoon": {
+    "description": "Caption of a destination that is designed but not built yet"
   },
   "play": "Play",
   "@play": {

@@ -15,6 +15,12 @@ class AppLocalizationsEs extends AppLocalizations {
   String get appTitle => 'Bars';
 
   @override
+  String get homeTitle => 'Inicio';
+
+  @override
+  String get discoverTitle => 'Descubrir';
+
+  @override
   String get libraryTitle => 'Biblioteca';
 
   @override
@@ -30,7 +36,13 @@ class AppLocalizationsEs extends AppLocalizations {
   String get libraryAlbums => 'Álbumes';
 
   @override
+  String get meTitle => 'Yo';
+
+  @override
   String get settingsTitle => 'Ajustes';
+
+  @override
+  String get comingSoon => 'Próximamente';
 
   @override
   String get play => 'Reproducir';
