@@ -72,110 +72,123 @@ class _PlayerBar extends ConsumerWidget {
     final track = state.track!;
     final accent = Theme.of(context).colorScheme.primary;
 
-    return DecoratedBox(
-      decoration: const BoxDecoration(
-        border: Border(top: BorderSide(color: AppColors.outline)),
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(
+        AppSpacing.sm,
+        0,
+        AppSpacing.sm,
+        AppSpacing.sm,
       ),
-      child: Stack(
-        children: [
-          Positioned.fill(
-            child:
-                backdrop ??
-                CoverBackdrop(
-                  artworkRef: track.artworkRef,
-                  fallback: DecoratedBox(
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
-                        colors: [
-                          accent.withValues(alpha: 0.16),
-                          AppColors.surfaceHigh,
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-          ),
-          InkWell(
-            onTap: onOpen,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                SizedBox(
-                  height: 2,
-                  child: LinearProgressIndicator(
-                    value: _progress(state),
-                    backgroundColor: Colors.transparent,
-                    color: accent,
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: AppSpacing.lg,
-                    vertical: AppSpacing.sm,
-                  ),
-                  child: Row(
-                    children: [
-                      leading ??
-                          Hero(
-                            tag: nowPlayingCoverHeroTag,
-                            child: ArtworkImage(
-                              artworkRef: track.artworkRef,
-                              size: AppSizing.coverMiniPlayer,
-                            ),
-                          ),
-                      const SizedBox(width: AppSpacing.md),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Text(
-                              track.title,
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              style: AppTextStyles.body.copyWith(
-                                color: AppColors.textPrimary,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                            if (track.artist != null)
-                              Text(
-                                track.artist!,
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                                style: AppTextStyles.label.copyWith(
-                                  color: AppColors.textSecondary,
-                                  letterSpacing: 0.4,
-                                ),
-                              ),
+      child: ClipRRect(
+        borderRadius: AppRadii.cardLarge,
+        child: Stack(
+          children: [
+            Positioned.fill(
+              child:
+                  backdrop ??
+                  CoverBackdrop(
+                    artworkRef: track.artworkRef,
+                    fallback: DecoratedBox(
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                          colors: [
+                            accent.withValues(alpha: 0.16),
+                            AppColors.surfaceHigh,
                           ],
                         ),
                       ),
-                      IconButton.filled(
-                        onPressed: () async {
-                          await notifier.togglePlayPause();
-                        },
-                        tooltip: state.playing ? l10n.pause : l10n.play,
-                        icon: Icon(
-                          state.playing ? AppIcons.pause : AppIcons.play,
-                        ),
-                      ),
-                      IconButton(
-                        onPressed: () async {
-                          await notifier.next();
-                        },
-                        tooltip: l10n.next,
-                        icon: const Icon(AppIcons.next),
-                      ),
-                    ],
+                    ),
                   ),
-                ),
-              ],
             ),
-          ),
-        ],
+            Material(
+              type: MaterialType.transparency,
+              child: InkWell(
+                onTap: onOpen,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    SizedBox(
+                      height: 2,
+                      child: LinearProgressIndicator(
+                        value: _progress(state),
+                        backgroundColor: Colors.transparent,
+                        color: accent,
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(
+                        AppSpacing.md,
+                        AppSpacing.sm,
+                        AppSpacing.sm,
+                        AppSpacing.sm,
+                      ),
+                      child: Row(
+                        children: [
+                          leading ??
+                              Hero(
+                                tag: nowPlayingCoverHeroTag,
+                                child: ArtworkImage(
+                                  artworkRef: track.artworkRef,
+                                  size: AppSizing.coverMiniPlayer,
+                                ),
+                              ),
+                          const SizedBox(width: AppSpacing.md),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Text(
+                                  track.title,
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: AppTextStyles.trackTitle.copyWith(
+                                    color: AppColors.textPrimary,
+                                  ),
+                                ),
+                                if (track.artist != null)
+                                  Text(
+                                    track.artist!,
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: AppTextStyles.trackArtist.copyWith(
+                                      color: AppColors.textSecondary,
+                                    ),
+                                  ),
+                              ],
+                            ),
+                          ),
+                          IconButton(
+                            onPressed: () async {
+                              await notifier.togglePlayPause();
+                            },
+                            tooltip: state.playing ? l10n.pause : l10n.play,
+                            icon: Icon(
+                              state.playing ? AppIcons.pause : AppIcons.play,
+                              color: accent,
+                            ),
+                          ),
+                          IconButton(
+                            onPressed: () async {
+                              await notifier.next();
+                            },
+                            tooltip: l10n.next,
+                            icon: const Icon(
+                              AppIcons.next,
+                              color: AppColors.textPrimary,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
