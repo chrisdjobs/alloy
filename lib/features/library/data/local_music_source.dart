@@ -106,6 +106,7 @@ final class LocalMusicSource implements MusicSource {
       sampleRateHz: row.sampleRateHz,
       bitrateKbps: row.bitrateKbps,
       format: row.format,
+      dateAdded: row.dateAdded,
     );
   }
 }

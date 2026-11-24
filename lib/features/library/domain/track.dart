@@ -25,6 +25,9 @@ abstract class Track with _$Track {
     int? sampleRateHz,
     int? bitrateKbps,
     String? format,
+
+    /// When the source added the track; drives the Home "recently added" list.
+    DateTime? dateAdded,
   }) = _Track;
 }
 
