@@ -96,25 +96,7 @@ def random_preset(rng: random.Random, palette: list[str], preset_id: str) -> dic
             "name": preset_id,
             "base": base,
             "layers": layers,
-            "home": {
-                "center": [round(rng.uniform(-0.35, 0.35), 3), round(rng.uniform(-0.7, -0.5), 3)],
-                "radius": round(rng.uniform(1.0, 1.25), 3),
-                "stops": [
-                    _stop(dominant, 0, rng.uniform(0.38, 0.55)),
-                    _stop(dominant, rng.uniform(0.24, 0.32), rng.uniform(0.12, 0.2)),
-                    _stop(base, rng.uniform(0.38, 0.48), 1),
-                    _stop(base, 1, 1),
-                ],
-            },
-            "pill": {
-                "center": [round(rng.uniform(-0.6, 0.0), 3), round(rng.uniform(-0.9, -0.2), 3)],
-                "radius": round(rng.uniform(1.6, 2.4), 3),
-                "stops": [
-                    _stop(dominant, 0, 1),
-                    _stop(accent, rng.uniform(0.45, 0.6), 1),
-                    _stop(accent, 1, 1),
-                ],
-            },
+            **_home_and_pill(base, dominant, accent, rng),
             "render": {
                 "grain": round(rng.uniform(0.008, 0.02), 4),
                 "seed": rng.randrange(1, 2**31 - 1),
@@ -122,6 +104,42 @@ def random_preset(rng: random.Random, palette: list[str], preset_id: str) -> dic
             "icon": None,
         }
     )
+
+
+def _home_and_pill(
+    base: str,
+    dominant: str,
+    accent: str,
+    rng: random.Random,
+) -> dict:
+    """Home fades into base inside the header; the pill stays bright."""
+    return {
+        "home": {
+            "center": [
+                round(rng.uniform(-0.35, 0.35), 3),
+                round(rng.uniform(-0.7, -0.5), 3),
+            ],
+            "radius": round(rng.uniform(1.0, 1.25), 3),
+            "stops": [
+                _stop(dominant, 0, rng.uniform(0.38, 0.55)),
+                _stop(dominant, rng.uniform(0.24, 0.32), rng.uniform(0.12, 0.2)),
+                _stop(base, rng.uniform(0.38, 0.48), 1),
+                _stop(base, 1, 1),
+            ],
+        },
+        "pill": {
+            "center": [
+                round(rng.uniform(-0.6, 0.0), 3),
+                round(rng.uniform(-0.9, -0.2), 3),
+            ],
+            "radius": round(rng.uniform(1.6, 2.4), 3),
+            "stops": [
+                _stop(dominant, 0, 1),
+                _stop(accent, rng.uniform(0.45, 0.6), 1),
+                _stop(accent, 1, 1),
+            ],
+        },
+    }
 
 
 def _accent_center(rng: random.Random, dominant: list[float]) -> list[float]:
@@ -221,25 +239,7 @@ def image_preset(path: Path, rng: random.Random, preset_id: str) -> dict:
             "approximate": True,
             "base": base,
             "layers": layers[:3],
-            "home": {
-                "center": [round(rng.uniform(-0.35, 0.35), 3), round(rng.uniform(-0.7, -0.5), 3)],
-                "radius": round(rng.uniform(1.0, 1.25), 3),
-                "stops": [
-                    _stop(dominant, 0, rng.uniform(0.38, 0.55)),
-                    _stop(dominant, rng.uniform(0.24, 0.32), rng.uniform(0.12, 0.2)),
-                    _stop(base, rng.uniform(0.38, 0.48), 1),
-                    _stop(base, 1, 1),
-                ],
-            },
-            "pill": {
-                "center": [round(rng.uniform(-0.6, 0.0), 3), round(rng.uniform(-0.9, -0.2), 3)],
-                "radius": round(rng.uniform(1.6, 2.4), 3),
-                "stops": [
-                    _stop(dominant, 0, 1),
-                    _stop(accent, rng.uniform(0.45, 0.6), 1),
-                    _stop(accent, 1, 1),
-                ],
-            },
+            **_home_and_pill(base, dominant, accent, rng),
             "render": {"grain": 0.012, "seed": rng.randrange(1, 2**31 - 1)},
             "icon": None,
         }
