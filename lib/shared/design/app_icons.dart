@@ -31,6 +31,11 @@ final class AppIconSet {
     required this.sort,
     required this.calendar,
     required this.duration,
+    required this.back,
+    required this.forward,
+    required this.check,
+    required this.appearance,
+    required this.language,
     required this.pass,
   });
 
@@ -102,6 +107,21 @@ final class AppIconSet {
 
   /// Track length.
   final IconData duration;
+
+  /// Goes back to the previous screen.
+  final IconData back;
+
+  /// Opens the next screen of a row.
+  final IconData forward;
+
+  /// Marks the active option of a list.
+  final IconData check;
+
+  /// Appearance settings.
+  final IconData appearance;
+
+  /// Language settings.
+  final IconData language;
 
   /// Passes the current discovery card.
   final IconData pass;
@@ -181,6 +201,21 @@ abstract final class AppIcons {
   /// Track length (Lucide).
   static const IconData duration = LucideIcons.clock;
 
+  /// Goes back (Lucide).
+  static const IconData back = LucideIcons.arrowLeft;
+
+  /// Opens the next screen of a row (Lucide).
+  static const IconData forward = LucideIcons.chevronRight;
+
+  /// Active option of a list (Lucide).
+  static const IconData check = LucideIcons.check;
+
+  /// Appearance settings (Lucide).
+  static const IconData appearance = LucideIcons.palette;
+
+  /// Language settings (Lucide).
+  static const IconData language = LucideIcons.languages;
+
   /// Passes the current discovery card (Lucide).
   static const IconData pass = LucideIcons.x;
 
@@ -209,6 +244,11 @@ abstract final class AppIcons {
     sort: AppIcons.sort,
     calendar: AppIcons.calendar,
     duration: AppIcons.duration,
+    back: AppIcons.back,
+    forward: AppIcons.forward,
+    check: AppIcons.check,
+    appearance: AppIcons.appearance,
+    language: AppIcons.language,
     pass: AppIcons.pass,
   );
 
@@ -237,6 +277,11 @@ abstract final class AppIcons {
     sort: Icons.sort_rounded,
     calendar: Icons.calendar_today_rounded,
     duration: Icons.schedule_rounded,
+    back: Icons.arrow_back_rounded,
+    forward: Icons.chevron_right_rounded,
+    check: Icons.check_rounded,
+    appearance: Icons.palette_outlined,
+    language: Icons.translate_rounded,
     pass: Icons.close_rounded,
   );
 }

@@ -4,6 +4,7 @@ import 'package:bars/l10n/app_localizations.dart';
 import 'package:bars/shared/design/text_styles.dart';
 import 'package:bars/shared/design/tokens.dart';
 import 'package:bars/shared/design/visual_theme.dart';
+import 'package:bars/shared/widgets/app_choice_chip.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:material_ui/material_ui.dart';
 
@@ -54,7 +55,7 @@ class LibraryOptionsSheet extends ConsumerWidget {
               runSpacing: AppSpacing.sm,
               children: [
                 for (final option in _options(l10n, context.icons))
-                  _SortChip(
+                  AppChoiceChip(
                     label: option.label,
                     icon: option.icon,
                     selected: options.sort == option.sort,
@@ -116,61 +117,4 @@ List<_SortOption> _options(AppLocalizations l10n, AppIconSet icons) {
     (sort: TrackSort.artist, label: l10n.sortArtist, icon: icons.sort),
     (sort: TrackSort.duration, label: l10n.sortDuration, icon: icons.duration),
   ];
-}
-
-/// Outlined chip; the active option is filled with the accent.
-class _SortChip extends StatelessWidget {
-  const new({
-    required this.label,
-    required this.icon,
-    required this.selected,
-    required this.onTap,
-  });
-
-  final String label;
-  final IconData icon;
-  final bool selected;
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    final accent = Theme.of(context).colorScheme.primary;
-    final radius = BorderRadius.circular(AppRadii.sm);
-
-    return Material(
-      color: selected ? accent : Colors.transparent,
-      shape: RoundedRectangleBorder(
-        borderRadius: radius,
-        side: BorderSide(color: selected ? accent : AppColors.outline),
-      ),
-      child: InkWell(
-        onTap: onTap,
-        borderRadius: radius,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(
-            horizontal: AppSpacing.md,
-            vertical: AppSpacing.sm,
-          ),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Icon(
-                icon,
-                size: AppSizing.chipIcon,
-                color: selected ? AppColors.onAccent : accent,
-              ),
-              const SizedBox(width: AppSpacing.sm),
-              Text(
-                label,
-                style: AppTextStyles.body.copyWith(
-                  color: selected ? AppColors.onAccent : AppColors.textPrimary,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
 }
