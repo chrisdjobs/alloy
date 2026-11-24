@@ -111,6 +111,30 @@ abstract class AppLocalizations {
   /// **'Library'**
   String get libraryTitle;
 
+  /// Library tab that lists every track
+  ///
+  /// In en, this message translates to:
+  /// **'Tracks'**
+  String get libraryTracks;
+
+  /// Library tab for playlists; not implemented yet
+  ///
+  /// In en, this message translates to:
+  /// **'Playlists'**
+  String get libraryPlaylists;
+
+  /// Library tab for artists; not implemented yet
+  ///
+  /// In en, this message translates to:
+  /// **'Artists'**
+  String get libraryArtists;
+
+  /// Library tab for albums; not implemented yet
+  ///
+  /// In en, this message translates to:
+  /// **'Albums'**
+  String get libraryAlbums;
+
   /// Top-level settings destination and screen title
   ///
   /// In en, this message translates to:

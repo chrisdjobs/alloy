@@ -73,7 +73,7 @@ void main() {
     await _pump(tester, repository, played, shuffled);
     await tester.pumpAndSettle();
 
-    expect(find.text('Shuffle all'), findsOneWidget);
+    expect(find.text('SHUFFLE ALL'), findsOneWidget);
     expect(find.text('Alpha'), findsOneWidget);
     expect(find.text('Beta'), findsOneWidget);
     expect(find.byType(ArtworkImage), findsNWidgets(2));
@@ -100,7 +100,7 @@ void main() {
     await _pump(tester, repository, played, shuffled);
     await tester.pumpAndSettle();
 
-    await tester.tap(find.text('Shuffle all'));
+    await tester.tap(find.text('SHUFFLE ALL'));
     await tester.pump();
 
     expect(shuffled, hasLength(1));

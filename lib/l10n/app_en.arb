@@ -8,6 +8,22 @@
   "@libraryTitle": {
     "description": "Top-level library destination and screen title"
   },
+  "libraryTracks": "Tracks",
+  "@libraryTracks": {
+    "description": "Library tab that lists every track"
+  },
+  "libraryPlaylists": "Playlists",
+  "@libraryPlaylists": {
+    "description": "Library tab for playlists; not implemented yet"
+  },
+  "libraryArtists": "Artists",
+  "@libraryArtists": {
+    "description": "Library tab for artists; not implemented yet"
+  },
+  "libraryAlbums": "Albums",
+  "@libraryAlbums": {
+    "description": "Library tab for albums; not implemented yet"
+  },
   "settingsTitle": "Settings",
   "@settingsTitle": {
     "description": "Top-level settings destination and screen title"

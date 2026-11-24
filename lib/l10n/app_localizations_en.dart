@@ -18,6 +18,18 @@ class AppLocalizationsEn extends AppLocalizations {
   String get libraryTitle => 'Library';
 
   @override
+  String get libraryTracks => 'Tracks';
+
+  @override
+  String get libraryPlaylists => 'Playlists';
+
+  @override
+  String get libraryArtists => 'Artists';
+
+  @override
+  String get libraryAlbums => 'Albums';
+
+  @override
   String get settingsTitle => 'Settings';
 
   @override

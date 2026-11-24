@@ -43,10 +43,10 @@ class LibraryScreen extends ConsumerWidget {
         children: [
           Padding(
             padding: const EdgeInsets.fromLTRB(
-              AppSpacing.lg,
-              AppSpacing.xl,
-              AppSpacing.lg,
+              AppSpacing.page,
               AppSpacing.md,
+              AppSpacing.page,
+              AppSpacing.lg,
             ),
             child: Row(
               children: [
@@ -63,6 +63,7 @@ class LibraryScreen extends ConsumerWidget {
               ],
             ),
           ),
+          const _LibraryTabs(),
           if (scanning) const _ScanBanner(),
           Expanded(
             child: switch (tracks) {
@@ -84,6 +85,66 @@ class LibraryScreen extends ConsumerWidget {
             },
           ),
         ],
+      ),
+    );
+  }
+}
+
+class _LibraryTabs extends StatelessWidget {
+  const new();
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(
+          AppSpacing.page,
+          0,
+          AppSpacing.page,
+          AppSpacing.sm,
+        ),
+        child: Row(
+          children: [
+            _LibraryTab(label: l10n.libraryTracks, active: true),
+            const SizedBox(width: AppSpacing.xl),
+            _LibraryTab(label: l10n.libraryPlaylists),
+            const SizedBox(width: AppSpacing.xl),
+            _LibraryTab(label: l10n.libraryArtists),
+            const SizedBox(width: AppSpacing.xl),
+            _LibraryTab(label: l10n.libraryAlbums),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _LibraryTab extends StatelessWidget {
+  const new({required this.label, this.active = false});
+
+  final String label;
+  final bool active;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.only(bottom: AppSpacing.sm),
+      decoration: BoxDecoration(
+        border: Border(
+          bottom: BorderSide(
+            color: active ? AppColors.textPrimary : Colors.transparent,
+            width: 2,
+          ),
+        ),
+      ),
+      child: Text(
+        label.toUpperCase(),
+        style: AppTextStyles.label.copyWith(
+          color: active ? AppColors.textPrimary : AppColors.textMuted,
+        ),
       ),
     );
   }
@@ -164,37 +225,29 @@ class _ShuffleAllRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
-    final accent = Theme.of(context).colorScheme.primary;
 
     return Padding(
-      padding: const EdgeInsets.symmetric(
-        horizontal: AppSpacing.lg,
-        vertical: AppSpacing.sm,
-      ),
-      child: Material(
-        color: AppColors.surface,
+      padding: const EdgeInsets.symmetric(horizontal: AppSpacing.page),
+      child: InkWell(
+        onTap: onTap,
         borderRadius: AppRadii.card,
-        child: InkWell(
-          onTap: onTap,
-          borderRadius: AppRadii.card,
-          child: Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: AppSpacing.md,
-              vertical: AppSpacing.md,
-            ),
-            child: Row(
-              children: [
-                Icon(AppIcons.shuffle, color: accent, size: 20),
-                const SizedBox(width: AppSpacing.md),
-                Text(
-                  l10n.shuffleAll,
-                  style: AppTextStyles.body.copyWith(
-                    color: AppColors.textPrimary,
-                    fontWeight: FontWeight.w600,
-                  ),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: AppSpacing.md),
+          child: Row(
+            children: [
+              const Icon(
+                AppIcons.shuffle,
+                color: AppColors.textPrimary,
+                size: 22,
+              ),
+              const SizedBox(width: AppSpacing.page),
+              Text(
+                l10n.shuffleAll.toUpperCase(),
+                style: AppTextStyles.action.copyWith(
+                  color: AppColors.textPrimary,
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),

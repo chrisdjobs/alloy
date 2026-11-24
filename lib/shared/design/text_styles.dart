@@ -40,4 +40,12 @@ abstract final class AppTextStyles {
     fontWeight: FontWeight.w600,
     letterSpacing: 1.4,
   );
+
+  /// Prominent uppercase action label, such as the shuffle row.
+  static const TextStyle action = TextStyle(
+    fontSize: 14,
+    height: 1.2,
+    fontWeight: FontWeight.w700,
+    letterSpacing: 1.2,
+  );
 }

@@ -64,6 +64,9 @@ abstract final class AppSpacing {
 
   /// 32 px.
   static const double xxl = 32;
+
+  /// Horizontal gutter of a page's content.
+  static const double page = 20;
 }
 
 /// Corner radii in logical pixels.
