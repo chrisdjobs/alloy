@@ -4,7 +4,7 @@ import 'package:bars/features/player/presentation/mini_player.dart';
 import 'package:bars/features/settings/domain/app_settings.dart';
 import 'package:bars/features/settings/presentation/settings_notifier.dart';
 import 'package:bars/l10n/app_localizations.dart';
-import 'package:bars/shared/design/gradients.dart';
+import 'package:bars/shared/design/gradient_presets_provider.dart';
 import 'package:bars/shared/design/text_styles.dart';
 import 'package:bars/shared/design/tokens.dart';
 import 'package:bars/shared/design/visual_theme.dart';
@@ -39,6 +39,7 @@ class AdaptiveShell extends ConsumerWidget {
       settingsProvider.select((settings) => settings.navOrder),
     );
     final current = AppTab.values[navigationShell.currentIndex];
+    final pill = ref.watch(activeGradientPresetProvider).pill;
 
     return LayoutBuilder(
       builder: (context, constraints) {
@@ -61,11 +62,17 @@ class AdaptiveShell extends ConsumerWidget {
                     destinations: [
                       for (final tab in order)
                         NavigationRailDestination(
-                          icon: _NavPill(tab: tab, selected: false, width: 180),
+                          icon: _NavPill(
+                            tab: tab,
+                            selected: false,
+                            width: 180,
+                            pill: pill,
+                          ),
                           selectedIcon: _NavPill(
                             tab: tab,
                             selected: true,
                             width: 180,
+                            pill: pill,
                           ),
                           label: Text(_labelOf(tab, context).toUpperCase()),
                         ),
@@ -85,6 +92,7 @@ class AdaptiveShell extends ConsumerWidget {
             tabs: order,
             current: current,
             onSelected: _select,
+            pill: pill,
           ),
         );
       },
@@ -127,11 +135,13 @@ class _BarsBottomBar extends StatelessWidget {
     required this.tabs,
     required this.current,
     required this.onSelected,
+    required this.pill,
   });
 
   final List<AppTab> tabs;
   final AppTab current;
   final ValueChanged<AppTab> onSelected;
+  final RadialGradient pill;
 
   @override
   Widget build(BuildContext context) {
@@ -172,9 +182,7 @@ class _BarsBottomBar extends StatelessWidget {
                   height: AppSizing.navPillHeight,
                   child: DecoratedBox(
                     decoration: BoxDecoration(
-                      gradient: AppGradients.accent(
-                        Theme.of(context).colorScheme.primary,
-                      ),
+                      gradient: pill,
                       borderRadius: AppRadii.navPill,
                     ),
                   ),
@@ -296,15 +304,20 @@ class _BottomTabState extends State<_BottomTab> {
 }
 
 class _NavPill extends StatelessWidget {
-  const new({required this.tab, required this.selected, this.width});
+  const new({
+    required this.tab,
+    required this.selected,
+    required this.pill,
+    this.width,
+  });
 
   final AppTab tab;
   final bool selected;
+  final RadialGradient pill;
   final double? width;
 
   @override
   Widget build(BuildContext context) {
-    final accent = Theme.of(context).colorScheme.primary;
     final foreground = selected ? AppColors.onAccent : AppColors.textSecondary;
 
     return AnimatedContainer(
@@ -316,7 +329,7 @@ class _NavPill extends StatelessWidget {
         vertical: AppSpacing.sm,
       ),
       decoration: BoxDecoration(
-        gradient: selected ? AppGradients.accent(accent) : null,
+        gradient: selected ? pill : null,
         borderRadius: AppRadii.pill,
       ),
       child: Row(

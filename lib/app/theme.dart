@@ -1,3 +1,4 @@
+import 'package:bars/shared/design/gradient_presets.dart';
 import 'package:bars/shared/design/text_styles.dart';
 import 'package:bars/shared/design/tokens.dart';
 import 'package:bars/shared/design/visual_theme.dart';
@@ -6,10 +7,15 @@ import 'package:material_ui/material_ui.dart';
 /// Builds the single Material 3 dark theme used on every platform.
 abstract final class AppTheme {
   /// Dark theme with [accent] as the primary color and [icons] in the theme.
+  ///
+  /// [base] defaults to the active gradient preset's base so the Home gradient
+  /// fades into the page background instead of showing an edge where it ends.
   static ThemeData dark({
     Color accent = AppColors.accent,
     AppIconSet icons = AppIcons.lucide,
+    Color? base,
   }) {
+    final background = base ?? AppGradientPresets.active.base;
     final colorScheme =
         ColorScheme.dark(
           primary: accent,
@@ -48,8 +54,8 @@ abstract final class AppTheme {
       useMaterial3: true,
       brightness: Brightness.dark,
       colorScheme: colorScheme,
-      scaffoldBackgroundColor: AppColors.background,
-      canvasColor: AppColors.background,
+      scaffoldBackgroundColor: background,
+      canvasColor: background,
       textTheme: textTheme,
       iconTheme: const IconThemeData(color: AppColors.textSecondary, size: 22),
       dividerTheme: const DividerThemeData(
@@ -63,21 +69,21 @@ abstract final class AppTheme {
         margin: EdgeInsets.zero,
         shape: RoundedRectangleBorder(borderRadius: AppRadii.card),
       ),
-      appBarTheme: const AppBarThemeData(
-        backgroundColor: AppColors.background,
+      appBarTheme: AppBarThemeData(
+        backgroundColor: background,
         surfaceTintColor: Colors.transparent,
         elevation: 0,
         centerTitle: false,
       ),
-      navigationBarTheme: const NavigationBarThemeData(
-        backgroundColor: AppColors.background,
+      navigationBarTheme: NavigationBarThemeData(
+        backgroundColor: background,
         elevation: 0,
         height: 72,
         indicatorColor: Colors.transparent,
         labelBehavior: NavigationDestinationLabelBehavior.alwaysHide,
       ),
-      navigationRailTheme: const NavigationRailThemeData(
-        backgroundColor: AppColors.background,
+      navigationRailTheme: NavigationRailThemeData(
+        backgroundColor: background,
         useIndicator: false,
         labelType: NavigationRailLabelType.none,
         minWidth: 220,
