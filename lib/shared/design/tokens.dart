@@ -96,7 +96,7 @@ abstract final class AppRadii {
 
   /// Large artwork used by the now-playing screen.
   static const BorderRadius artworkLarge = BorderRadius.all(
-    Radius.circular(lg),
+    Radius.circular(md),
   );
 
   /// Fully rounded pill.

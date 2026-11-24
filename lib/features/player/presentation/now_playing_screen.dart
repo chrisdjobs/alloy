@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:math' as math;
 
 import 'package:bars/features/library/domain/track.dart';
 import 'package:bars/features/player/domain/playback_state.dart';
@@ -103,81 +102,83 @@ class _PlayerBody extends ConsumerWidget {
       children: [
         _Header(title: track.album ?? l10n.nowPlaying),
         Expanded(
-          child: LayoutBuilder(
-            builder: (context, constraints) {
-              // Square, never stretched: the short side wins.
-              final side = math.min(
-                constraints.maxWidth,
-                constraints.maxHeight,
-              );
-              return Center(
-                child: Hero(
-                  tag: nowPlayingCoverHeroTag,
-                  child: ArtworkImage(
-                    artworkRef: track.artworkRef,
-                    size: side,
-                    borderRadius: AppRadii.artworkLarge,
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                const SizedBox(height: AppSpacing.xxl),
+                LayoutBuilder(
+                  builder: (context, constraints) => Hero(
+                    tag: nowPlayingCoverHeroTag,
+                    child: ArtworkImage(
+                      artworkRef: track.artworkRef,
+                      size: constraints.maxWidth,
+                      borderRadius: AppRadii.artworkLarge,
+                    ),
                   ),
                 ),
-              );
-            },
-          ),
-        ),
-        const SizedBox(height: AppSpacing.xl),
-        Align(
-          alignment: Alignment.centerLeft,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(
-                track.title,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: AppTextStyles.title.copyWith(
-                  color: AppColors.textPrimary,
-                  fontWeight: FontWeight.w700,
-                ),
-              ),
-              if (track.artist != null)
-                Text(
-                  track.artist!,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: AppTextStyles.body.copyWith(
-                    color: AppColors.textSecondary,
+                const SizedBox(height: AppSpacing.xxl),
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        track.title,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: AppTextStyles.playerTitle.copyWith(
+                          color: AppColors.textPrimary,
+                        ),
+                      ),
+                      if (track.artist != null)
+                        Text(
+                          track.artist!,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: AppTextStyles.body.copyWith(
+                            color: AppColors.textSecondary,
+                          ),
+                        ),
+                    ],
                   ),
                 ),
-            ],
-          ),
-        ),
-        const SizedBox(height: AppSpacing.md),
-        SeekBar(
-          position: state.position,
-          duration: state.duration,
-          onSeek: (position) => unawaited(notifier.seek(position)),
-        ),
-        const SizedBox(height: AppSpacing.xs),
-        Row(
-          children: [
-            Text(_formatDuration(state.position), style: _timeStyle),
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: AppSpacing.sm),
-                child: Text(
-                  technical ?? '',
-                  maxLines: 1,
-                  textAlign: TextAlign.center,
-                  overflow: TextOverflow.ellipsis,
-                  style: _timeStyle.copyWith(color: AppColors.textMuted),
+                const SizedBox(height: AppSpacing.md),
+                SeekBar(
+                  position: state.position,
+                  duration: state.duration,
+                  onSeek: (position) => unawaited(notifier.seek(position)),
                 ),
-              ),
+                const SizedBox(height: AppSpacing.xs),
+                Row(
+                  children: [
+                    Text(_formatDuration(state.position), style: _timeStyle),
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: AppSpacing.sm,
+                        ),
+                        child: Text(
+                          technical ?? '',
+                          maxLines: 1,
+                          textAlign: TextAlign.center,
+                          overflow: TextOverflow.ellipsis,
+                          style: _timeStyle.copyWith(
+                            color: AppColors.textMuted,
+                          ),
+                        ),
+                      ),
+                    ),
+                    Text(_formatDuration(state.duration), style: _timeStyle),
+                  ],
+                ),
+                const SizedBox(height: AppSpacing.lg),
+                _Controls(state: state),
+              ],
             ),
-            Text(_formatDuration(state.duration), style: _timeStyle),
-          ],
+          ),
         ),
-        const SizedBox(height: AppSpacing.lg),
-        _Controls(state: state),
         const SizedBox(height: AppSpacing.sm),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -301,6 +302,7 @@ class _Header extends StatelessWidget {
         IconButton(
           onPressed: onClose ?? () => Navigator.of(context).maybePop(),
           tooltip: l10n.close,
+          color: AppColors.textPrimary,
           icon: const Icon(AppIcons.collapse),
         ),
         Expanded(
@@ -309,7 +311,10 @@ class _Header extends StatelessWidget {
             maxLines: 1,
             textAlign: TextAlign.center,
             overflow: TextOverflow.ellipsis,
-            style: AppTextStyles.label.copyWith(color: AppColors.textSecondary),
+            style: AppTextStyles.body.copyWith(
+              color: AppColors.textPrimary,
+              fontWeight: FontWeight.w600,
+            ),
           ),
         ),
         // Mirrors the icon so the title stays centered.

@@ -84,10 +84,13 @@ class _SeekBarState extends State<SeekBar> {
                   borderRadius: AppRadii.pill,
                   child: SizedBox(
                     height: AppSizing.seekBarHeight,
+                    // The Stack has no intrinsic width; without this the empty
+                    // track collapses to the progress width.
+                    width: double.infinity,
                     child: Stack(
                       children: [
                         const Positioned.fill(
-                          child: ColoredBox(color: AppColors.outline),
+                          child: ColoredBox(color: AppColors.textMuted),
                         ),
                         FractionallySizedBox(
                           alignment: Alignment.centerLeft,

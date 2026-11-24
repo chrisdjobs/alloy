@@ -41,6 +41,14 @@ abstract final class AppTextStyles {
     letterSpacing: -0.1,
   );
 
+  /// Track title on the now-playing screen.
+  static const TextStyle playerTitle = TextStyle(
+    fontSize: 24,
+    height: 1.15,
+    fontWeight: FontWeight.w700,
+    letterSpacing: -0.3,
+  );
+
   /// Artist line under a track title.
   static const TextStyle trackArtist = TextStyle(
     fontSize: 13,
