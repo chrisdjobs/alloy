@@ -19,6 +19,22 @@ abstract final class AppGradients {
     );
   }
 
+  /// Soft accent bloom that sits behind the Home header and quick actions.
+  ///
+  /// Generated from [accent] so the glow follows the user's color.
+  static RadialGradient accentGlow(Color accent) {
+    return RadialGradient(
+      center: const Alignment(0.1, -0.55),
+      radius: 1.2,
+      colors: [
+        accent.withValues(alpha: 0.55),
+        accent.withValues(alpha: 0.16),
+        accent.withValues(alpha: 0),
+      ],
+      stops: const [0, 0.45, 1],
+    );
+  }
+
   /// Vertical fade from a cover-derived [color] into the [base] background.
   ///
   /// [color] is expected to be already darkened enough for readable text

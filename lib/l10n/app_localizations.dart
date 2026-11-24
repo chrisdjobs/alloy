@@ -302,6 +302,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Rescan library'**
   String get rescanLibrary;
+
+  /// Home section and shortcut for the newest tracks
+  ///
+  /// In en, this message translates to:
+  /// **'Recently added'**
+  String get recentlyAdded;
 }
 
 class _AppLocalizationsDelegate

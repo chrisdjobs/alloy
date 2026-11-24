@@ -1,27 +1,195 @@
+import 'package:bars/features/home/domain/home_sections.dart';
+import 'package:bars/features/home/presentation/home_callbacks.dart';
+import 'package:bars/features/home/presentation/widgets/home_header.dart';
+import 'package:bars/features/home/presentation/widgets/media_carousel.dart';
+import 'package:bars/features/library/domain/track.dart';
 import 'package:bars/l10n/app_localizations.dart';
-import 'package:bars/shared/widgets/bars_page_header.dart';
-import 'package:bars/shared/widgets/coming_soon.dart';
+import 'package:bars/shared/design/text_styles.dart';
+import 'package:bars/shared/design/tokens.dart';
+import 'package:bars/shared/design/visual_theme.dart';
+import 'package:bars/shared/widgets/tbd_placeholder.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:material_ui/material_ui.dart';
 
-/// Home destination.
+/// Home: accent glow, quick actions and the library's newest music.
 ///
-/// The header glow, quick access, carousels, most played, activity and
-/// statistics arrive in a later step; until then this is a deliberate
-/// placeholder, not fake content.
-class HomeScreen extends StatelessWidget {
+/// The library stream and the playback callbacks come from the router, so this
+/// feature only imports the library's domain.
+class HomeScreen extends StatefulWidget {
   /// Creates the home screen.
-  const new({super.key});
+  const new({
+    required this.tracks,
+    required this.onPlay,
+    required this.onShuffleAll,
+    required this.onChooseFolder,
+    required this.onRetry,
+    super.key,
+  });
+
+  /// Library tracks and their load state.
+  final AsyncValue<List<Track>> tracks;
+
+  /// Opens a track from a carousel.
+  final PlayTracksCallback onPlay;
+
+  /// Starts the whole library in shuffle mode.
+  final ShuffleTracksCallback onShuffleAll;
+
+  /// Opens the folder picker for the empty state.
+  final VoidCallback onChooseFolder;
+
+  /// Reloads the library after a failure.
+  final VoidCallback onRetry;
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  final GlobalKey _recentKey = GlobalKey();
+  final GlobalKey _albumsKey = GlobalKey();
+
+  Future<void> _scrollTo(GlobalKey key) async {
+    final target = key.currentContext;
+    if (target == null) return;
+    await Scrollable.ensureVisible(
+      target,
+      duration: const Duration(milliseconds: 300),
+      curve: Curves.easeOut,
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    final value = widget.tracks.value;
+    final tracks = value != null && value.isNotEmpty ? value : null;
+    final recent = tracks == null
+        ? const <Track>[]
+        : recentlyAddedTracks(tracks);
+    final albums = tracks == null ? const <HomeAlbum>[] : libraryAlbums(tracks);
+
+    return ListView(
+      padding: EdgeInsets.zero,
+      children: [
+        HomeHeader(
+          title: l10n.homeTitle,
+          quickActions: tracks == null
+              ? const []
+              : [
+                  QuickAccessCard(
+                    label: l10n.shuffle,
+                    icon: context.icons.shuffle,
+                    onTap: () => widget.onShuffleAll(tracks),
+                  ),
+                  QuickAccessCard(
+                    label: l10n.recentlyAdded,
+                    icon: context.icons.recent,
+                    onTap: () => _scrollTo(_recentKey),
+                  ),
+                  if (albums.isNotEmpty)
+                    QuickAccessCard(
+                      label: l10n.libraryAlbums,
+                      icon: context.icons.library,
+                      onTap: () => _scrollTo(_albumsKey),
+                    ),
+                ],
+        ),
+        ...switch (widget.tracks) {
+          AsyncValue(hasError: true) => [
+            _HomeMessage(
+              message: l10n.error,
+              actionLabel: l10n.retry,
+              onAction: widget.onRetry,
+            ),
+          ],
+          AsyncValue(:final value?) when value.isEmpty => [
+            _EmptyHome(onChooseFolder: widget.onChooseFolder),
+          ],
+          AsyncValue(hasValue: true) => [
+            SectionHeader(key: _recentKey, title: l10n.recentlyAdded),
+            TrackCarousel(tracks: recent, onPlay: widget.onPlay),
+            if (albums.isNotEmpty) ...[
+              SectionHeader(key: _albumsKey, title: l10n.libraryAlbums),
+              AlbumCarousel(
+                albums: albums,
+                onPlay: (album) => widget.onPlay(album.tracks, 0),
+              ),
+            ],
+            const SizedBox(height: AppSpacing.xl),
+          ],
+          _ => const [
+            Padding(
+              padding: EdgeInsets.all(AppSpacing.xxl),
+              child: Center(child: CircularProgressIndicator()),
+            ),
+          ],
+        },
+      ],
+    );
+  }
+}
+
+class _EmptyHome extends StatelessWidget {
+  const new({required this.onChooseFolder});
+
+  final VoidCallback onChooseFolder;
 
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
 
-    return SafeArea(
+    return Padding(
+      padding: const EdgeInsets.all(AppSpacing.xl),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          BarsPageHeader(title: l10n.homeTitle),
-          Expanded(child: ComingSoon(label: l10n.comingSoon)),
+          const TbdPlaceholder(width: 132, height: 132),
+          const SizedBox(height: AppSpacing.lg),
+          Text(
+            l10n.noTracksFound,
+            textAlign: TextAlign.center,
+            style: AppTextStyles.title.copyWith(color: AppColors.textPrimary),
+          ),
+          const SizedBox(height: AppSpacing.lg),
+          FilledButton.icon(
+            onPressed: onChooseFolder,
+            icon: Icon(context.icons.folder),
+            label: Text(l10n.chooseFolder),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _HomeMessage extends StatelessWidget {
+  const new({
+    required this.message,
+    required this.actionLabel,
+    required this.onAction,
+  });
+
+  final String message;
+  final String actionLabel;
+  final VoidCallback onAction;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(AppSpacing.xl),
+      child: Column(
+        children: [
+          Text(
+            message,
+            textAlign: TextAlign.center,
+            style: AppTextStyles.title.copyWith(color: AppColors.textPrimary),
+          ),
+          const SizedBox(height: AppSpacing.md),
+          TextButton.icon(
+            onPressed: onAction,
+            icon: Icon(context.icons.refresh),
+            label: Text(actionLabel),
+          ),
         ],
       ),
     );

@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:bars/app/shell.dart';
 import 'package:bars/features/discover/presentation/discover_screen.dart';
 import 'package:bars/features/home/presentation/home_screen.dart';
+import 'package:bars/features/library/presentation/library_notifier.dart';
 import 'package:bars/features/library/presentation/library_screen.dart';
 import 'package:bars/features/player/presentation/now_playing_screen.dart';
 import 'package:bars/features/player/presentation/player_notifier.dart';
@@ -26,7 +27,29 @@ GoRouter createAppRouter({String initialLocation = '/library'}) {
             routes: [
               GoRoute(
                 path: '/home',
-                builder: (context, state) => const HomeScreen(),
+                builder: (context, state) => Consumer(
+                  builder: (context, ref, _) => HomeScreen(
+                    tracks: ref.watch(libraryProvider),
+                    onPlay: (tracks, index) {
+                      unawaited(
+                        ref
+                            .read(playerProvider.notifier)
+                            .loadQueueAndPlay(tracks, index),
+                      );
+                    },
+                    onShuffleAll: (tracks) {
+                      unawaited(
+                        ref.read(playerProvider.notifier).shuffleAll(tracks),
+                      );
+                    },
+                    onChooseFolder: () {
+                      unawaited(
+                        ref.read(libraryProvider.notifier).scanFolder(),
+                      );
+                    },
+                    onRetry: () => ref.invalidate(libraryProvider),
+                  ),
+                ),
               ),
             ],
           ),

@@ -81,6 +81,14 @@ abstract final class AppTextStyles {
     letterSpacing: 1.4,
   );
 
+  /// Uppercase section header, such as "Recently added".
+  static const TextStyle sectionHeader = TextStyle(
+    fontSize: 16,
+    height: 1.2,
+    fontWeight: FontWeight.w700,
+    letterSpacing: 1,
+  );
+
   /// Prominent uppercase action label, such as the shuffle row.
   static const TextStyle action = TextStyle(
     fontSize: 14,

@@ -47,7 +47,7 @@ abstract class AppSettings with _$AppSettings {
     List<AppTab> navOrder,
 
     /// Destination the app opens on.
-    @Default(AppTab.library) AppTab startTab,
+    @Default(AppTab.home) AppTab startTab,
 
     /// Language override; null follows the system locale.
     String? localeCode,

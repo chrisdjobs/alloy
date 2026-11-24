@@ -27,6 +27,7 @@ final class AppIconSet {
     required this.repeatOne,
     required this.stop,
     required this.more,
+    required this.recent,
   });
 
   /// Library destination.
@@ -85,6 +86,9 @@ final class AppIconSet {
 
   /// Overflow menu.
   final IconData more;
+
+  /// Recently added shortcut.
+  final IconData recent;
 }
 
 /// Single swap point for functional icons.
@@ -149,6 +153,9 @@ abstract final class AppIcons {
   /// Overflow menu (Lucide).
   static const IconData more = LucideIcons.ellipsisVertical;
 
+  /// Recently added shortcut (Lucide).
+  static const IconData recent = LucideIcons.clock;
+
   /// Lucide outline pack, the default.
   static const AppIconSet lucide = AppIconSet(
     library: AppIcons.library,
@@ -170,6 +177,7 @@ abstract final class AppIcons {
     repeatOne: AppIcons.repeatOne,
     stop: AppIcons.stop,
     more: AppIcons.more,
+    recent: AppIcons.recent,
   );
 
   /// Material pack.
@@ -193,5 +201,6 @@ abstract final class AppIcons {
     repeatOne: Icons.repeat_one_rounded,
     stop: Icons.stop_rounded,
     more: Icons.more_vert_rounded,
+    recent: Icons.schedule_rounded,
   );
 }

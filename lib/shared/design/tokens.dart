@@ -149,6 +149,15 @@ abstract final class AppSizing {
 
   /// Icon size inside the bottom bar.
   static const double navIcon = 20;
+
+  /// Height of a quick-access card on the Home screen.
+  static const double quickAccessHeight = 100;
+
+  /// Cover size of the Home carousels.
+  static const double homeCarouselCover = 120;
+
+  /// Height of a Home carousel, cover plus its two text lines.
+  static const double homeCarouselHeight = 176;
 }
 
 /// Motion durations shared by the app.

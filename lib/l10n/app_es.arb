@@ -33,5 +33,6 @@
   "queuePosition": "{position} de {total}",
   "audioQuality": "{sampleRate} kHz · {bitrate} kbps · {format}",
   "shuffleAll": "Aleatorio",
-  "rescanLibrary": "Volver a escanear la biblioteca"
+  "rescanLibrary": "Volver a escanear la biblioteca",
+  "recentlyAdded": "Añadidos recientes"
 }

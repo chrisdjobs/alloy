@@ -116,4 +116,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get rescanLibrary => 'Volver a escanear la biblioteca';
+
+  @override
+  String get recentlyAdded => 'Añadidos recientes';
 }

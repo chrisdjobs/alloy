@@ -154,5 +154,9 @@
   "rescanLibrary": "Rescan library",
   "@rescanLibrary": {
     "description": "Tooltip for the action that scans the last folder again"
+  },
+  "recentlyAdded": "Recently added",
+  "@recentlyAdded": {
+    "description": "Home section and shortcut for the newest tracks"
   }
 }

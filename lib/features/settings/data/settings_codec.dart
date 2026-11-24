@@ -28,8 +28,7 @@ abstract final class SettingsCodec {
           _decodeEnum(entries[iconPackKey], AppIconPack.values) ??
           AppIconPack.lucide,
       navOrder: _decodeNavOrder(entries[navOrderKey]),
-      startTab:
-          _decodeEnum(entries[startTabKey], AppTab.values) ?? AppTab.library,
+      startTab: _decodeEnum(entries[startTabKey], AppTab.values) ?? AppTab.home,
       localeCode: _decodeLocale(entries[localeKey]),
     );
   }
