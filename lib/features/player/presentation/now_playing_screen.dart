@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:bars/core/utils/duration_format.dart';
 import 'package:bars/features/library/domain/track.dart';
 import 'package:bars/features/player/domain/playback_state.dart';
 import 'package:bars/features/player/presentation/player_hero.dart';
@@ -154,7 +155,10 @@ class _PlayerBody extends ConsumerWidget {
                 const SizedBox(height: AppSpacing.xs),
                 Row(
                   children: [
-                    Text(_formatDuration(state.position), style: _timeStyle),
+                    Text(
+                      formatTrackDuration(state.position),
+                      style: _timeStyle,
+                    ),
                     Expanded(
                       child: Padding(
                         padding: const EdgeInsets.symmetric(
@@ -171,7 +175,10 @@ class _PlayerBody extends ConsumerWidget {
                         ),
                       ),
                     ),
-                    Text(_formatDuration(state.duration), style: _timeStyle),
+                    Text(
+                      formatTrackDuration(state.duration),
+                      style: _timeStyle,
+                    ),
                   ],
                 ),
                 const SizedBox(height: AppSpacing.lg),
@@ -346,13 +353,3 @@ class _EmptyPlayer extends StatelessWidget {
 final TextStyle _timeStyle = AppTextStyles.playerMeta.copyWith(
   color: AppColors.textSecondary,
 );
-
-String _formatDuration(Duration? duration) {
-  if (duration == null) return '--:--';
-  final seconds = duration.inSeconds;
-  final minutes = seconds ~/ 60;
-  final remainder = (seconds % 60).toString().padLeft(2, '0');
-  final hours = minutes ~/ 60;
-  if (hours == 0) return '$minutes:$remainder';
-  return '$hours:${(minutes % 60).toString().padLeft(2, '0')}:$remainder';
-}

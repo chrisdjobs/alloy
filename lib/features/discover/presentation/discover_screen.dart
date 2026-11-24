@@ -1,5 +1,6 @@
 import 'dart:math' as math;
 
+import 'package:bars/core/utils/duration_format.dart';
 import 'package:bars/features/library/domain/track.dart';
 import 'package:bars/features/player/domain/playback_state.dart';
 import 'package:bars/l10n/app_localizations.dart';
@@ -249,7 +250,7 @@ class _Deck extends StatelessWidget {
           ),
           Row(
             children: [
-              Text(_formatDuration(position), style: _timeStyle),
+              Text(formatTrackDuration(position), style: _timeStyle),
               const Spacer(),
               Text(_durationLabel(l10n, duration), style: _timeStyle),
             ],
@@ -347,16 +348,6 @@ final TextStyle _timeStyle = AppTextStyles.playerMeta.copyWith(
 
 /// Duration line of the deck card, e.g. "of 3:20".
 String _durationLabel(AppLocalizations l10n, Duration? duration) {
-  final formatted = _formatDuration(duration);
+  final formatted = formatTrackDuration(duration);
   return l10n.ofDuration(formatted);
-}
-
-String _formatDuration(Duration? duration) {
-  if (duration == null) return '--:--';
-  final seconds = duration.inSeconds;
-  final minutes = seconds ~/ 60;
-  final remainder = (seconds % 60).toString().padLeft(2, '0');
-  final hours = minutes ~/ 60;
-  if (hours == 0) return '$minutes:$remainder';
-  return '$hours:${(minutes % 60).toString().padLeft(2, '0')}:$remainder';
 }
