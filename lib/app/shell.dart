@@ -120,7 +120,8 @@ IconData _iconOf(AppTab tab, AppIconSet icons) {
   };
 }
 
-/// Compact bottom bar: icon-only tabs with a gradient pill on the active one.
+/// Compact bottom bar: icon-only tabs with a gradient pill that slides
+/// between the slots.
 class _BarsBottomBar extends StatelessWidget {
   const new({
     required this.tabs,
@@ -135,30 +136,72 @@ class _BarsBottomBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final icons = context.icons;
+    final selectedIndex = tabs.indexOf(current);
 
     return SafeArea(
       top: false,
       child: SizedBox(
         height: AppSizing.navBarHeight,
-        child: Row(
-          children: [
-            for (final tab in tabs)
-              Expanded(
-                child: _BottomTab(
-                  label: _labelOf(tab, context),
-                  icon: _iconOf(tab, icons),
-                  selected: tab == current,
-                  onTap: () => onSelected(tab),
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            final slot = constraints.maxWidth / tabs.length;
+            // Same height the label line takes, so the pill lines up with the
+            // icons no matter how the slot is laid out.
+            final labelHeight =
+                MediaQuery.textScalerOf(context)
+                    .scale(AppTextStyles.label.fontSize!) *
+                AppTextStyles.label.height!;
+            final top =
+                (AppSizing.navBarHeight -
+                    AppSizing.navPillHeight -
+                    AppSpacing.xs -
+                    labelHeight) /
+                2;
+
+            return Stack(
+              alignment: Alignment.center,
+              children: [
+                AnimatedPositioned(
+                  duration: AppDurations.navSlide,
+                  curve: Curves.easeOutCubic,
+                  left:
+                      slot * selectedIndex +
+                      (slot - AppSizing.navPillWidth) / 2,
+                  top: top,
+                  width: AppSizing.navPillWidth,
+                  height: AppSizing.navPillHeight,
+                  child: DecoratedBox(
+                    decoration: BoxDecoration(
+                      gradient: AppGradients.accent(
+                        Theme.of(context).colorScheme.primary,
+                      ),
+                      borderRadius: AppRadii.navPill,
+                    ),
+                  ),
                 ),
-              ),
-          ],
+                Row(
+                  children: [
+                    for (final tab in tabs)
+                      Expanded(
+                        child: _BottomTab(
+                          label: _labelOf(tab, context),
+                          icon: _iconOf(tab, icons),
+                          selected: tab == current,
+                          onTap: () => onSelected(tab),
+                        ),
+                      ),
+                  ],
+                ),
+              ],
+            );
+          },
         ),
       ),
     );
   }
 }
 
-class _BottomTab extends StatelessWidget {
+class _BottomTab extends StatefulWidget {
   const new({
     required this.label,
     required this.icon,
@@ -172,31 +215,62 @@ class _BottomTab extends StatelessWidget {
   final VoidCallback onTap;
 
   @override
-  Widget build(BuildContext context) {
-    final accent = Theme.of(context).colorScheme.primary;
+  State<_BottomTab> createState() => _BottomTabState();
+}
 
+class _BottomTabState extends State<_BottomTab> {
+  bool _pressed = false;
+
+  void _setPressed(bool pressed) {
+    if (_pressed == pressed) return;
+    setState(() => _pressed = pressed);
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Semantics(
       button: true,
-      selected: selected,
-      label: label,
+      selected: widget.selected,
+      label: widget.label,
       child: InkWell(
-        onTap: onTap,
+        onTap: widget.onTap,
+        onTapDown: (_) => _setPressed(true),
+        onTapUp: (_) => _setPressed(false),
+        onTapCancel: () => _setPressed(false),
+        // The only tap feedback is the icon shrinking; no splash or highlight
+        // may be drawn over the tab.
+        splashFactory: NoSplash.splashFactory,
+        highlightColor: Colors.transparent,
+        hoverColor: Colors.transparent,
+        overlayColor: const WidgetStatePropertyAll(Colors.transparent),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            AnimatedContainer(
-              duration: AppDurations.navPill,
-              curve: Curves.easeOut,
+            SizedBox(
               width: AppSizing.navPillWidth,
               height: AppSizing.navPillHeight,
-              decoration: BoxDecoration(
-                gradient: selected ? AppGradients.accent(accent) : null,
-                borderRadius: AppRadii.navPill,
-              ),
-              child: Icon(
-                icon,
-                size: AppSizing.navIcon,
-                color: selected ? AppColors.onAccent : AppColors.textSecondary,
+              child: Center(
+                child: AnimatedScale(
+                  scale: _pressed ? 0.82 : 1,
+                  duration: _pressed
+                      ? AppDurations.navPress
+                      : AppDurations.navPill,
+                  curve: Curves.easeOut,
+                  child: TweenAnimationBuilder<double>(
+                    tween: Tween(end: widget.selected ? 1 : 0),
+                    duration: AppDurations.navSlide,
+                    curve: Curves.easeOutCubic,
+                    builder: (context, tint, _) => Icon(
+                      widget.icon,
+                      size: AppSizing.navIcon,
+                      color: Color.lerp(
+                        AppColors.textSecondary,
+                        AppColors.onAccent,
+                        tint,
+                      ),
+                    ),
+                  ),
+                ),
               ),
             ),
             const SizedBox(height: AppSpacing.xs),
@@ -204,9 +278,9 @@ class _BottomTab extends StatelessWidget {
             // selection changes; only the active tab draws its label.
             AnimatedOpacity(
               duration: AppDurations.navPill,
-              opacity: selected ? 1 : 0,
+              opacity: widget.selected ? 1 : 0,
               child: Text(
-                label.toUpperCase(),
+                widget.label.toUpperCase(),
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
                 style: AppTextStyles.label.copyWith(

@@ -167,4 +167,13 @@ abstract final class AppDurations {
 
   /// Highlight change of the bottom bar.
   static const Duration navPill = Duration(milliseconds: 180);
+
+  /// Travel of the bottom-bar highlight between two tabs.
+  static const Duration navSlide = Duration(milliseconds: 260);
+
+  /// Shrink of a bottom-bar icon while it is pressed.
+  static const Duration navPress = Duration(milliseconds: 90);
+
+  /// Cross-fade between the top-level branches of the shell.
+  static const Duration branchFade = Duration(milliseconds: 220);
 }

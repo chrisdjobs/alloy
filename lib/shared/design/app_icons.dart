@@ -97,7 +97,7 @@ final class AppIconSet {
 /// `const` widgets. Prefer `context.icons` in new code so the user's pack wins.
 abstract final class AppIcons {
   /// Library destination (Lucide).
-  static const IconData library = LucideIcons.libraryBig;
+  static const IconData library = LucideIcons.library;
 
   /// Settings destination (Lucide).
   static const IconData settings = LucideIcons.settings;

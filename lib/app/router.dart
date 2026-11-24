@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:bars/app/branch_fade.dart';
 import 'package:bars/app/shell.dart';
 import 'package:bars/features/discover/presentation/discover_screen.dart';
 import 'package:bars/features/home/presentation/home_screen.dart';
@@ -19,7 +20,8 @@ GoRouter createAppRouter({String initialLocation = '/library'}) {
   return GoRouter(
     initialLocation: initialLocation,
     routes: [
-      StatefulShellRoute.indexedStack(
+      StatefulShellRoute(
+        navigatorContainerBuilder: fadeBranchContainer,
         builder: (context, state, navigationShell) =>
             AdaptiveShell(navigationShell: navigationShell),
         branches: [
