@@ -59,7 +59,35 @@ GoRouter createAppRouter({String initialLocation = '/library'}) {
             routes: [
               GoRoute(
                 path: '/discover',
-                builder: (context, state) => const DiscoverScreen(),
+                builder: (context, state) => Consumer(
+                  builder: (context, ref, _) => DiscoverScreen(
+                    tracks: ref.watch(libraryProvider),
+                    playback: ref.watch(playerProvider).value,
+                    onPlay: (tracks, index) {
+                      unawaited(
+                        ref
+                            .read(playerProvider.notifier)
+                            .loadQueueAndPlay(tracks, index),
+                      );
+                    },
+                    onTogglePlayPause: () {
+                      unawaited(
+                        ref.read(playerProvider.notifier).togglePlayPause(),
+                      );
+                    },
+                    onSeek: (position) {
+                      unawaited(
+                        ref.read(playerProvider.notifier).seek(position),
+                      );
+                    },
+                    onChooseFolder: () {
+                      unawaited(
+                        ref.read(libraryProvider.notifier).scanFolder(),
+                      );
+                    },
+                    onRetry: () => ref.invalidate(libraryProvider),
+                  ),
+                ),
               ),
             ],
           ),

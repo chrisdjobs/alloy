@@ -34,5 +34,8 @@
   "audioQuality": "{sampleRate} kHz · {bitrate} kbps · {format}",
   "shuffleAll": "Aleatorio",
   "rescanLibrary": "Volver a escanear la biblioteca",
-  "recentlyAdded": "Añadidos recientes"
+  "recentlyAdded": "Añadidos recientes",
+  "discoverPass": "Pasar",
+  "discoverReshuffle": "Reordenar",
+  "ofDuration": "de {duration}"
 }

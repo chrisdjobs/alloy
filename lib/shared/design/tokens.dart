@@ -158,6 +158,15 @@ abstract final class AppSizing {
 
   /// Height of a Home carousel, cover plus its two text lines.
   static const double homeCarouselHeight = 176;
+
+  /// Maximum size of the discovery card.
+  static const double discoverCardMax = 420;
+
+  /// Diameter of the round play button of the discovery deck.
+  static const double discoverPlayButton = 64;
+
+  /// Diameter of the secondary discovery actions.
+  static const double discoverActionButton = 52;
 }
 
 /// Motion durations shared by the app.

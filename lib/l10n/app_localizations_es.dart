@@ -119,4 +119,15 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get recentlyAdded => 'Añadidos recientes';
+
+  @override
+  String get discoverPass => 'Pasar';
+
+  @override
+  String get discoverReshuffle => 'Reordenar';
+
+  @override
+  String ofDuration(String duration) {
+    return 'de $duration';
+  }
 }

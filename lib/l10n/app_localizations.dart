@@ -308,6 +308,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Recently added'**
   String get recentlyAdded;
+
+  /// Discover action that skips the current card
+  ///
+  /// In en, this message translates to:
+  /// **'Pass'**
+  String get discoverPass;
+
+  /// Discover action that deals a new deck of tracks
+  ///
+  /// In en, this message translates to:
+  /// **'Reshuffle'**
+  String get discoverReshuffle;
+
+  /// Total length under the discover waveform
+  ///
+  /// In en, this message translates to:
+  /// **'of {duration}'**
+  String ofDuration(String duration);
 }
 
 class _AppLocalizationsDelegate

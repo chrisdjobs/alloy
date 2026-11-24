@@ -158,5 +158,22 @@
   "recentlyAdded": "Recently added",
   "@recentlyAdded": {
     "description": "Home section and shortcut for the newest tracks"
+  },
+  "discoverPass": "Pass",
+  "@discoverPass": {
+    "description": "Discover action that skips the current card"
+  },
+  "discoverReshuffle": "Reshuffle",
+  "@discoverReshuffle": {
+    "description": "Discover action that deals a new deck of tracks"
+  },
+  "ofDuration": "of {duration}",
+  "@ofDuration": {
+    "description": "Total length under the discover waveform",
+    "placeholders": {
+      "duration": {
+        "type": "String"
+      }
+    }
   }
 }

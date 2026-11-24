@@ -28,6 +28,7 @@ final class AppIconSet {
     required this.stop,
     required this.more,
     required this.recent,
+    required this.pass,
   });
 
   /// Library destination.
@@ -89,6 +90,9 @@ final class AppIconSet {
 
   /// Recently added shortcut.
   final IconData recent;
+
+  /// Passes the current discovery card.
+  final IconData pass;
 }
 
 /// Single swap point for functional icons.
@@ -156,6 +160,9 @@ abstract final class AppIcons {
   /// Recently added shortcut (Lucide).
   static const IconData recent = LucideIcons.clock;
 
+  /// Passes the current discovery card (Lucide).
+  static const IconData pass = LucideIcons.x;
+
   /// Lucide outline pack, the default.
   static const AppIconSet lucide = AppIconSet(
     library: AppIcons.library,
@@ -178,6 +185,7 @@ abstract final class AppIcons {
     stop: AppIcons.stop,
     more: AppIcons.more,
     recent: AppIcons.recent,
+    pass: AppIcons.pass,
   );
 
   /// Material pack.
@@ -202,5 +210,6 @@ abstract final class AppIcons {
     stop: Icons.stop_rounded,
     more: Icons.more_vert_rounded,
     recent: Icons.schedule_rounded,
+    pass: Icons.close_rounded,
   );
 }
