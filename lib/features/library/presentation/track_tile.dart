@@ -1,3 +1,4 @@
+import 'package:bars/core/utils/duration_format.dart';
 import 'package:bars/features/library/domain/track.dart';
 import 'package:bars/l10n/app_localizations.dart';
 import 'package:bars/shared/design/app_icons.dart';
@@ -16,6 +17,7 @@ class TrackTile extends StatelessWidget {
     required this.track,
     required this.onTap,
     this.leading,
+    this.showDuration = false,
     super.key,
   });
 
@@ -27,6 +29,9 @@ class TrackTile extends StatelessWidget {
 
   /// Cover slot; defaults to the track's [ArtworkImage].
   final Widget? leading;
+
+  /// Whether the track length is written before the overflow button.
+  final bool showDuration;
 
   @override
   Widget build(BuildContext context) {
@@ -68,6 +73,16 @@ class TrackTile extends StatelessWidget {
                   ],
                 ),
               ),
+              if (showDuration)
+                Padding(
+                  padding: const EdgeInsets.only(left: AppSpacing.sm),
+                  child: Text(
+                    formatTrackDuration(track.duration),
+                    style: AppTextStyles.trackArtist.copyWith(
+                      color: AppColors.textSecondary,
+                    ),
+                  ),
+                ),
               PopupMenuButton<_TrackAction>(
                 icon: const Icon(AppIcons.more),
                 onSelected: (_) => onTap(),

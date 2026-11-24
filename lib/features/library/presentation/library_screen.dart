@@ -1,5 +1,8 @@
 import 'package:bars/features/library/domain/track.dart';
+import 'package:bars/features/library/domain/track_sort.dart';
 import 'package:bars/features/library/presentation/library_notifier.dart';
+import 'package:bars/features/library/presentation/library_options_sheet.dart';
+import 'package:bars/features/library/presentation/library_view_options.dart';
 import 'package:bars/features/library/presentation/track_tile.dart';
 import 'package:bars/l10n/app_localizations.dart';
 import 'package:bars/shared/design/text_styles.dart';
@@ -34,6 +37,7 @@ class LibraryScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context);
     final tracks = ref.watch(libraryProvider);
+    final options = ref.watch(libraryViewOptionsProvider);
     final progress = ref.watch(scanProgressProvider).value;
     final scanning = progress != null && !progress.isComplete;
     final notifier = ref.read(libraryProvider.notifier);
@@ -45,6 +49,11 @@ class LibraryScreen extends ConsumerWidget {
           BarsPageHeader(
             title: l10n.libraryTitle,
             actions: [
+              IconButton(
+                onPressed: () => _showOptions(context),
+                tooltip: l10n.libraryOptions,
+                icon: Icon(context.icons.sort),
+              ),
               IconButton(
                 onPressed: () async {
                   await notifier.triggerScan();
@@ -68,7 +77,8 @@ class LibraryScreen extends ConsumerWidget {
                   },
                 ),
               AsyncValue(:final value?) => _TrackList(
-                tracks: value,
+                tracks: sortTracks(value, options.sort),
+                showDuration: options.showDuration,
                 onPlay: onPlay,
                 onShuffleAll: onShuffleAll,
               ),
@@ -79,6 +89,18 @@ class LibraryScreen extends ConsumerWidget {
       ),
     );
   }
+}
+
+void _showOptions(BuildContext context) {
+  showModalBottomSheet<void>(
+    context: context,
+    isScrollControlled: true,
+    backgroundColor: AppColors.surface,
+    shape: const RoundedRectangleBorder(
+      borderRadius: BorderRadius.vertical(top: Radius.circular(AppRadii.lg)),
+    ),
+    builder: (context) => const LibraryOptionsSheet(),
+  );
 }
 
 class _LibraryTabs extends StatelessWidget {
@@ -181,11 +203,13 @@ class _ScanBanner extends ConsumerWidget {
 class _TrackList extends StatelessWidget {
   const new({
     required this.tracks,
+    required this.showDuration,
     required this.onPlay,
     required this.onShuffleAll,
   });
 
   final List<Track> tracks;
+  final bool showDuration;
   final PlayTracksCallback onPlay;
   final ShuffleTracksCallback onShuffleAll;
 
@@ -201,6 +225,7 @@ class _TrackList extends StatelessWidget {
         final trackIndex = index - 1;
         return TrackTile(
           track: tracks[trackIndex],
+          showDuration: showDuration,
           onTap: () => onPlay(tracks, trackIndex),
         );
       },

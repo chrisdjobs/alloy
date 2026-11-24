@@ -28,6 +28,9 @@ final class AppIconSet {
     required this.stop,
     required this.more,
     required this.recent,
+    required this.sort,
+    required this.calendar,
+    required this.duration,
     required this.pass,
   });
 
@@ -90,6 +93,15 @@ final class AppIconSet {
 
   /// Recently added shortcut.
   final IconData recent;
+
+  /// Orders a list.
+  final IconData sort;
+
+  /// A calendar day, used by the date filters.
+  final IconData calendar;
+
+  /// Track length.
+  final IconData duration;
 
   /// Passes the current discovery card.
   final IconData pass;
@@ -160,6 +172,15 @@ abstract final class AppIcons {
   /// Recently added shortcut (Lucide).
   static const IconData recent = LucideIcons.clock;
 
+  /// Orders a list (Lucide).
+  static const IconData sort = LucideIcons.arrowDownWideNarrow;
+
+  /// A calendar day (Lucide).
+  static const IconData calendar = LucideIcons.calendarDays;
+
+  /// Track length (Lucide).
+  static const IconData duration = LucideIcons.clock;
+
   /// Passes the current discovery card (Lucide).
   static const IconData pass = LucideIcons.x;
 
@@ -185,6 +206,9 @@ abstract final class AppIcons {
     stop: AppIcons.stop,
     more: AppIcons.more,
     recent: AppIcons.recent,
+    sort: AppIcons.sort,
+    calendar: AppIcons.calendar,
+    duration: AppIcons.duration,
     pass: AppIcons.pass,
   );
 
@@ -210,6 +234,9 @@ abstract final class AppIcons {
     stop: Icons.stop_rounded,
     more: Icons.more_vert_rounded,
     recent: Icons.schedule_rounded,
+    sort: Icons.sort_rounded,
+    calendar: Icons.calendar_today_rounded,
+    duration: Icons.schedule_rounded,
     pass: Icons.close_rounded,
   );
 }

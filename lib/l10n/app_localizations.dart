@@ -147,6 +147,60 @@ abstract class AppLocalizations {
   /// **'Albums'**
   String get libraryAlbums;
 
+  /// Opens the sheet with the library sort and row options
+  ///
+  /// In en, this message translates to:
+  /// **'Library options'**
+  String get libraryOptions;
+
+  /// Section label above the sort chips of the library sheet
+  ///
+  /// In en, this message translates to:
+  /// **'Sort'**
+  String get sortBy;
+
+  /// Sort chip: track title, A to Z
+  ///
+  /// In en, this message translates to:
+  /// **'A-Z'**
+  String get sortTitleAscending;
+
+  /// Sort chip: track title, Z to A
+  ///
+  /// In en, this message translates to:
+  /// **'Z-A'**
+  String get sortTitleDescending;
+
+  /// Sort chip: oldest dateAdded first
+  ///
+  /// In en, this message translates to:
+  /// **'Oldest added'**
+  String get sortOldestAdded;
+
+  /// Sort chip: album name
+  ///
+  /// In en, this message translates to:
+  /// **'Album'**
+  String get sortAlbum;
+
+  /// Sort chip: artist name
+  ///
+  /// In en, this message translates to:
+  /// **'Artist'**
+  String get sortArtist;
+
+  /// Sort chip: track length
+  ///
+  /// In en, this message translates to:
+  /// **'Duration'**
+  String get sortDuration;
+
+  /// Toggle that shows the track length in every library row
+  ///
+  /// In en, this message translates to:
+  /// **'Show duration'**
+  String get showDuration;
+
   /// Label of the settings hub destination in the navigation bar
   ///
   /// In en, this message translates to:

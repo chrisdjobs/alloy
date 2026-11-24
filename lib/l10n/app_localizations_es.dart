@@ -36,6 +36,33 @@ class AppLocalizationsEs extends AppLocalizations {
   String get libraryAlbums => 'Álbumes';
 
   @override
+  String get libraryOptions => 'Opciones de la biblioteca';
+
+  @override
+  String get sortBy => 'Ordenar';
+
+  @override
+  String get sortTitleAscending => 'A-Z';
+
+  @override
+  String get sortTitleDescending => 'Z-A';
+
+  @override
+  String get sortOldestAdded => 'Más antiguos';
+
+  @override
+  String get sortAlbum => 'Álbum';
+
+  @override
+  String get sortArtist => 'Artista';
+
+  @override
+  String get sortDuration => 'Duración';
+
+  @override
+  String get showDuration => 'Mostrar duración';
+
+  @override
   String get meTitle => 'Yo';
 
   @override

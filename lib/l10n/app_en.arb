@@ -32,6 +32,42 @@
   "@libraryAlbums": {
     "description": "Library tab for albums; not implemented yet"
   },
+  "libraryOptions": "Library options",
+  "@libraryOptions": {
+    "description": "Opens the sheet with the library sort and row options"
+  },
+  "sortBy": "Sort",
+  "@sortBy": {
+    "description": "Section label above the sort chips of the library sheet"
+  },
+  "sortTitleAscending": "A-Z",
+  "@sortTitleAscending": {
+    "description": "Sort chip: track title, A to Z"
+  },
+  "sortTitleDescending": "Z-A",
+  "@sortTitleDescending": {
+    "description": "Sort chip: track title, Z to A"
+  },
+  "sortOldestAdded": "Oldest added",
+  "@sortOldestAdded": {
+    "description": "Sort chip: oldest dateAdded first"
+  },
+  "sortAlbum": "Album",
+  "@sortAlbum": {
+    "description": "Sort chip: album name"
+  },
+  "sortArtist": "Artist",
+  "@sortArtist": {
+    "description": "Sort chip: artist name"
+  },
+  "sortDuration": "Duration",
+  "@sortDuration": {
+    "description": "Sort chip: track length"
+  },
+  "showDuration": "Show duration",
+  "@showDuration": {
+    "description": "Toggle that shows the track length in every library row"
+  },
   "meTitle": "Me",
   "@meTitle": {
     "description": "Label of the settings hub destination in the navigation bar"

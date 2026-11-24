@@ -167,6 +167,15 @@ abstract final class AppSizing {
 
   /// Diameter of the secondary discovery actions.
   static const double discoverActionButton = 52;
+
+  /// Width of the grab handle at the top of a bottom sheet.
+  static const double sheetHandleWidth = 40;
+
+  /// Height of the grab handle at the top of a bottom sheet.
+  static const double sheetHandleHeight = 4;
+
+  /// Icon size inside a filter chip.
+  static const double chipIcon = 16;
 }
 
 /// Motion durations shared by the app.
