@@ -1,0 +1,8 @@
+-- Key/value preferences owned by the settings feature.
+--
+-- They live in their own database so visual settings evolve on a different
+-- release cycle than the library schema and migrations stay independent.
+CREATE TABLE settings_entries (
+    setting_key TEXT NOT NULL PRIMARY KEY,
+    value TEXT NOT NULL
+) AS SettingsEntry;
