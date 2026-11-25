@@ -65,17 +65,22 @@ class ActivityChart extends StatelessWidget {
               Row(
                 spacing: AppSizing.activityBarGap,
                 children: [
-                  for (var i = 0; i < points.length; i++)
-                    Expanded(
-                      child: Text(
-                        _label(points[i], i, weekday),
-                        textAlign: TextAlign.center,
-                        maxLines: 1,
-                        style: AppTextStyles.label.copyWith(
-                          color: AppColors.textMuted,
+                  if (period == HomePeriod.week)
+                    for (final point in points)
+                      Expanded(
+                        child: _label(
+                          weekday
+                              .format(point.date)
+                              .substring(0, 1)
+                              .toUpperCase(),
                         ),
+                      )
+                  else
+                    for (var start = 0; start < points.length; start += 5)
+                      Expanded(
+                        flex: math.min(5, points.length - start),
+                        child: _label('${_groupEnd(start).date.day}'),
                       ),
-                    ),
                 ],
               ),
             ],
@@ -91,12 +96,18 @@ class ActivityChart extends StatelessWidget {
     return math.max(AppSizing.activityBarMinHeight, scaled);
   }
 
-  String _label(ActivityPoint point, int index, DateFormat weekday) {
-    if (period == HomePeriod.week) {
-      return weekday.format(point.date).substring(0, 1).toUpperCase();
-    }
-    final isMarked = index % 5 == 0 || index == points.length - 1;
-    return isMarked ? '${point.date.day}' : '';
+  Widget _label(String text) {
+    return Text(
+      text,
+      textAlign: TextAlign.center,
+      maxLines: 1,
+      style: AppTextStyles.label.copyWith(color: AppColors.textMuted),
+    );
+  }
+
+  /// Last day of the five-day group that starts at [start].
+  ActivityPoint _groupEnd(int start) {
+    return points[math.min(start + 4, points.length - 1)];
   }
 }
 
