@@ -356,5 +356,35 @@
         "type": "int"
       }
     }
+  },
+  "activity": "Activity",
+  "@activity": {
+    "description": "Home section with the daily plays bar chart"
+  },
+  "statistics": "Statistics",
+  "@statistics": {
+    "description": "Home section with the library totals"
+  },
+  "totalLength": "Length",
+  "@totalLength": {
+    "description": "Label of the total listening length in the statistics card"
+  },
+  "durationHours": "{hours} h",
+  "@durationHours": {
+    "description": "Listening length with hours, such as 26 h",
+    "placeholders": {
+      "hours": {
+        "type": "int"
+      }
+    }
+  },
+  "durationMinutes": "{minutes} min",
+  "@durationMinutes": {
+    "description": "Listening length with minutes, used below one hour",
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
   }
 }

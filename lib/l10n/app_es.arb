@@ -74,5 +74,10 @@
   "mostPlayed": "Más escuchadas",
   "week": "Semana",
   "month": "Mes",
-  "playCount": "{count, plural, =0{Sin reproducciones} =1{1 reproducción} other{{count} reproducciones}}"
+  "playCount": "{count, plural, =0{Sin reproducciones} =1{1 reproducción} other{{count} reproducciones}}",
+  "activity": "Actividad",
+  "statistics": "Estadísticas",
+  "totalLength": "Duración",
+  "durationHours": "{hours} h",
+  "durationMinutes": "{minutes} min"
 }

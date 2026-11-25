@@ -96,7 +96,6 @@ final class HomeStatistics {
     required this.albumCount,
     required this.artistCount,
     required this.totalDuration,
-    required this.playCount,
   });
 
   /// Number of tracks in the library.
@@ -110,9 +109,6 @@ final class HomeStatistics {
 
   /// Total listening length of the library.
   final Duration totalDuration;
-
-  /// Number of plays in the selected period.
-  final int playCount;
 }
 
 /// Scaffold mixes: derived from [tracks] until the play history exists.
@@ -170,7 +166,7 @@ List<ActivityPoint> activityPoints(HomePeriod period, {DateTime? now}) {
   ];
 }
 
-/// Library totals; [HomeStatistics.playCount] is a placeholder for now.
+/// Library totals: real counts and length, no play history needed.
 HomeStatistics homeStatistics(List<Track> tracks) {
   final albums = <String>{};
   final artists = <String>{};
@@ -188,7 +184,6 @@ HomeStatistics homeStatistics(List<Track> tracks) {
     albumCount: albums.length,
     artistCount: artists.length,
     totalDuration: duration,
-    playCount: tracks.length * 3,
   );
 }
 
