@@ -9,3 +9,9 @@ typedef ShuffleTracksCallback = void Function(List<Track> tracks);
 
 /// Plays [album] from its first track.
 typedef PlayAlbumCallback = void Function(HomeAlbum album);
+
+/// Plays [mix] from its first track.
+typedef PlayMixCallback = void Function(HomeMix mix);
+
+/// Switches the statistics window.
+typedef OnPeriodChanged = void Function(HomePeriod period);
