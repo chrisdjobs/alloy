@@ -465,6 +465,18 @@ abstract class AppLocalizations {
   /// **'Shuffle all'**
   String get shuffleAll;
 
+  /// Home shortcut and screen title for the favorited tracks
+  ///
+  /// In en, this message translates to:
+  /// **'Favorites'**
+  String get favorites;
+
+  /// Caption of the favorites placeholder screen
+  ///
+  /// In en, this message translates to:
+  /// **'Your favorite tracks will live here'**
+  String get favoritesComingSoon;
+
   /// Tooltip for the action that scans the last folder again
   ///
   /// In en, this message translates to:
@@ -494,6 +506,90 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'of {duration}'**
   String ofDuration(String duration);
+
+  /// Home section with generated track mixes
+  ///
+  /// In en, this message translates to:
+  /// **'Mixes for you'**
+  String get mixesForYou;
+
+  /// Name of the mix built from the tracks played most right now
+  ///
+  /// In en, this message translates to:
+  /// **'Your rotation'**
+  String get mixOnRotationTitle;
+
+  /// Description of the rotation mix
+  ///
+  /// In en, this message translates to:
+  /// **'What you keep coming back to'**
+  String get mixOnRotationSubtitle;
+
+  /// Name of the mix built from less played library tracks
+  ///
+  /// In en, this message translates to:
+  /// **'Deep cuts'**
+  String get mixDeepCutsTitle;
+
+  /// Description of the deep cuts mix
+  ///
+  /// In en, this message translates to:
+  /// **'Hidden gems from your library'**
+  String get mixDeepCutsSubtitle;
+
+  /// Home section that ranks the tracks with the most plays
+  ///
+  /// In en, this message translates to:
+  /// **'Most played'**
+  String get mostPlayed;
+
+  /// Statistics window of the last seven days
+  ///
+  /// In en, this message translates to:
+  /// **'Week'**
+  String get week;
+
+  /// Statistics window of the last thirty days
+  ///
+  /// In en, this message translates to:
+  /// **'Month'**
+  String get month;
+
+  /// Number of plays of a track inside the selected window
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =0{No plays} =1{1 play} other{{count} plays}}'**
+  String playCount(int count);
+
+  /// Home section with the daily plays bar chart
+  ///
+  /// In en, this message translates to:
+  /// **'Activity'**
+  String get activity;
+
+  /// Home section with the library totals
+  ///
+  /// In en, this message translates to:
+  /// **'Statistics'**
+  String get statistics;
+
+  /// Label of the total listening length in the statistics card
+  ///
+  /// In en, this message translates to:
+  /// **'Length'**
+  String get totalLength;
+
+  /// Listening length with hours, such as 26 h
+  ///
+  /// In en, this message translates to:
+  /// **'{hours} h'**
+  String durationHours(int hours);
+
+  /// Listening length with minutes, used below one hour
+  ///
+  /// In en, this message translates to:
+  /// **'{minutes} min'**
+  String durationMinutes(int minutes);
 }
 
 class _AppLocalizationsDelegate

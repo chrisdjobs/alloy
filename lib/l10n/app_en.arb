@@ -291,6 +291,14 @@
   "@shuffleAll": {
     "description": "Library action that plays the whole library in random order"
   },
+  "favorites": "Favorites",
+  "@favorites": {
+    "description": "Home shortcut and screen title for the favorited tracks"
+  },
+  "favoritesComingSoon": "Your favorite tracks will live here",
+  "@favoritesComingSoon": {
+    "description": "Caption of the favorites placeholder screen"
+  },
   "rescanLibrary": "Rescan library",
   "@rescanLibrary": {
     "description": "Tooltip for the action that scans the last folder again"

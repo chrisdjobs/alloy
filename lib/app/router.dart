@@ -4,6 +4,7 @@ import 'package:alloy/app/branch_fade.dart';
 import 'package:alloy/app/player_transition.dart';
 import 'package:alloy/app/shell.dart';
 import 'package:alloy/features/discover/presentation/discover_screen.dart';
+import 'package:alloy/features/favorites/presentation/favorites_screen.dart';
 import 'package:alloy/features/home/presentation/home_screen.dart';
 import 'package:alloy/features/library/presentation/library_notifier.dart';
 import 'package:alloy/features/library/presentation/library_screen.dart';
@@ -49,6 +50,7 @@ GoRouter createAppRouter({String initialLocation = '/library'}) {
                         ref.read(playerProvider.notifier).shuffleAll(tracks),
                       );
                     },
+                    onOpenFavorites: () => context.push('/home/favorites'),
                     onChooseFolder: () {
                       unawaited(
                         ref.read(libraryProvider.notifier).scanFolder(),
@@ -57,6 +59,12 @@ GoRouter createAppRouter({String initialLocation = '/library'}) {
                     onRetry: () => ref.invalidate(libraryProvider),
                   ),
                 ),
+                routes: [
+                  GoRoute(
+                    path: 'favorites',
+                    builder: (context, state) => const FavoritesScreen(),
+                  ),
+                ],
               ),
             ],
           ),

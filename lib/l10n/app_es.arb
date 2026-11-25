@@ -61,6 +61,8 @@
   "queuePosition": "{position} de {total}",
   "audioQuality": "{sampleRate} kHz · {bitrate} kbps · {format}",
   "shuffleAll": "Aleatorio",
+  "favorites": "Favoritos",
+  "favoritesComingSoon": "Tus pistas favoritas vivirán aquí",
   "rescanLibrary": "Volver a escanear la biblioteca",
   "recentlyAdded": "Añadidos recientes",
   "discoverPass": "Pasar",

@@ -25,6 +25,7 @@ class HomeScreen extends StatefulWidget {
     required this.tracks,
     required this.onPlay,
     required this.onShuffleAll,
+    required this.onOpenFavorites,
     required this.onChooseFolder,
     required this.onRetry,
     super.key,
@@ -39,6 +40,9 @@ class HomeScreen extends StatefulWidget {
   /// Starts the whole library in shuffle mode.
   final ShuffleTracksCallback onShuffleAll;
 
+  /// Opens the favorites destination.
+  final VoidCallback onOpenFavorites;
+
   /// Opens the folder picker for the empty state.
   final VoidCallback onChooseFolder;
 
@@ -50,9 +54,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  final GlobalKey _mixesKey = GlobalKey();
   final GlobalKey _recentKey = GlobalKey();
-  final GlobalKey _albumsKey = GlobalKey();
   HomePeriod _period = HomePeriod.week;
 
   Future<void> _scrollTo(GlobalKey key) async {
@@ -95,16 +97,15 @@ class _HomeScreenState extends State<HomeScreen> {
                     onTap: () => widget.onShuffleAll(tracks),
                   ),
                   QuickAccessCard(
-                    label: l10n.mixesForYou,
-                    icon: context.icons.mixes,
-                    onTap: () => _scrollTo(_mixesKey),
+                    label: l10n.favorites,
+                    icon: context.icons.favorite,
+                    onTap: widget.onOpenFavorites,
                   ),
-                  if (albums.isNotEmpty)
-                    QuickAccessCard(
-                      label: l10n.libraryAlbums,
-                      icon: context.icons.library,
-                      onTap: () => _scrollTo(_albumsKey),
-                    ),
+                  QuickAccessCard(
+                    label: l10n.recentlyAdded,
+                    icon: context.icons.recent,
+                    onTap: () => _scrollTo(_recentKey),
+                  ),
                 ],
         ),
         ...switch (widget.tracks) {
@@ -119,7 +120,7 @@ class _HomeScreenState extends State<HomeScreen> {
             NoTracksState(onChooseFolder: widget.onChooseFolder),
           ],
           AsyncValue(hasValue: true) => [
-            SectionHeader(key: _mixesKey, title: l10n.mixesForYou),
+            SectionHeader(title: l10n.mixesForYou),
             MixCarousel(
               mixes: mixes,
               onPlay: (mix) => widget.onPlay(mix.tracks, 0),
@@ -127,7 +128,7 @@ class _HomeScreenState extends State<HomeScreen> {
             SectionHeader(key: _recentKey, title: l10n.recentlyAdded),
             TrackCarousel(tracks: recent, onPlay: widget.onPlay),
             if (albums.isNotEmpty) ...[
-              SectionHeader(key: _albumsKey, title: l10n.libraryAlbums),
+              SectionHeader(title: l10n.libraryAlbums),
               AlbumCarousel(
                 albums: albums,
                 onPlay: (album) => widget.onPlay(album.tracks, 0),

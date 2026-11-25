@@ -223,6 +223,12 @@ class AppLocalizationsEs extends AppLocalizations {
   String get shuffleAll => 'Aleatorio';
 
   @override
+  String get favorites => 'Favoritos';
+
+  @override
+  String get favoritesComingSoon => 'Tus pistas favoritas vivirán aquí';
+
+  @override
   String get rescanLibrary => 'Volver a escanear la biblioteca';
 
   @override
@@ -237,5 +243,60 @@ class AppLocalizationsEs extends AppLocalizations {
   @override
   String ofDuration(String duration) {
     return 'de $duration';
+  }
+
+  @override
+  String get mixesForYou => 'Mezclas para ti';
+
+  @override
+  String get mixOnRotationTitle => 'Tu rotación';
+
+  @override
+  String get mixOnRotationSubtitle => 'Lo que más escuchas ahora';
+
+  @override
+  String get mixDeepCutsTitle => 'Joyas ocultas';
+
+  @override
+  String get mixDeepCutsSubtitle => 'Tesoros escondidos en tu biblioteca';
+
+  @override
+  String get mostPlayed => 'Más escuchadas';
+
+  @override
+  String get week => 'Semana';
+
+  @override
+  String get month => 'Mes';
+
+  @override
+  String playCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count reproducciones',
+      one: '1 reproducción',
+      zero: 'Sin reproducciones',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get activity => 'Actividad';
+
+  @override
+  String get statistics => 'Estadísticas';
+
+  @override
+  String get totalLength => 'Duración';
+
+  @override
+  String durationHours(int hours) {
+    return '$hours h';
+  }
+
+  @override
+  String durationMinutes(int minutes) {
+    return '$minutes min';
   }
 }
