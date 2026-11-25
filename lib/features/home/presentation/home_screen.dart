@@ -79,7 +79,7 @@ class _HomeScreenState extends State<HomeScreen> {
     final mixes = tracks == null ? const <HomeMix>[] : mixesForYou(tracks);
     final played = tracks == null
         ? const <MostPlayedEntry>[]
-        : mostPlayed(tracks, _period);
+        : mostPlayed(tracks, _period, limit: tracks.length);
     final activity = activityPoints(_period);
     final statistics = tracks == null ? null : homeStatistics(tracks);
 

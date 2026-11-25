@@ -282,6 +282,9 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get seeAll => 'See all';
+
+  @override
   String get activity => 'Activity';
 
   @override

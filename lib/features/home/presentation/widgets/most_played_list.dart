@@ -9,7 +9,9 @@ import 'package:alloy/shared/widgets/artwork_image.dart';
 import 'package:material_ui/material_ui.dart';
 
 /// Ranked list of the most played tracks with a week/month toggle.
-class MostPlayedList extends StatelessWidget {
+///
+/// Shows the first five entries until "See all" expands the list.
+class MostPlayedList extends StatefulWidget {
   /// Creates the list; tapping a row plays the ranking from that track.
   const new({
     required this.entries,
@@ -32,10 +34,23 @@ class MostPlayedList extends StatelessWidget {
   final PlayTracksCallback onPlay;
 
   @override
+  State<MostPlayedList> createState() => _MostPlayedListState();
+}
+
+class _MostPlayedListState extends State<MostPlayedList> {
+  static const int _collapsedCount = 5;
+
+  var _expanded = false;
+
+  @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
+    final entries = widget.entries;
     if (entries.isEmpty) return const SizedBox.shrink();
     final tracks = [for (final entry in entries) entry.track];
+    final visible = _expanded
+        ? entries
+        : entries.take(_collapsedCount).toList(growable: false);
 
     return Column(
       children: [
@@ -46,23 +61,37 @@ class MostPlayedList extends StatelessWidget {
             children: [
               AppChoiceChip(
                 label: l10n.week,
-                selected: period == HomePeriod.week,
-                onTap: () => onPeriodChanged(HomePeriod.week),
+                selected: widget.period == HomePeriod.week,
+                onTap: () => widget.onPeriodChanged(HomePeriod.week),
               ),
               const SizedBox(width: AppSpacing.sm),
               AppChoiceChip(
                 label: l10n.month,
-                selected: period == HomePeriod.month,
-                onTap: () => onPeriodChanged(HomePeriod.month),
+                selected: widget.period == HomePeriod.month,
+                onTap: () => widget.onPeriodChanged(HomePeriod.month),
               ),
             ],
           ),
         ),
-        for (var i = 0; i < entries.length; i++)
+        for (var i = 0; i < visible.length; i++)
           _MostPlayedRow(
             rank: i + 1,
-            entry: entries[i],
-            onTap: () => onPlay(tracks, i),
+            entry: visible[i],
+            onTap: () => widget.onPlay(tracks, i),
+          ),
+        if (!_expanded && entries.length > _collapsedCount)
+          Align(
+            alignment: Alignment.centerLeft,
+            child: TextButton(
+              onPressed: () => setState(() => _expanded = true),
+              child: Text(
+                l10n.seeAll,
+                style: AppTextStyles.body.copyWith(
+                  color: Theme.of(context).colorScheme.primary,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ),
           ),
       ],
     );

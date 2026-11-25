@@ -365,6 +365,10 @@
       }
     }
   },
+  "seeAll": "See all",
+  "@seeAll": {
+    "description": "Expands the most played ranking to the whole list"
+  },
   "activity": "Activity",
   "@activity": {
     "description": "Home section with the daily plays bar chart"

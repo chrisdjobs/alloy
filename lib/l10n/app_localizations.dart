@@ -561,6 +561,12 @@ abstract class AppLocalizations {
   /// **'{count, plural, =0{No plays} =1{1 play} other{{count} plays}}'**
   String playCount(int count);
 
+  /// Expands the most played ranking to the whole list
+  ///
+  /// In en, this message translates to:
+  /// **'See all'**
+  String get seeAll;
+
   /// Home section with the daily plays bar chart
   ///
   /// In en, this message translates to:
