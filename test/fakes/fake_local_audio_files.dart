@@ -1,4 +1,4 @@
-import 'package:bars/core/platform/local_audio_files.dart';
+import 'package:alloy/core/platform/local_audio_files.dart';
 
 /// In-memory [LocalAudioFiles] for scanner tests.
 final class FakeLocalAudioFiles implements LocalAudioFiles {

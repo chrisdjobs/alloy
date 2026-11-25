@@ -1,12 +1,12 @@
 import 'dart:async';
 
-import 'package:bars/features/settings/domain/app_settings.dart';
-import 'package:bars/features/settings/presentation/settings_notifier.dart';
-import 'package:bars/features/settings/presentation/widgets/settings_sub_screen.dart';
-import 'package:bars/l10n/app_localizations.dart';
-import 'package:bars/shared/design/accent_palette.dart';
-import 'package:bars/shared/design/tokens.dart';
-import 'package:bars/shared/widgets/app_choice_chip.dart';
+import 'package:alloy/features/settings/domain/app_settings.dart';
+import 'package:alloy/features/settings/presentation/settings_notifier.dart';
+import 'package:alloy/features/settings/presentation/widgets/settings_sub_screen.dart';
+import 'package:alloy/l10n/app_localizations.dart';
+import 'package:alloy/shared/design/accent_palette.dart';
+import 'package:alloy/shared/design/tokens.dart';
+import 'package:alloy/shared/widgets/app_choice_chip.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:material_ui/material_ui.dart';
 

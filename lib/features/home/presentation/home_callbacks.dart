@@ -1,5 +1,5 @@
-import 'package:bars/features/home/domain/home_sections.dart';
-import 'package:bars/features/library/domain/track.dart';
+import 'package:alloy/features/home/domain/home_sections.dart';
+import 'package:alloy/features/library/domain/track.dart';
 
 /// Plays [tracks] starting at [index].
 typedef PlayTracksCallback = void Function(List<Track> tracks, int index);

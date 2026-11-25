@@ -1,6 +1,6 @@
-import 'package:bars/shared/design/text_styles.dart';
-import 'package:bars/shared/design/tokens.dart';
-import 'package:bars/shared/design/visual_theme.dart';
+import 'package:alloy/shared/design/text_styles.dart';
+import 'package:alloy/shared/design/tokens.dart';
+import 'package:alloy/shared/design/visual_theme.dart';
 import 'package:material_ui/material_ui.dart';
 
 /// Failure message with a single recovery action.

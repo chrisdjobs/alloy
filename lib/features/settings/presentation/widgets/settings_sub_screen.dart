@@ -1,7 +1,7 @@
-import 'package:bars/shared/design/text_styles.dart';
-import 'package:bars/shared/design/tokens.dart';
-import 'package:bars/shared/design/visual_theme.dart';
-import 'package:bars/shared/widgets/bars_page_header.dart';
+import 'package:alloy/shared/design/text_styles.dart';
+import 'package:alloy/shared/design/tokens.dart';
+import 'package:alloy/shared/design/visual_theme.dart';
+import 'package:alloy/shared/widgets/alloy_page_header.dart';
 import 'package:go_router/go_router.dart';
 import 'package:material_ui/material_ui.dart';
 
@@ -23,7 +23,7 @@ class SettingsSubScreen extends StatelessWidget {
       child: ListView(
         padding: const EdgeInsets.only(bottom: AppSpacing.xl),
         children: [
-          BarsPageHeader(
+          AlloyPageHeader(
             title: title,
             leading: IconButton(
               onPressed: () => context.pop(),

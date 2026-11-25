@@ -1,11 +1,11 @@
 import 'dart:async';
 
-import 'package:bars/core/failure.dart';
-import 'package:bars/core/result.dart';
-import 'package:bars/features/settings/data/database/settings_database.dart';
-import 'package:bars/features/settings/data/settings_codec.dart';
-import 'package:bars/features/settings/domain/app_settings.dart';
-import 'package:bars/features/settings/domain/settings_repository.dart';
+import 'package:alloy/core/failure.dart';
+import 'package:alloy/core/result.dart';
+import 'package:alloy/features/settings/data/database/settings_database.dart';
+import 'package:alloy/features/settings/data/settings_codec.dart';
+import 'package:alloy/features/settings/domain/app_settings.dart';
+import 'package:alloy/features/settings/domain/settings_repository.dart';
 
 /// [SettingsRepository] backed by the settings database.
 final class DriftSettingsRepository implements SettingsRepository {

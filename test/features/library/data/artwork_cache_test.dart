@@ -1,8 +1,8 @@
 import 'dart:typed_data';
 
-import 'package:bars/core/artwork/artwork_ref.dart';
-import 'package:bars/core/artwork/artwork_visual.dart';
-import 'package:bars/features/library/data/artwork_cache.dart';
+import 'package:alloy/core/artwork/artwork_ref.dart';
+import 'package:alloy/core/artwork/artwork_visual.dart';
+import 'package:alloy/features/library/data/artwork_cache.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import '../../../fakes/fake_artwork_store.dart';

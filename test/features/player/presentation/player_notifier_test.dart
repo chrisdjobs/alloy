@@ -1,7 +1,7 @@
-import 'package:bars/core/failure.dart';
-import 'package:bars/features/library/domain/track.dart';
-import 'package:bars/features/player/domain/playback_state.dart';
-import 'package:bars/features/player/presentation/player_notifier.dart';
+import 'package:alloy/core/failure.dart';
+import 'package:alloy/features/library/domain/track.dart';
+import 'package:alloy/features/player/domain/playback_state.dart';
+import 'package:alloy/features/player/presentation/player_notifier.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 

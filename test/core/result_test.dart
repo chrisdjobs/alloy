@@ -1,5 +1,5 @@
-import 'package:bars/core/failure.dart';
-import 'package:bars/core/result.dart';
+import 'package:alloy/core/failure.dart';
+import 'package:alloy/core/result.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
@@ -32,14 +32,14 @@ void main() {
     });
 
     test('pattern matching is exhaustive', () {
-      const result = Result.ok('bars');
+      const result = Result.ok('alloy');
 
       final description = switch (result) {
         Ok(:final value) => value,
         Err(:final failure) => failure.message ?? 'failure',
       };
 
-      expect(description, 'bars');
+      expect(description, 'alloy');
     });
 
     test('exposes the concrete branch', () {

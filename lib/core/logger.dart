@@ -5,7 +5,7 @@ import 'dart:developer' as developer;
 /// Using this facade instead of `print` keeps output out of stdout and makes
 /// every entry visible in the DevTools log with a consistent name.
 abstract final class Logger {
-  static const _name = 'bars';
+  static const _name = 'alloy';
   static const _debugLevel = 500;
   static const _infoLevel = 800;
   static const _warningLevel = 900;

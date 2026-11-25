@@ -1,10 +1,10 @@
-import 'package:bars/features/library/domain/track_sort.dart';
-import 'package:bars/features/library/presentation/library_view_options.dart';
-import 'package:bars/l10n/app_localizations.dart';
-import 'package:bars/shared/design/text_styles.dart';
-import 'package:bars/shared/design/tokens.dart';
-import 'package:bars/shared/design/visual_theme.dart';
-import 'package:bars/shared/widgets/app_choice_chip.dart';
+import 'package:alloy/features/library/domain/track_sort.dart';
+import 'package:alloy/features/library/presentation/library_view_options.dart';
+import 'package:alloy/l10n/app_localizations.dart';
+import 'package:alloy/shared/design/text_styles.dart';
+import 'package:alloy/shared/design/tokens.dart';
+import 'package:alloy/shared/design/visual_theme.dart';
+import 'package:alloy/shared/widgets/app_choice_chip.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:material_ui/material_ui.dart';
 

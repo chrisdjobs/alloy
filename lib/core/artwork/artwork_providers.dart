@@ -1,7 +1,7 @@
 import 'dart:async';
 
-import 'package:bars/core/artwork/artwork_ref.dart';
-import 'package:bars/core/artwork/artwork_visual.dart';
+import 'package:alloy/core/artwork/artwork_ref.dart';
+import 'package:alloy/core/artwork/artwork_visual.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 

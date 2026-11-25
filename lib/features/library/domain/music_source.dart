@@ -1,4 +1,4 @@
-import 'package:bars/features/library/domain/track.dart';
+import 'package:alloy/features/library/domain/track.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'music_source.freezed.dart';

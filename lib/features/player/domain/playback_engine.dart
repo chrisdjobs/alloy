@@ -1,6 +1,6 @@
-import 'package:bars/core/result.dart';
-import 'package:bars/features/library/domain/track.dart';
-import 'package:bars/features/player/domain/playback_state.dart';
+import 'package:alloy/core/result.dart';
+import 'package:alloy/features/library/domain/track.dart';
+import 'package:alloy/features/player/domain/playback_state.dart';
 
 /// Resolves the URI the engine opens for [track].
 typedef TrackUriResolver = Uri Function(Track track);

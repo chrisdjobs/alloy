@@ -1,38 +1,38 @@
 import 'dart:async';
 
-import 'package:bars/app/router.dart';
-import 'package:bars/app/theme.dart';
-import 'package:bars/core/artwork/artwork_providers.dart';
-import 'package:bars/core/logger.dart';
-import 'package:bars/core/platform/audio_permission.dart';
-import 'package:bars/core/platform/dart_io_artwork_store.dart';
-import 'package:bars/core/platform/dart_io_folder_store.dart';
-import 'package:bars/core/platform/dart_io_local_audio_files.dart';
-import 'package:bars/core/platform/dart_io_local_cover_reader.dart';
-import 'package:bars/core/platform/dart_io_platform_info.dart';
-import 'package:bars/core/platform/folder_picker.dart';
-import 'package:bars/core/platform/permission_handler_audio_permission.dart';
-import 'package:bars/core/platform/platform_info.dart';
-import 'package:bars/features/library/data/artwork_cache.dart';
-import 'package:bars/features/library/data/artwork_repository_impl.dart';
-import 'package:bars/features/library/data/database/app_database.dart';
-import 'package:bars/features/library/data/library_repository_impl.dart';
-import 'package:bars/features/library/data/local_artwork_source.dart';
-import 'package:bars/features/library/data/local_music_source.dart';
-import 'package:bars/features/library/presentation/library_notifier.dart';
-import 'package:bars/features/player/data/android_playback_engine.dart';
-import 'package:bars/features/player/data/audio_handler.dart';
-import 'package:bars/features/player/data/audio_service_playback_engine.dart';
-import 'package:bars/features/player/data/linux_playback_engine.dart';
-import 'package:bars/features/player/domain/playback_engine.dart';
-import 'package:bars/features/player/presentation/player_notifier.dart';
-import 'package:bars/features/settings/data/database/settings_database.dart';
-import 'package:bars/features/settings/data/drift_settings_repository.dart';
-import 'package:bars/features/settings/domain/app_settings.dart';
-import 'package:bars/features/settings/presentation/settings_notifier.dart';
-import 'package:bars/l10n/app_localizations.dart';
-import 'package:bars/shared/design/tokens.dart';
-import 'package:bars/shared/design/visual_theme.dart';
+import 'package:alloy/app/router.dart';
+import 'package:alloy/app/theme.dart';
+import 'package:alloy/core/artwork/artwork_providers.dart';
+import 'package:alloy/core/logger.dart';
+import 'package:alloy/core/platform/audio_permission.dart';
+import 'package:alloy/core/platform/dart_io_artwork_store.dart';
+import 'package:alloy/core/platform/dart_io_folder_store.dart';
+import 'package:alloy/core/platform/dart_io_local_audio_files.dart';
+import 'package:alloy/core/platform/dart_io_local_cover_reader.dart';
+import 'package:alloy/core/platform/dart_io_platform_info.dart';
+import 'package:alloy/core/platform/folder_picker.dart';
+import 'package:alloy/core/platform/permission_handler_audio_permission.dart';
+import 'package:alloy/core/platform/platform_info.dart';
+import 'package:alloy/features/library/data/artwork_cache.dart';
+import 'package:alloy/features/library/data/artwork_repository_impl.dart';
+import 'package:alloy/features/library/data/database/app_database.dart';
+import 'package:alloy/features/library/data/library_repository_impl.dart';
+import 'package:alloy/features/library/data/local_artwork_source.dart';
+import 'package:alloy/features/library/data/local_music_source.dart';
+import 'package:alloy/features/library/presentation/library_notifier.dart';
+import 'package:alloy/features/player/data/android_playback_engine.dart';
+import 'package:alloy/features/player/data/audio_handler.dart';
+import 'package:alloy/features/player/data/audio_service_playback_engine.dart';
+import 'package:alloy/features/player/data/linux_playback_engine.dart';
+import 'package:alloy/features/player/domain/playback_engine.dart';
+import 'package:alloy/features/player/presentation/player_notifier.dart';
+import 'package:alloy/features/settings/data/database/settings_database.dart';
+import 'package:alloy/features/settings/data/drift_settings_repository.dart';
+import 'package:alloy/features/settings/domain/app_settings.dart';
+import 'package:alloy/features/settings/presentation/settings_notifier.dart';
+import 'package:alloy/l10n/app_localizations.dart';
+import 'package:alloy/shared/design/tokens.dart';
+import 'package:alloy/shared/design/visual_theme.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:just_audio_media_kit/just_audio_media_kit.dart';
 import 'package:material_ui/material_ui.dart';
@@ -108,7 +108,7 @@ Future<void> bootstrap() async {
           ),
         ),
       ],
-      child: const BarsApp(),
+      child: const AlloyApp(),
     ),
   );
 }
@@ -155,12 +155,12 @@ Future<PlaybackEngine> _createEngine(
 
 PlaybackEngine _sessionLessEngine(TrackUriResolver resolveUri) {
   return AudioServicePlaybackEngine(
-    handler: BarsAudioHandler(resolveUri: resolveUri),
+    handler: AlloyAudioHandler(resolveUri: resolveUri),
   );
 }
 
 /// Root widget: theme, router and localization configuration.
-class BarsApp extends ConsumerWidget {
+class AlloyApp extends ConsumerWidget {
   /// Creates the root widget.
   const new({super.key});
 

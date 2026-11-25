@@ -1,12 +1,12 @@
+import 'package:alloy/features/library/domain/track.dart';
+import 'package:alloy/features/player/domain/playback_engine.dart';
 import 'package:audio_service/audio_service.dart';
-import 'package:bars/features/library/domain/track.dart';
-import 'package:bars/features/player/domain/playback_engine.dart';
 import 'package:just_audio/just_audio.dart';
 
 /// Connects just_audio to the system media session.
 ///
 /// Android renders it as the media notification, Linux exposes it over MPRIS.
-final class BarsAudioHandler extends BaseAudioHandler
+final class AlloyAudioHandler extends BaseAudioHandler
     with QueueHandler, SeekHandler {
   /// Creates a handler whose player opens tracks through [resolveUri].
   new({required this.resolveUri}) {

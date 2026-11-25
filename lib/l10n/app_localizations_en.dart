@@ -12,7 +12,7 @@ class AppLocalizationsEn extends AppLocalizations {
   AppLocalizationsEn([String locale = 'en']) : super(locale);
 
   @override
-  String get appTitle => 'Bars';
+  String get appTitle => 'Alloy';
 
   @override
   String get homeTitle => 'Home';
@@ -104,7 +104,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get musicFolders => 'Music folders';
 
   @override
-  String get chooseFolderHint => 'Where Bars looks for your music';
+  String get chooseFolderHint => 'Where Alloy looks for your music';
 
   @override
   String get rescanLibraryHint => 'Look for new files in the same folder';

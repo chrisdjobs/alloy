@@ -1,12 +1,12 @@
-import 'package:bars/features/player/domain/playback_state.dart';
-import 'package:bars/features/player/presentation/player_hero.dart';
-import 'package:bars/features/player/presentation/player_notifier.dart';
-import 'package:bars/l10n/app_localizations.dart';
-import 'package:bars/shared/design/text_styles.dart';
-import 'package:bars/shared/design/tokens.dart';
-import 'package:bars/shared/design/visual_theme.dart';
-import 'package:bars/shared/widgets/artwork_image.dart';
-import 'package:bars/shared/widgets/cover_backdrop.dart';
+import 'package:alloy/features/player/domain/playback_state.dart';
+import 'package:alloy/features/player/presentation/player_hero.dart';
+import 'package:alloy/features/player/presentation/player_notifier.dart';
+import 'package:alloy/l10n/app_localizations.dart';
+import 'package:alloy/shared/design/text_styles.dart';
+import 'package:alloy/shared/design/tokens.dart';
+import 'package:alloy/shared/design/visual_theme.dart';
+import 'package:alloy/shared/widgets/artwork_image.dart';
+import 'package:alloy/shared/widgets/cover_backdrop.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:material_ui/material_ui.dart';
 

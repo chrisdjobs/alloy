@@ -1,8 +1,8 @@
-import 'package:bars/shared/design/gradient_presets_provider.dart';
-import 'package:bars/shared/design/text_styles.dart';
-import 'package:bars/shared/design/tokens.dart';
-import 'package:bars/shared/widgets/bars_page_header.dart';
-import 'package:bars/shared/widgets/preset_glow.dart';
+import 'package:alloy/shared/design/gradient_presets_provider.dart';
+import 'package:alloy/shared/design/text_styles.dart';
+import 'package:alloy/shared/design/tokens.dart';
+import 'package:alloy/shared/widgets/alloy_page_header.dart';
+import 'package:alloy/shared/widgets/preset_glow.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:material_ui/material_ui.dart';
 
@@ -40,7 +40,7 @@ class HomeHeader extends ConsumerWidget {
         Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            SafeArea(bottom: false, child: BarsPageHeader(title: title)),
+            SafeArea(bottom: false, child: AlloyPageHeader(title: title)),
             if (quickActions.isEmpty)
               const SizedBox(height: AppSpacing.lg)
             else ...[

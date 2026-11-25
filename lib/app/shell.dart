@@ -1,15 +1,15 @@
 import 'dart:async';
 
-import 'package:bars/features/player/presentation/mini_player.dart';
-import 'package:bars/features/settings/domain/app_settings.dart';
-import 'package:bars/features/settings/presentation/settings_notifier.dart';
-import 'package:bars/l10n/app_localizations.dart';
-import 'package:bars/shared/design/gradient_presets_provider.dart';
-import 'package:bars/shared/design/text_styles.dart';
-import 'package:bars/shared/design/tokens.dart';
-import 'package:bars/shared/design/visual_theme.dart';
-import 'package:bars/shared/widgets/preset_glow.dart';
-import 'package:bars/shared/widgets/tbd_placeholder.dart';
+import 'package:alloy/features/player/presentation/mini_player.dart';
+import 'package:alloy/features/settings/domain/app_settings.dart';
+import 'package:alloy/features/settings/presentation/settings_notifier.dart';
+import 'package:alloy/l10n/app_localizations.dart';
+import 'package:alloy/shared/design/gradient_presets_provider.dart';
+import 'package:alloy/shared/design/text_styles.dart';
+import 'package:alloy/shared/design/tokens.dart';
+import 'package:alloy/shared/design/visual_theme.dart';
+import 'package:alloy/shared/widgets/preset_glow.dart';
+import 'package:alloy/shared/widgets/tbd_placeholder.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:material_ui/material_ui.dart';
@@ -89,7 +89,7 @@ class AdaptiveShell extends ConsumerWidget {
 
         return Scaffold(
           body: _content(context),
-          bottomNavigationBar: _BarsBottomBar(
+          bottomNavigationBar: _AlloyBottomBar(
             tabs: order,
             current: current,
             onSelected: _select,
@@ -131,7 +131,7 @@ IconData _iconOf(AppTab tab, AppIconSet icons) {
 
 /// Compact bottom bar: icon-only tabs with a gradient pill that slides
 /// between the slots.
-class _BarsBottomBar extends StatelessWidget {
+class _AlloyBottomBar extends StatelessWidget {
   const new({
     required this.tabs,
     required this.current,

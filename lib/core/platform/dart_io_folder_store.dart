@@ -1,7 +1,7 @@
 import 'dart:io';
 
-import 'package:bars/core/logger.dart';
-import 'package:bars/core/platform/folder_store.dart';
+import 'package:alloy/core/logger.dart';
+import 'package:alloy/core/platform/folder_store.dart';
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
 

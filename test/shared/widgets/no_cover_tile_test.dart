@@ -1,6 +1,6 @@
-import 'package:bars/shared/design/app_icons.dart';
-import 'package:bars/shared/design/tokens.dart';
-import 'package:bars/shared/widgets/no_cover_tile.dart';
+import 'package:alloy/shared/design/app_icons.dart';
+import 'package:alloy/shared/design/tokens.dart';
+import 'package:alloy/shared/widgets/no_cover_tile.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:material_ui/material_ui.dart';
 

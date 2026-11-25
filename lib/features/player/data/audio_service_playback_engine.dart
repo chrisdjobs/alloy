@@ -1,15 +1,15 @@
+import 'package:alloy/core/failure.dart';
+import 'package:alloy/core/result.dart';
+import 'package:alloy/features/library/domain/track.dart';
+import 'package:alloy/features/player/data/audio_handler.dart';
+import 'package:alloy/features/player/domain/playback_engine.dart';
+import 'package:alloy/features/player/domain/playback_state.dart';
 import 'package:audio_service/audio_service.dart'
     show AudioServiceRepeatMode, AudioServiceShuffleMode;
-import 'package:bars/core/failure.dart';
-import 'package:bars/core/result.dart';
-import 'package:bars/features/library/domain/track.dart';
-import 'package:bars/features/player/data/audio_handler.dart';
-import 'package:bars/features/player/domain/playback_engine.dart';
-import 'package:bars/features/player/domain/playback_state.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:rxdart/rxdart.dart';
 
-/// [PlaybackEngine] backed by just_audio and a [BarsAudioHandler].
+/// [PlaybackEngine] backed by just_audio and a [AlloyAudioHandler].
 ///
 /// Android and Linux only differ in how the handler is started, so both
 /// platform engines extend this class.
@@ -18,7 +18,7 @@ base class AudioServicePlaybackEngine implements PlaybackEngine {
   new({required this.handler});
 
   /// Handler that owns the player and the media session.
-  final BarsAudioHandler handler;
+  final AlloyAudioHandler handler;
   List<Track> _queue = const [];
 
   AudioPlayer get _player => handler.player;

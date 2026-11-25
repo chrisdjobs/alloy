@@ -1,4 +1,4 @@
-import 'package:bars/core/platform/folder_picker.dart';
+import 'package:alloy/core/platform/folder_picker.dart';
 
 /// [FolderPicker] that returns a preset folder without a native dialog.
 final class FakeFolderPicker implements FolderPicker {

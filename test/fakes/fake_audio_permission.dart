@@ -1,4 +1,4 @@
-import 'package:bars/core/platform/audio_permission.dart';
+import 'package:alloy/core/platform/audio_permission.dart';
 
 /// [AudioPermission] with a configurable answer.
 final class FakeAudioPermission implements AudioPermission {

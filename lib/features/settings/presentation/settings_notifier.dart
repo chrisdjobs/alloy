@@ -1,8 +1,8 @@
 import 'dart:async';
 
-import 'package:bars/core/logger.dart';
-import 'package:bars/features/settings/domain/app_settings.dart';
-import 'package:bars/features/settings/domain/settings_repository.dart';
+import 'package:alloy/core/logger.dart';
+import 'package:alloy/features/settings/domain/app_settings.dart';
+import 'package:alloy/features/settings/domain/settings_repository.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 

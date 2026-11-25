@@ -1,4 +1,4 @@
-import 'package:bars/features/settings/domain/app_settings.dart';
+import 'package:alloy/features/settings/domain/app_settings.dart';
 
 /// Maps [AppSettings] to the key/value rows of the settings table and back.
 ///

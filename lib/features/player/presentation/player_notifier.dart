@@ -1,11 +1,11 @@
 import 'dart:async';
 import 'dart:math';
 
-import 'package:bars/core/logger.dart';
-import 'package:bars/core/result.dart';
-import 'package:bars/features/library/domain/track.dart';
-import 'package:bars/features/player/domain/playback_engine.dart';
-import 'package:bars/features/player/domain/playback_state.dart';
+import 'package:alloy/core/logger.dart';
+import 'package:alloy/core/result.dart';
+import 'package:alloy/features/library/domain/track.dart';
+import 'package:alloy/features/player/domain/playback_engine.dart';
+import 'package:alloy/features/player/domain/playback_state.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 

@@ -1,9 +1,9 @@
 import 'dart:async';
 
-import 'package:bars/core/result.dart';
-import 'package:bars/features/library/domain/library_repository.dart';
-import 'package:bars/features/library/domain/music_source.dart';
-import 'package:bars/features/library/domain/track.dart';
+import 'package:alloy/core/result.dart';
+import 'package:alloy/features/library/domain/library_repository.dart';
+import 'package:alloy/features/library/domain/music_source.dart';
+import 'package:alloy/features/library/domain/track.dart';
 
 /// In-memory [LibraryRepository] for notifier and widget tests.
 final class FakeLibraryRepository implements LibraryRepository {

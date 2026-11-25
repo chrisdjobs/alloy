@@ -2,9 +2,9 @@ import 'dart:io';
 import 'dart:isolate';
 import 'dart:typed_data';
 
+import 'package:alloy/core/platform/cover_files.dart';
+import 'package:alloy/core/platform/local_audio_files.dart';
 import 'package:audio_metadata_reader/audio_metadata_reader.dart';
-import 'package:bars/core/platform/cover_files.dart';
-import 'package:bars/core/platform/local_audio_files.dart';
 import 'package:crypto/crypto.dart';
 import 'package:path/path.dart' as p;
 

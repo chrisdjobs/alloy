@@ -1,4 +1,4 @@
-import 'package:bars/core/platform/audio_permission.dart';
+import 'package:alloy/core/platform/audio_permission.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 /// [AudioPermission] backed by `permission_handler` on Android.

@@ -1,6 +1,6 @@
-import 'package:bars/core/result.dart';
-import 'package:bars/features/library/domain/music_source.dart';
-import 'package:bars/features/library/domain/track.dart';
+import 'package:alloy/core/result.dart';
+import 'package:alloy/features/library/domain/music_source.dart';
+import 'package:alloy/features/library/domain/track.dart';
 
 /// Library-facing view of the music sources.
 ///

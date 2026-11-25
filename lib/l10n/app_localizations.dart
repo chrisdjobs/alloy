@@ -102,7 +102,7 @@ abstract class AppLocalizations {
   /// Application name
   ///
   /// In en, this message translates to:
-  /// **'Bars'**
+  /// **'Alloy'**
   String get appTitle;
 
   /// Top-level home destination and screen title
@@ -282,7 +282,7 @@ abstract class AppLocalizations {
   /// Subtitle of the folder picker row in the storage settings
   ///
   /// In en, this message translates to:
-  /// **'Where Bars looks for your music'**
+  /// **'Where Alloy looks for your music'**
   String get chooseFolderHint;
 
   /// Subtitle of the rescan row in the storage settings

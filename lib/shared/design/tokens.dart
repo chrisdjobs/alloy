@@ -1,6 +1,6 @@
 import 'package:material_ui/material_ui.dart';
 
-/// Core palette for the single Bars visual identity.
+/// Core palette for the single Alloy visual identity.
 abstract final class AppColors {
   /// Near-black page background.
   static const Color background = Color(0xFF0D0D0D);

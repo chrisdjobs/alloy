@@ -1,4 +1,4 @@
-import 'package:bars/shared/design/gradient_presets.dart';
+import 'package:alloy/shared/design/gradient_presets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 /// Preset selected in `assets/icon/presets.json` when the app was built.

@@ -1,8 +1,8 @@
-import 'package:bars/features/settings/presentation/settings_labels.dart';
-import 'package:bars/features/settings/presentation/settings_notifier.dart';
-import 'package:bars/features/settings/presentation/widgets/settings_sub_screen.dart';
-import 'package:bars/l10n/app_localizations.dart';
-import 'package:bars/shared/design/visual_theme.dart';
+import 'package:alloy/features/settings/presentation/settings_labels.dart';
+import 'package:alloy/features/settings/presentation/settings_notifier.dart';
+import 'package:alloy/features/settings/presentation/widgets/settings_sub_screen.dart';
+import 'package:alloy/l10n/app_localizations.dart';
+import 'package:alloy/shared/design/visual_theme.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:material_ui/material_ui.dart';

@@ -1,7 +1,7 @@
 import 'dart:async';
 
-import 'package:bars/core/result.dart';
-import 'package:bars/features/settings/domain/app_settings.dart';
+import 'package:alloy/core/result.dart';
+import 'package:alloy/features/settings/domain/app_settings.dart';
 
 /// Storage for [AppSettings].
 ///

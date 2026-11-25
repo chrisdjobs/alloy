@@ -1,10 +1,10 @@
 import 'dart:math';
 
-import 'package:bars/core/artwork/artwork_ref.dart';
-import 'package:bars/core/platform/local_audio_files.dart';
-import 'package:bars/features/library/data/database/app_database.dart';
-import 'package:bars/features/library/domain/music_source.dart';
-import 'package:bars/features/library/domain/track.dart';
+import 'package:alloy/core/artwork/artwork_ref.dart';
+import 'package:alloy/core/platform/local_audio_files.dart';
+import 'package:alloy/features/library/data/database/app_database.dart';
+import 'package:alloy/features/library/domain/music_source.dart';
+import 'package:alloy/features/library/domain/track.dart';
 import 'package:drift/drift.dart';
 
 /// [MusicSource] that scans folders on the local file system.

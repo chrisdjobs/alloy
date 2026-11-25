@@ -1,8 +1,8 @@
 import 'dart:typed_data';
 
-import 'package:bars/core/artwork/artwork_ref.dart';
-import 'package:bars/core/artwork/artwork_visual.dart';
-import 'package:bars/core/platform/artwork_store.dart';
+import 'package:alloy/core/artwork/artwork_ref.dart';
+import 'package:alloy/core/artwork/artwork_visual.dart';
+import 'package:alloy/core/platform/artwork_store.dart';
 
 /// Size-capped, least-recently-used disk cache for extracted artwork.
 ///

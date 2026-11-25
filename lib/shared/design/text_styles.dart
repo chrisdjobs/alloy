@@ -1,6 +1,6 @@
 import 'package:material_ui/material_ui.dart';
 
-/// Type scale for the Bars visual identity.
+/// Type scale for the Alloy visual identity.
 abstract final class AppTextStyles {
   /// Large display text.
   static const TextStyle display = TextStyle(

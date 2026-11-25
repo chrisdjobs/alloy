@@ -1,5 +1,5 @@
-import 'package:bars/core/artwork/artwork_ref.dart';
-import 'package:bars/core/artwork/artwork_visual.dart';
+import 'package:alloy/core/artwork/artwork_ref.dart';
+import 'package:alloy/core/artwork/artwork_visual.dart';
 
 /// In-memory [ArtworkRepository] for widget tests.
 final class FakeArtworkRepository implements ArtworkRepository {

@@ -1,7 +1,7 @@
-import 'package:bars/shared/design/gradient_presets.dart';
-import 'package:bars/shared/design/text_styles.dart';
-import 'package:bars/shared/design/tokens.dart';
-import 'package:bars/shared/design/visual_theme.dart';
+import 'package:alloy/shared/design/gradient_presets.dart';
+import 'package:alloy/shared/design/text_styles.dart';
+import 'package:alloy/shared/design/tokens.dart';
+import 'package:alloy/shared/design/visual_theme.dart';
 import 'package:material_ui/material_ui.dart';
 
 /// Builds the single Material 3 dark theme used on every platform.
@@ -88,7 +88,7 @@ abstract final class AppTheme {
         labelType: NavigationRailLabelType.none,
         minWidth: 220,
       ),
-      extensions: [BarsVisualTheme(icons: icons)],
+      extensions: [AlloyVisualTheme(icons: icons)],
     );
   }
 }

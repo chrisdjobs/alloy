@@ -1,6 +1,6 @@
 import 'dart:typed_data';
 
-import 'package:bars/core/platform/artwork_store.dart';
+import 'package:alloy/core/platform/artwork_store.dart';
 
 /// In-memory [ArtworkStore] with controllable timestamps for LRU tests.
 final class FakeArtworkStore implements ArtworkStore {

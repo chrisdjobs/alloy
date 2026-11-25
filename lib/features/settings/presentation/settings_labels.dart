@@ -1,5 +1,5 @@
-import 'package:bars/features/settings/domain/app_settings.dart';
-import 'package:bars/l10n/app_localizations.dart';
+import 'package:alloy/features/settings/domain/app_settings.dart';
+import 'package:alloy/l10n/app_localizations.dart';
 
 /// Localized name of the language override [code]; null follows the system.
 String languageName(AppLocalizations l10n, String? code) {

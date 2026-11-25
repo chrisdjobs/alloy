@@ -1,4 +1,4 @@
-import 'package:bars/shared/design/cover_colors.dart';
+import 'package:alloy/shared/design/cover_colors.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {

@@ -1,4 +1,4 @@
-name: bars
+name: alloy
 description: "Open source, local-first music player for Android and Linux."
 publish_to: 'none'
 version: 0.1.0+1

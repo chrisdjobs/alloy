@@ -1,5 +1,5 @@
-import 'package:bars/core/artwork/artwork_ref.dart';
-import 'package:bars/features/library/domain/track.dart';
+import 'package:alloy/core/artwork/artwork_ref.dart';
+import 'package:alloy/features/library/domain/track.dart';
 
 /// An album assembled from the tracks the library already holds.
 ///

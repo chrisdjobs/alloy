@@ -1,6 +1,6 @@
 {
   "@@locale": "en",
-  "appTitle": "Bars",
+  "appTitle": "Alloy",
   "@appTitle": {
     "description": "Application name"
   },
@@ -125,7 +125,7 @@
   "@musicFolders": {
     "description": "Section of the storage settings that lists the library folder"
   },
-  "chooseFolderHint": "Where Bars looks for your music",
+  "chooseFolderHint": "Where Alloy looks for your music",
   "@chooseFolderHint": {
     "description": "Subtitle of the folder picker row in the storage settings"
   },

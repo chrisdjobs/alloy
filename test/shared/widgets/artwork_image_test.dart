@@ -1,9 +1,9 @@
-import 'package:bars/core/artwork/artwork_providers.dart';
-import 'package:bars/core/artwork/artwork_ref.dart';
-import 'package:bars/core/artwork/artwork_visual.dart';
-import 'package:bars/l10n/app_localizations.dart';
-import 'package:bars/shared/widgets/artwork_image.dart';
-import 'package:bars/shared/widgets/no_cover_tile.dart';
+import 'package:alloy/core/artwork/artwork_providers.dart';
+import 'package:alloy/core/artwork/artwork_ref.dart';
+import 'package:alloy/core/artwork/artwork_visual.dart';
+import 'package:alloy/l10n/app_localizations.dart';
+import 'package:alloy/shared/widgets/artwork_image.dart';
+import 'package:alloy/shared/widgets/no_cover_tile.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:material_ui/material_ui.dart';

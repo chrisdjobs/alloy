@@ -1,13 +1,13 @@
-import 'package:bars/app/theme.dart';
-import 'package:bars/shared/design/gradient_presets.dart';
-import 'package:bars/shared/design/gradients.dart';
-import 'package:bars/shared/design/text_styles.dart';
-import 'package:bars/shared/design/tokens.dart';
+import 'package:alloy/app/theme.dart';
+import 'package:alloy/shared/design/gradient_presets.dart';
+import 'package:alloy/shared/design/gradients.dart';
+import 'package:alloy/shared/design/text_styles.dart';
+import 'package:alloy/shared/design/tokens.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:material_ui/material_ui.dart';
 
 void main() {
-  test('dark theme exposes the Bars palette and type scale', () {
+  test('dark theme exposes the Alloy palette and type scale', () {
     final theme = AppTheme.dark();
 
     expect(theme.brightness, Brightness.dark);
@@ -46,7 +46,7 @@ void main() {
                     borderRadius: AppRadii.card,
                     gradient: AppGradients.accent(theme.colorScheme.primary),
                   ),
-                  child: const Text('Bars', style: AppTextStyles.display),
+                  child: const Text('Alloy', style: AppTextStyles.display),
                 ),
               ),
             );
@@ -55,7 +55,7 @@ void main() {
       ),
     );
 
-    expect(find.text('Bars'), findsOneWidget);
+    expect(find.text('Alloy'), findsOneWidget);
     expect(tester.takeException(), isNull);
   });
 }

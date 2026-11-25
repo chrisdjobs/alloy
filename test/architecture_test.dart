@@ -58,9 +58,9 @@ void main() {
     _expectNoViolation(
       files,
       appliesTo: (uri) =>
-          uri.startsWith('package:bars/core/') ||
-          uri.startsWith('package:bars/shared/'),
-      forbidden: (uri) => uri.startsWith('package:bars/features/'),
+          uri.startsWith('package:alloy/core/') ||
+          uri.startsWith('package:alloy/shared/'),
+      forbidden: (uri) => uri.startsWith('package:alloy/features/'),
       reason: 'core and shared must not know about features',
     );
   });
@@ -69,15 +69,15 @@ void main() {
     _expectNoViolation(
       files,
       appliesTo: (uri) =>
-          !uri.startsWith('package:bars/core/platform/') &&
-          uri != 'package:bars/app/bootstrap.dart',
+          !uri.startsWith('package:alloy/core/platform/') &&
+          uri != 'package:alloy/app/bootstrap.dart',
       forbidden: (uri) => uri == 'dart:io',
       reason: 'platform differences belong behind core/platform interfaces',
     );
   });
 }
 
-const _packageName = 'bars';
+const _packageName = 'alloy';
 const _sourceRoot = 'lib';
 
 const _generatedSuffixes = ['.g.dart', '.freezed.dart', '.gr.dart'];

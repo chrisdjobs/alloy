@@ -1,10 +1,10 @@
-import 'package:bars/core/artwork/artwork_ref.dart';
-import 'package:bars/features/home/domain/home_sections.dart';
-import 'package:bars/features/home/presentation/home_callbacks.dart';
-import 'package:bars/features/library/domain/track.dart';
-import 'package:bars/shared/design/text_styles.dart';
-import 'package:bars/shared/design/tokens.dart';
-import 'package:bars/shared/widgets/artwork_image.dart';
+import 'package:alloy/core/artwork/artwork_ref.dart';
+import 'package:alloy/features/home/domain/home_sections.dart';
+import 'package:alloy/features/home/presentation/home_callbacks.dart';
+import 'package:alloy/features/library/domain/track.dart';
+import 'package:alloy/shared/design/text_styles.dart';
+import 'package:alloy/shared/design/tokens.dart';
+import 'package:alloy/shared/widgets/artwork_image.dart';
 import 'package:material_ui/material_ui.dart';
 
 /// Uppercase title above a Home section.

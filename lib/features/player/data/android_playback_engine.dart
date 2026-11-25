@@ -1,7 +1,7 @@
+import 'package:alloy/features/player/data/audio_handler.dart';
+import 'package:alloy/features/player/data/audio_service_playback_engine.dart';
+import 'package:alloy/features/player/domain/playback_engine.dart';
 import 'package:audio_service/audio_service.dart';
-import 'package:bars/features/player/data/audio_handler.dart';
-import 'package:bars/features/player/data/audio_service_playback_engine.dart';
-import 'package:bars/features/player/domain/playback_engine.dart';
 
 /// Android playback: just_audio behind audio_service's media session.
 final class AndroidPlaybackEngine extends AudioServicePlaybackEngine {
@@ -13,9 +13,9 @@ final class AndroidPlaybackEngine extends AudioServicePlaybackEngine {
     required TrackUriResolver resolveUri,
   }) async {
     final handler = await AudioService.init(
-      builder: () => BarsAudioHandler(resolveUri: resolveUri),
+      builder: () => AlloyAudioHandler(resolveUri: resolveUri),
       config: const AudioServiceConfig(
-        androidNotificationChannelId: 'com.dynamjobs.bars.channel.audio',
+        androidNotificationChannelId: 'com.dynamjobs.alloy.channel.audio',
         androidNotificationChannelName: 'Playback',
         androidNotificationOngoing: true,
       ),

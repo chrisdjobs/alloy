@@ -1,8 +1,8 @@
-import 'package:bars/l10n/app_localizations.dart';
-import 'package:bars/shared/design/text_styles.dart';
-import 'package:bars/shared/design/tokens.dart';
-import 'package:bars/shared/design/visual_theme.dart';
-import 'package:bars/shared/widgets/tbd_placeholder.dart';
+import 'package:alloy/l10n/app_localizations.dart';
+import 'package:alloy/shared/design/text_styles.dart';
+import 'package:alloy/shared/design/tokens.dart';
+import 'package:alloy/shared/design/visual_theme.dart';
+import 'package:alloy/shared/widgets/tbd_placeholder.dart';
 import 'package:material_ui/material_ui.dart';
 
 /// Empty library state: an illustration slot, the reason and the folder action.

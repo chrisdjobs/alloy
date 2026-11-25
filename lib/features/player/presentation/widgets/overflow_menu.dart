@@ -1,6 +1,6 @@
-import 'package:bars/l10n/app_localizations.dart';
-import 'package:bars/shared/design/tokens.dart';
-import 'package:bars/shared/design/visual_theme.dart';
+import 'package:alloy/l10n/app_localizations.dart';
+import 'package:alloy/shared/design/tokens.dart';
+import 'package:alloy/shared/design/visual_theme.dart';
 import 'package:material_ui/material_ui.dart';
 
 /// Secondary actions of the now-playing screen.

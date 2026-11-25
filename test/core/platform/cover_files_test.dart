@@ -1,14 +1,14 @@
 import 'dart:io';
 import 'dart:typed_data';
 
-import 'package:bars/core/platform/cover_files.dart';
+import 'package:alloy/core/platform/cover_files.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   late Directory folder;
 
   setUp(() async {
-    folder = await Directory.systemTemp.createTemp('bars-covers');
+    folder = await Directory.systemTemp.createTemp('alloy-covers');
   });
 
   tearDown(() async {

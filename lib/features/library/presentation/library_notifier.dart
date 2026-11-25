@@ -1,10 +1,10 @@
 import 'dart:async';
 
-import 'package:bars/core/logger.dart';
-import 'package:bars/core/result.dart';
-import 'package:bars/features/library/domain/library_repository.dart';
-import 'package:bars/features/library/domain/music_source.dart';
-import 'package:bars/features/library/domain/track.dart';
+import 'package:alloy/core/logger.dart';
+import 'package:alloy/core/result.dart';
+import 'package:alloy/features/library/domain/library_repository.dart';
+import 'package:alloy/features/library/domain/music_source.dart';
+import 'package:alloy/features/library/domain/track.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 

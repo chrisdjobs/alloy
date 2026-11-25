@@ -1,4 +1,4 @@
-import 'package:bars/shared/design/tokens.dart';
+import 'package:alloy/shared/design/tokens.dart';
 import 'package:material_ui/material_ui.dart';
 
 /// Gradients generated in code from the current accent color.

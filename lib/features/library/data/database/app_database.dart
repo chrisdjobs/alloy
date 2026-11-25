@@ -1,4 +1,4 @@
-import 'package:bars/features/library/data/database/migrations.dart';
+import 'package:alloy/features/library/data/database/migrations.dart';
 import 'package:drift/drift.dart';
 import 'package:drift_flutter/drift_flutter.dart';
 
@@ -29,5 +29,5 @@ final class AppDatabase extends _$AppDatabase {
   @override
   MigrationStrategy get migration => buildMigrationStrategy();
 
-  static QueryExecutor _openConnection() => driftDatabase(name: 'bars');
+  static QueryExecutor _openConnection() => driftDatabase(name: 'alloy');
 }

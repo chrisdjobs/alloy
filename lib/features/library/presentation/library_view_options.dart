@@ -1,4 +1,4 @@
-import 'package:bars/features/library/domain/track_sort.dart';
+import 'package:alloy/features/library/domain/track_sort.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'library_view_options.g.dart';

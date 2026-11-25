@@ -1,11 +1,11 @@
 import 'dart:async';
 import 'dart:typed_data';
 
-import 'package:bars/core/artwork/artwork_ref.dart';
-import 'package:bars/core/artwork/artwork_visual.dart';
-import 'package:bars/features/library/data/artwork_cache.dart';
-import 'package:bars/features/library/data/artwork_repository_impl.dart';
-import 'package:bars/shared/design/cover_colors.dart';
+import 'package:alloy/core/artwork/artwork_ref.dart';
+import 'package:alloy/core/artwork/artwork_visual.dart';
+import 'package:alloy/features/library/data/artwork_cache.dart';
+import 'package:alloy/features/library/data/artwork_repository_impl.dart';
+import 'package:alloy/shared/design/cover_colors.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:image/image.dart' as img;
 

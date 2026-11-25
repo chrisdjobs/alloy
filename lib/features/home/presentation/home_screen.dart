@@ -1,13 +1,13 @@
-import 'package:bars/features/home/domain/home_sections.dart';
-import 'package:bars/features/home/presentation/home_callbacks.dart';
-import 'package:bars/features/home/presentation/widgets/home_header.dart';
-import 'package:bars/features/home/presentation/widgets/media_carousel.dart';
-import 'package:bars/features/library/domain/track.dart';
-import 'package:bars/l10n/app_localizations.dart';
-import 'package:bars/shared/design/tokens.dart';
-import 'package:bars/shared/design/visual_theme.dart';
-import 'package:bars/shared/widgets/no_tracks_state.dart';
-import 'package:bars/shared/widgets/retry_message.dart';
+import 'package:alloy/features/home/domain/home_sections.dart';
+import 'package:alloy/features/home/presentation/home_callbacks.dart';
+import 'package:alloy/features/home/presentation/widgets/home_header.dart';
+import 'package:alloy/features/home/presentation/widgets/media_carousel.dart';
+import 'package:alloy/features/library/domain/track.dart';
+import 'package:alloy/l10n/app_localizations.dart';
+import 'package:alloy/shared/design/tokens.dart';
+import 'package:alloy/shared/design/visual_theme.dart';
+import 'package:alloy/shared/widgets/no_tracks_state.dart';
+import 'package:alloy/shared/widgets/retry_message.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:material_ui/material_ui.dart';
 

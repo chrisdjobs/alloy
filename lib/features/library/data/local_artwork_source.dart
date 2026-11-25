@@ -1,8 +1,8 @@
 import 'dart:typed_data';
 
-import 'package:bars/core/artwork/artwork_ref.dart';
-import 'package:bars/core/platform/local_cover_reader.dart';
-import 'package:bars/features/library/data/database/app_database.dart';
+import 'package:alloy/core/artwork/artwork_ref.dart';
+import 'package:alloy/core/platform/local_cover_reader.dart';
+import 'package:alloy/features/library/data/database/app_database.dart';
 import 'package:drift/drift.dart';
 
 /// Supplies local cover bytes for an artwork reference.

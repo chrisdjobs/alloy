@@ -1,8 +1,8 @@
-import 'package:bars/core/failure.dart';
-import 'package:bars/core/result.dart';
-import 'package:bars/features/library/domain/music_source.dart';
-import 'package:bars/features/library/domain/track.dart';
-import 'package:bars/features/library/presentation/library_notifier.dart';
+import 'package:alloy/core/failure.dart';
+import 'package:alloy/core/result.dart';
+import 'package:alloy/features/library/domain/music_source.dart';
+import 'package:alloy/features/library/domain/track.dart';
+import 'package:alloy/features/library/presentation/library_notifier.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 

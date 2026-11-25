@@ -16,5 +16,5 @@ final class SettingsDatabase extends _$SettingsDatabase {
   int get schemaVersion => 1;
 
   static QueryExecutor _openConnection() =>
-      driftDatabase(name: 'bars_settings');
+      driftDatabase(name: 'alloy_settings');
 }

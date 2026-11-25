@@ -1,10 +1,10 @@
 import 'dart:typed_data';
 
-import 'package:bars/core/artwork/artwork_ref.dart';
-import 'package:bars/core/artwork/artwork_visual.dart';
-import 'package:bars/core/logger.dart';
-import 'package:bars/features/library/data/artwork_cache.dart';
-import 'package:bars/features/library/data/cover_extractor.dart';
+import 'package:alloy/core/artwork/artwork_ref.dart';
+import 'package:alloy/core/artwork/artwork_visual.dart';
+import 'package:alloy/core/logger.dart';
+import 'package:alloy/features/library/data/artwork_cache.dart';
+import 'package:alloy/features/library/data/cover_extractor.dart';
 
 /// [ArtworkRepository] that extracts covers once and caches every variant.
 ///

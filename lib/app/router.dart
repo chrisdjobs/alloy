@@ -1,18 +1,18 @@
 import 'dart:async';
 
-import 'package:bars/app/branch_fade.dart';
-import 'package:bars/app/shell.dart';
-import 'package:bars/features/discover/presentation/discover_screen.dart';
-import 'package:bars/features/home/presentation/home_screen.dart';
-import 'package:bars/features/library/presentation/library_notifier.dart';
-import 'package:bars/features/library/presentation/library_screen.dart';
-import 'package:bars/features/player/presentation/now_playing_screen.dart';
-import 'package:bars/features/player/presentation/player_notifier.dart';
-import 'package:bars/features/settings/presentation/appearance_screen.dart';
-import 'package:bars/features/settings/presentation/general_screen.dart';
-import 'package:bars/features/settings/presentation/language_screen.dart';
-import 'package:bars/features/settings/presentation/music_storage_screen.dart';
-import 'package:bars/features/settings/presentation/settings_screen.dart';
+import 'package:alloy/app/branch_fade.dart';
+import 'package:alloy/app/shell.dart';
+import 'package:alloy/features/discover/presentation/discover_screen.dart';
+import 'package:alloy/features/home/presentation/home_screen.dart';
+import 'package:alloy/features/library/presentation/library_notifier.dart';
+import 'package:alloy/features/library/presentation/library_screen.dart';
+import 'package:alloy/features/player/presentation/now_playing_screen.dart';
+import 'package:alloy/features/player/presentation/player_notifier.dart';
+import 'package:alloy/features/settings/presentation/appearance_screen.dart';
+import 'package:alloy/features/settings/presentation/general_screen.dart';
+import 'package:alloy/features/settings/presentation/language_screen.dart';
+import 'package:alloy/features/settings/presentation/music_storage_screen.dart';
+import 'package:alloy/features/settings/presentation/settings_screen.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 

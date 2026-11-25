@@ -1,4 +1,4 @@
-import 'package:bars/core/failure.dart';
+import 'package:alloy/core/failure.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {

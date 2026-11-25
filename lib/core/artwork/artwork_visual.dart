@@ -1,6 +1,6 @@
 import 'dart:typed_data';
 
-import 'package:bars/core/artwork/artwork_ref.dart';
+import 'package:alloy/core/artwork/artwork_ref.dart';
 
 /// Resolution a cover image is cached and displayed at.
 enum ArtworkSize {

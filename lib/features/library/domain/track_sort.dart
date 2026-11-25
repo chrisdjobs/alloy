@@ -1,4 +1,4 @@
-import 'package:bars/features/library/domain/track.dart';
+import 'package:alloy/features/library/domain/track.dart';
 
 /// Order of the library list.
 enum TrackSort {

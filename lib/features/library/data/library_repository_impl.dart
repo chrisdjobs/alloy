@@ -1,13 +1,13 @@
 import 'dart:async';
 
-import 'package:bars/core/failure.dart';
-import 'package:bars/core/platform/audio_permission.dart';
-import 'package:bars/core/platform/folder_picker.dart';
-import 'package:bars/core/platform/folder_store.dart';
-import 'package:bars/core/result.dart';
-import 'package:bars/features/library/domain/library_repository.dart';
-import 'package:bars/features/library/domain/music_source.dart';
-import 'package:bars/features/library/domain/track.dart';
+import 'package:alloy/core/failure.dart';
+import 'package:alloy/core/platform/audio_permission.dart';
+import 'package:alloy/core/platform/folder_picker.dart';
+import 'package:alloy/core/platform/folder_store.dart';
+import 'package:alloy/core/result.dart';
+import 'package:alloy/features/library/domain/library_repository.dart';
+import 'package:alloy/features/library/domain/music_source.dart';
+import 'package:alloy/features/library/domain/track.dart';
 
 /// [LibraryRepository] backed by one [MusicSource] and the platform pickers.
 final class LibraryRepositoryImpl implements LibraryRepository {

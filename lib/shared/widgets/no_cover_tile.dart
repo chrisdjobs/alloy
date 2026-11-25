@@ -1,5 +1,5 @@
-import 'package:bars/shared/design/tokens.dart';
-import 'package:bars/shared/design/visual_theme.dart';
+import 'package:alloy/shared/design/tokens.dart';
+import 'package:alloy/shared/design/visual_theme.dart';
 import 'package:material_ui/material_ui.dart';
 
 /// Neutral fallback shown wherever a track has no cover art.

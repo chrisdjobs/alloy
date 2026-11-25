@@ -1,9 +1,9 @@
-import 'package:bars/app/router.dart';
-import 'package:bars/app/theme.dart';
-import 'package:bars/features/player/presentation/mini_player.dart';
-import 'package:bars/features/player/presentation/player_notifier.dart';
-import 'package:bars/l10n/app_localizations.dart';
-import 'package:bars/shared/design/app_icons.dart';
+import 'package:alloy/app/router.dart';
+import 'package:alloy/app/theme.dart';
+import 'package:alloy/features/player/presentation/mini_player.dart';
+import 'package:alloy/features/player/presentation/player_notifier.dart';
+import 'package:alloy/l10n/app_localizations.dart';
+import 'package:alloy/shared/design/app_icons.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:material_ui/material_ui.dart';

@@ -2,8 +2,8 @@ import 'dart:isolate';
 import 'dart:math' as math;
 import 'dart:typed_data';
 
-import 'package:bars/core/artwork/artwork_visual.dart';
-import 'package:bars/shared/design/cover_colors.dart';
+import 'package:alloy/core/artwork/artwork_visual.dart';
+import 'package:alloy/shared/design/cover_colors.dart';
 import 'package:image/image.dart' as img;
 import 'package:material_color_utilities/quantize/quantizer_celebi.dart';
 import 'package:material_color_utilities/score/score.dart';

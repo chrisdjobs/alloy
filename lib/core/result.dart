@@ -1,4 +1,4 @@
-import 'package:bars/core/failure.dart';
+import 'package:alloy/core/failure.dart';
 
 /// Outcome of a domain operation: either a value or a [Failure].
 sealed class Result<T> {

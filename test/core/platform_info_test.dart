@@ -1,4 +1,4 @@
-import 'package:bars/core/platform/platform_info.dart';
+import 'package:alloy/core/platform/platform_info.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {

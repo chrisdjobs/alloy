@@ -1,10 +1,10 @@
 import 'dart:async';
 
-import 'package:bars/core/failure.dart';
-import 'package:bars/core/result.dart';
-import 'package:bars/features/library/domain/track.dart';
-import 'package:bars/features/player/domain/playback_engine.dart';
-import 'package:bars/features/player/domain/playback_state.dart';
+import 'package:alloy/core/failure.dart';
+import 'package:alloy/core/result.dart';
+import 'package:alloy/features/library/domain/track.dart';
+import 'package:alloy/features/player/domain/playback_engine.dart';
+import 'package:alloy/features/player/domain/playback_state.dart';
 
 /// In-memory [PlaybackEngine] for notifier and widget tests.
 final class FakePlaybackEngine implements PlaybackEngine {

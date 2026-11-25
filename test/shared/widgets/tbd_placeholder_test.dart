@@ -1,6 +1,6 @@
-import 'package:bars/app/theme.dart';
-import 'package:bars/shared/design/tokens.dart';
-import 'package:bars/shared/widgets/tbd_placeholder.dart';
+import 'package:alloy/app/theme.dart';
+import 'package:alloy/shared/design/tokens.dart';
+import 'package:alloy/shared/widgets/tbd_placeholder.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:material_ui/material_ui.dart';
 
