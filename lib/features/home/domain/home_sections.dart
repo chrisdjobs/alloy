@@ -84,6 +84,25 @@ final class ActivityPoint {
   final int plays;
 }
 
+/// Headline figures of the Home activity card.
+final class ActivitySummary {
+  /// Creates the summary.
+  const new({
+    required this.today,
+    required this.thisWeek,
+    required this.streakDays,
+  });
+
+  /// Listening time of today.
+  final Duration today;
+
+  /// Listening time of the last seven days.
+  final Duration thisWeek;
+
+  /// Consecutive days with at least one play, counting back from today.
+  final int streakDays;
+}
+
 /// Library totals shown by the Home statistics card.
 final class HomeStatistics {
   /// Creates the totals.
@@ -184,6 +203,33 @@ HomeStatistics homeStatistics(List<Track> tracks) {
 }
 
 int _placeholderPlays(DateTime day) => (day.day * 7 + day.month * 3) % 9;
+
+/// Scaffold summary of [points].
+///
+/// Converts the placeholder play counts to time with a fixed average track
+/// length until the play history records real listening time.
+ActivitySummary activitySummary(List<ActivityPoint> points) {
+  if (points.isEmpty) {
+    return const ActivitySummary(
+      today: Duration.zero,
+      thisWeek: Duration.zero,
+      streakDays: 0,
+    );
+  }
+  const averageTrack = Duration(minutes: 3);
+  final weekPoints = points.length <= 7
+      ? points
+      : points.sublist(points.length - 7);
+  var streak = 0;
+  for (var i = points.length - 1; i >= 0 && points[i].plays > 0; i--) {
+    streak++;
+  }
+  return ActivitySummary(
+    today: averageTrack * points.last.plays,
+    thisWeek: averageTrack * weekPoints.fold(0, (sum, p) => sum + p.plays),
+    streakDays: streak,
+  );
+}
 
 /// Newest tracks first, capped at [limit].
 ///

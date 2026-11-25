@@ -579,6 +579,36 @@ abstract class AppLocalizations {
   /// **'Statistics'**
   String get statistics;
 
+  /// Activity label for the listening time of today
+  ///
+  /// In en, this message translates to:
+  /// **'Today'**
+  String get today;
+
+  /// Activity label for the listening time of the last seven days
+  ///
+  /// In en, this message translates to:
+  /// **'This week'**
+  String get thisWeek;
+
+  /// Activity label for the consecutive listening days
+  ///
+  /// In en, this message translates to:
+  /// **'Streak'**
+  String get streak;
+
+  /// Number of consecutive listening days
+  ///
+  /// In en, this message translates to:
+  /// **'{days, plural, =0{0 days} =1{1 day} other{{days} days}}'**
+  String dayCount(int days);
+
+  /// Listening time with hours and minutes, such as 1 h 07 min
+  ///
+  /// In en, this message translates to:
+  /// **'{hours} h {minutes} min'**
+  String durationHoursMinutes(int hours, String minutes);
+
   /// Label of the total listening length in the statistics card
   ///
   /// In en, this message translates to:

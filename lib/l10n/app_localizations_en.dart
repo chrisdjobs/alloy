@@ -291,6 +291,32 @@ class AppLocalizationsEn extends AppLocalizations {
   String get statistics => 'Statistics';
 
   @override
+  String get today => 'Today';
+
+  @override
+  String get thisWeek => 'This week';
+
+  @override
+  String get streak => 'Streak';
+
+  @override
+  String dayCount(int days) {
+    String _temp0 = intl.Intl.pluralLogic(
+      days,
+      locale: localeName,
+      other: '$days days',
+      one: '1 day',
+      zero: '0 days',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String durationHoursMinutes(int hours, String minutes) {
+    return '$hours h $minutes min';
+  }
+
+  @override
   String get totalLength => 'Length';
 
   @override

@@ -81,6 +81,7 @@ class _HomeScreenState extends State<HomeScreen> {
         ? const <MostPlayedEntry>[]
         : mostPlayed(tracks, _period, limit: tracks.length);
     final activity = activityPoints(_period);
+    final summary = activitySummary(activity);
     final statistics = tracks == null ? null : homeStatistics(tracks);
 
     return ListView(
@@ -141,7 +142,7 @@ class _HomeScreenState extends State<HomeScreen> {
               onPlay: widget.onPlay,
             ),
             SectionHeader(title: l10n.activity),
-            ActivityChart(points: activity, period: _period),
+            ActivityChart(points: activity, summary: summary, period: _period),
             SectionHeader(title: l10n.statistics),
             if (statistics != null) StatisticsCard(statistics: statistics),
             const SizedBox(height: AppSpacing.xl),

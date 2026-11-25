@@ -1,6 +1,8 @@
 import 'dart:math' as math;
 
 import 'package:alloy/features/home/domain/home_sections.dart';
+import 'package:alloy/features/home/presentation/widgets/listening_duration.dart';
+import 'package:alloy/l10n/app_localizations.dart';
 import 'package:alloy/shared/design/text_styles.dart';
 import 'package:alloy/shared/design/tokens.dart';
 import 'package:intl/intl.dart';
@@ -8,14 +10,23 @@ import 'package:material_ui/material_ui.dart';
 
 /// Bar chart of the plays of the last days, drawn inside a surface card.
 ///
-/// The week window labels every bar with its weekday initial; the month window
-/// labels every fifth day to stay readable.
+/// The headline figures of [summary] sit above the bars. The week window
+/// labels every bar with its weekday initial; the month window marks every
+/// fifth day to stay readable.
 class ActivityChart extends StatelessWidget {
-  /// Creates the chart for [points] of the active [period].
-  const new({required this.points, required this.period, super.key});
+  /// Creates the chart for [points] and [summary] of the active [period].
+  const new({
+    required this.points,
+    required this.summary,
+    required this.period,
+    super.key,
+  });
 
   /// One bar per day, oldest first.
   final List<ActivityPoint> points;
+
+  /// Headline figures above the bars.
+  final ActivitySummary summary;
 
   /// Active statistics window.
   final HomePeriod period;
@@ -24,6 +35,7 @@ class ActivityChart extends StatelessWidget {
   Widget build(BuildContext context) {
     if (points.isEmpty) return const SizedBox.shrink();
 
+    final l10n = AppLocalizations.of(context);
     final accent = Theme.of(context).colorScheme.primary;
     final weekday = DateFormat(
       'E',
@@ -45,6 +57,23 @@ class ActivityChart extends StatelessWidget {
           padding: const EdgeInsets.all(AppSpacing.lg),
           child: Column(
             children: [
+              Row(
+                children: [
+                  _SummaryStat(
+                    value: formatListeningDuration(l10n, summary.today),
+                    label: l10n.today,
+                  ),
+                  _SummaryStat(
+                    value: formatListeningDuration(l10n, summary.thisWeek),
+                    label: l10n.thisWeek,
+                  ),
+                  _SummaryStat(
+                    value: l10n.dayCount(summary.streakDays),
+                    label: l10n.streak,
+                  ),
+                ],
+              ),
+              const SizedBox(height: AppSpacing.lg),
               SizedBox(
                 height: AppSizing.activityChartHeight,
                 child: Row(
@@ -125,6 +154,42 @@ class _Bar extends StatelessWidget {
         borderRadius: AppRadii.activityBar,
       ),
       child: SizedBox(height: height),
+    );
+  }
+}
+
+/// One headline figure of the activity card: value on top, label below.
+class _SummaryStat extends StatelessWidget {
+  const new({required this.value, required this.label});
+
+  final String value;
+  final String label;
+
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            value,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: AppTextStyles.trackTitle.copyWith(
+              color: AppColors.textPrimary,
+            ),
+          ),
+          const SizedBox(height: AppSpacing.xs),
+          Text(
+            label,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: AppTextStyles.trackArtist.copyWith(
+              color: AppColors.textMuted,
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

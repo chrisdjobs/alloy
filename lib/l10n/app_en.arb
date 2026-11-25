@@ -377,6 +377,39 @@
   "@statistics": {
     "description": "Home section with the library totals"
   },
+  "today": "Today",
+  "@today": {
+    "description": "Activity label for the listening time of today"
+  },
+  "thisWeek": "This week",
+  "@thisWeek": {
+    "description": "Activity label for the listening time of the last seven days"
+  },
+  "streak": "Streak",
+  "@streak": {
+    "description": "Activity label for the consecutive listening days"
+  },
+  "dayCount": "{days, plural, =0{0 days} =1{1 day} other{{days} days}}",
+  "@dayCount": {
+    "description": "Number of consecutive listening days",
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  },
+  "durationHoursMinutes": "{hours} h {minutes} min",
+  "@durationHoursMinutes": {
+    "description": "Listening time with hours and minutes, such as 1 h 07 min",
+    "placeholders": {
+      "hours": {
+        "type": "int"
+      },
+      "minutes": {
+        "type": "String"
+      }
+    }
+  },
   "totalLength": "Length",
   "@totalLength": {
     "description": "Label of the total listening length in the statistics card"

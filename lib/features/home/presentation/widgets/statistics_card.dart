@@ -1,4 +1,5 @@
 import 'package:alloy/features/home/domain/home_sections.dart';
+import 'package:alloy/features/home/presentation/widgets/listening_duration.dart';
 import 'package:alloy/l10n/app_localizations.dart';
 import 'package:alloy/shared/design/text_styles.dart';
 import 'package:alloy/shared/design/tokens.dart';
@@ -40,7 +41,7 @@ class StatisticsCard extends StatelessWidget {
                 label: l10n.libraryArtists,
               ),
               _StatTile(
-                value: _length(l10n, statistics.totalDuration),
+                value: formatListeningDuration(l10n, statistics.totalDuration),
                 label: l10n.totalLength,
               ),
             ],
@@ -48,11 +49,6 @@ class StatisticsCard extends StatelessWidget {
         ),
       ),
     );
-  }
-
-  String _length(AppLocalizations l10n, Duration duration) {
-    if (duration.inHours > 0) return l10n.durationHours(duration.inHours);
-    return l10n.durationMinutes(duration.inMinutes);
   }
 }
 

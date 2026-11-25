@@ -80,6 +80,11 @@
   "seeAll": "Ver todas",
   "activity": "Actividad",
   "statistics": "Estadísticas",
+  "today": "Hoy",
+  "thisWeek": "Esta semana",
+  "streak": "Racha",
+  "dayCount": "{days, plural, =0{0 días} =1{1 día} other{{days} días}}",
+  "durationHoursMinutes": "{hours} h {minutes} min",
   "totalLength": "Duración",
   "durationHours": "{hours} h",
   "durationMinutes": "{minutes} min"
