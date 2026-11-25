@@ -46,6 +46,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  final GlobalKey _mixesKey = GlobalKey();
   final GlobalKey _recentKey = GlobalKey();
   final GlobalKey _albumsKey = GlobalKey();
 
@@ -82,17 +83,17 @@ class _HomeScreenState extends State<HomeScreen> {
                     icon: context.icons.shuffle,
                     onTap: () => widget.onShuffleAll(tracks),
                   ),
+                  QuickAccessCard(
+                    label: l10n.mixesForYou,
+                    icon: context.icons.mixes,
+                    onTap: () => _scrollTo(_mixesKey),
+                  ),
                   if (albums.isNotEmpty)
                     QuickAccessCard(
                       label: l10n.libraryAlbums,
                       icon: context.icons.library,
                       onTap: () => _scrollTo(_albumsKey),
                     ),
-                  QuickAccessCard(
-                    label: l10n.recentlyAdded,
-                    icon: context.icons.recent,
-                    onTap: () => _scrollTo(_recentKey),
-                  ),
                 ],
         ),
         ...switch (widget.tracks) {
