@@ -65,5 +65,10 @@
   "recentlyAdded": "Añadidos recientes",
   "discoverPass": "Pasar",
   "discoverReshuffle": "Reordenar",
-  "ofDuration": "de {duration}"
+  "ofDuration": "de {duration}",
+  "mixesForYou": "Mezclas para ti",
+  "mixOnRotationTitle": "Tu rotación",
+  "mixOnRotationSubtitle": "Lo que más escuchas ahora",
+  "mixDeepCutsTitle": "Joyas ocultas",
+  "mixDeepCutsSubtitle": "Tesoros escondidos en tu biblioteca"
 }

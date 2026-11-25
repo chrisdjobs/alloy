@@ -58,7 +58,7 @@ class TrackCarousel extends StatelessWidget {
         separatorBuilder: (_, _) => const SizedBox(width: AppSpacing.md),
         itemBuilder: (context, index) {
           final track = tracks[index];
-          return _MediaCard(
+          return MediaCard(
             artworkRef: track.artworkRef,
             title: track.title,
             subtitle: track.artist,
@@ -92,7 +92,7 @@ class AlbumCarousel extends StatelessWidget {
         separatorBuilder: (_, _) => const SizedBox(width: AppSpacing.md),
         itemBuilder: (context, index) {
           final album = albums[index];
-          return _MediaCard(
+          return MediaCard(
             artworkRef: album.artworkRef,
             title: album.title,
             subtitle: album.artist,
@@ -104,17 +104,27 @@ class AlbumCarousel extends StatelessWidget {
   }
 }
 
-class _MediaCard extends StatelessWidget {
+/// Card of a Home carousel: cover, title and an optional subtitle.
+class MediaCard extends StatelessWidget {
+  /// Creates the card.
   const new({
     required this.artworkRef,
     required this.title,
     required this.subtitle,
     required this.onTap,
+    super.key,
   });
 
+  /// Cover shown on top of the card.
   final ArtworkRef? artworkRef;
+
+  /// Primary line, usually a title.
   final String title;
+
+  /// Secondary line, omitted when null.
   final String? subtitle;
+
+  /// Action of the card.
   final VoidCallback onTap;
 
   @override

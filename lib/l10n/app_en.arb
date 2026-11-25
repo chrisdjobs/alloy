@@ -315,5 +315,25 @@
         "type": "String"
       }
     }
+  },
+  "mixesForYou": "Mixes for you",
+  "@mixesForYou": {
+    "description": "Home section with generated track mixes"
+  },
+  "mixOnRotationTitle": "Your rotation",
+  "@mixOnRotationTitle": {
+    "description": "Name of the mix built from the tracks played most right now"
+  },
+  "mixOnRotationSubtitle": "What you keep coming back to",
+  "@mixOnRotationSubtitle": {
+    "description": "Description of the rotation mix"
+  },
+  "mixDeepCutsTitle": "Deep cuts",
+  "@mixDeepCutsTitle": {
+    "description": "Name of the mix built from less played library tracks"
+  },
+  "mixDeepCutsSubtitle": "Hidden gems from your library",
+  "@mixDeepCutsSubtitle": {
+    "description": "Description of the deep cuts mix"
   }
 }
