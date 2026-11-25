@@ -48,11 +48,7 @@ enum HomeMixKind {
 /// A generated selection of tracks shown in the "Mixes for you" carousel.
 final class HomeMix {
   /// Creates a mix.
-  const new({
-    required this.kind,
-    required this.tracks,
-    required this.artworkRef,
-  });
+  const new({required this.kind, required this.tracks, required this.artworks});
 
   /// Which mix this is; drives its localized title and subtitle.
   final HomeMixKind kind;
@@ -60,8 +56,8 @@ final class HomeMix {
   /// Tracks of the mix, in playback order.
   final List<Track> tracks;
 
-  /// First cover found among the mix tracks.
-  final ArtworkRef? artworkRef;
+  /// Up to four distinct covers of the mix, for its collage.
+  final List<ArtworkRef> artworks;
 }
 
 /// One row of the "Most played" ranking.
@@ -124,7 +120,7 @@ List<HomeMix> mixesForYou(List<Track> tracks, {int limit = 10}) {
     return HomeMix(
       kind: kind,
       tracks: selection,
-      artworkRef: _firstArtwork(selection),
+      artworks: _collageArtworks(selection),
     );
   }
 
@@ -240,4 +236,17 @@ ArtworkRef? _firstArtwork(List<Track> tracks) {
     if (artwork != null) return artwork;
   }
   return null;
+}
+
+/// First four distinct covers of [tracks], for a mix collage.
+List<ArtworkRef> _collageArtworks(List<Track> tracks) {
+  final found = <ArtworkRef>[];
+  final seen = <String>{};
+  for (final track in tracks) {
+    final artwork = track.artworkRef;
+    if (artwork == null || !seen.add(artwork.hash)) continue;
+    found.add(artwork);
+    if (found.length == 4) break;
+  }
+  return found;
 }

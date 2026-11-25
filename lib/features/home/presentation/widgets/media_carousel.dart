@@ -118,14 +118,16 @@ class AlbumCarousel extends StatelessWidget {
 class MediaCard extends StatelessWidget {
   /// Creates the card.
   const new({
-    required this.artworkRef,
     required this.title,
     required this.subtitle,
     required this.onTap,
+    this.artworkRef,
+    this.cover,
+    this.subtitleMaxLines = 1,
     super.key,
   });
 
-  /// Cover shown on top of the card.
+  /// Cover shown on top of the card, unless [cover] replaces it.
   final ArtworkRef? artworkRef;
 
   /// Primary line, usually a title.
@@ -137,6 +139,12 @@ class MediaCard extends StatelessWidget {
   /// Action of the card.
   final VoidCallback onTap;
 
+  /// Replaces the plain cover, for example with a cover collage.
+  final Widget? cover;
+
+  /// Lines the subtitle may use before ellipsis.
+  final int subtitleMaxLines;
+
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -147,10 +155,11 @@ class MediaCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            ArtworkImage(
-              artworkRef: artworkRef,
-              size: AppSizing.homeCarouselCover,
-            ),
+            cover ??
+                ArtworkImage(
+                  artworkRef: artworkRef,
+                  size: AppSizing.homeCarouselCover,
+                ),
             const SizedBox(height: AppSpacing.sm),
             Text(
               title,
@@ -163,7 +172,7 @@ class MediaCard extends StatelessWidget {
             if (subtitle != null)
               Text(
                 subtitle!,
-                maxLines: 1,
+                maxLines: subtitleMaxLines,
                 overflow: TextOverflow.ellipsis,
                 style: AppTextStyles.trackArtist.copyWith(
                   color: AppColors.textSecondary,

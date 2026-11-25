@@ -110,6 +110,9 @@ abstract final class AppRadii {
 
   /// Caps of the bars of the Home activity chart.
   static const BorderRadius activityBar = BorderRadius.all(Radius.circular(2));
+
+  /// Tiles inside a cover collage.
+  static const BorderRadius collageTile = BorderRadius.all(Radius.circular(2));
 }
 
 /// Fixed sizes shared by the player and library surfaces.
@@ -179,6 +182,12 @@ abstract final class AppSizing {
 
   /// Height of a Home carousel, cover plus its two text lines.
   static const double homeCarouselHeight = 176;
+
+  /// Height of the Home mix carousel, cover plus a two-line description.
+  static const double homeMixCarouselHeight = 192;
+
+  /// Gap between the tiles of a cover collage.
+  static const double collageGap = 2;
 
   /// Maximum size of the discovery card.
   static const double discoverCardMax = 420;

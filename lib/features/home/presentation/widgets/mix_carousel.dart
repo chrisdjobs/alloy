@@ -1,11 +1,13 @@
 import 'package:alloy/features/home/domain/home_sections.dart';
 import 'package:alloy/features/home/presentation/home_callbacks.dart';
+import 'package:alloy/features/home/presentation/widgets/artwork_collage.dart';
 import 'package:alloy/features/home/presentation/widgets/media_carousel.dart';
 import 'package:alloy/l10n/app_localizations.dart';
 import 'package:alloy/shared/design/tokens.dart';
 import 'package:material_ui/material_ui.dart';
 
-/// Horizontal list of generated mixes with cover, title and description.
+/// Horizontal list of generated mixes with a cover collage, title and
+/// description.
 class MixCarousel extends StatelessWidget {
   /// Creates the carousel; tapping a card plays [mixes] at that position.
   const new({required this.mixes, required this.onPlay, super.key});
@@ -21,7 +23,7 @@ class MixCarousel extends StatelessWidget {
     final l10n = AppLocalizations.of(context);
 
     return SizedBox(
-      height: AppSizing.homeCarouselHeight,
+      height: AppSizing.homeMixCarouselHeight,
       child: ListView.separated(
         scrollDirection: Axis.horizontal,
         padding: const EdgeInsets.symmetric(horizontal: AppSpacing.page),
@@ -30,9 +32,13 @@ class MixCarousel extends StatelessWidget {
         itemBuilder: (context, index) {
           final mix = mixes[index];
           return MediaCard(
-            artworkRef: mix.artworkRef,
+            cover: ArtworkCollage(
+              artworks: mix.artworks,
+              size: AppSizing.homeCarouselCover,
+            ),
             title: _title(l10n, mix.kind),
             subtitle: _subtitle(l10n, mix.kind),
+            subtitleMaxLines: 2,
             onTap: () => onPlay(mix),
           );
         },
