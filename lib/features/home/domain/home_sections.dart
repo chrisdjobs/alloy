@@ -126,6 +126,24 @@ final class HomeStatistics {
   final Duration totalDuration;
 }
 
+/// Lyrics availability of the library, shown by the statistics card.
+final class LyricsBreakdown {
+  /// Creates the breakdown.
+  const new({required this.synced, required this.textOnly, required this.none});
+
+  /// Tracks with time-synced lyrics.
+  final int synced;
+
+  /// Tracks with plain-text lyrics.
+  final int textOnly;
+
+  /// Tracks without lyrics.
+  final int none;
+
+  /// Tracks counted in the breakdown.
+  int get total => synced + textOnly + none;
+}
+
 /// Scaffold mixes: derived from [tracks] until the play history exists.
 ///
 /// "On rotation" keeps every other track, "Deep cuts" walks the library
@@ -203,6 +221,20 @@ HomeStatistics homeStatistics(List<Track> tracks) {
 }
 
 int _placeholderPlays(DateTime day) => (day.day * 7 + day.month * 3) % 9;
+
+/// Scaffold lyrics counts.
+///
+/// Lyrics detection does not exist yet, so fixed small fractions of the
+/// library stand in for synced and text-only lyrics.
+LyricsBreakdown lyricsBreakdown(List<Track> tracks) {
+  final synced = (tracks.length * 6 / 100).round();
+  final textOnly = (tracks.length * 5 / 100).round();
+  return LyricsBreakdown(
+    synced: synced,
+    textOnly: textOnly,
+    none: tracks.length - synced - textOnly,
+  );
+}
 
 /// Scaffold summary of [points].
 ///

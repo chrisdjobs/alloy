@@ -83,6 +83,7 @@ class _HomeScreenState extends State<HomeScreen> {
     final activity = activityPoints(_period);
     final summary = activitySummary(activity);
     final statistics = tracks == null ? null : homeStatistics(tracks);
+    final lyrics = tracks == null ? null : lyricsBreakdown(tracks);
 
     return ListView(
       padding: EdgeInsets.zero,
@@ -144,7 +145,8 @@ class _HomeScreenState extends State<HomeScreen> {
             SectionHeader(title: l10n.activity),
             ActivityChart(points: activity, summary: summary, period: _period),
             SectionHeader(title: l10n.statistics),
-            if (statistics != null) StatisticsCard(statistics: statistics),
+            if (statistics != null && lyrics != null)
+              StatisticsCard(statistics: statistics, lyrics: lyrics),
             const SizedBox(height: AppSpacing.xl),
           ],
           _ => const [

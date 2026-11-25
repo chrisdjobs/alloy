@@ -615,17 +615,41 @@ abstract class AppLocalizations {
   /// **'Length'**
   String get totalLength;
 
-  /// Listening length with hours, such as 26 h
-  ///
-  /// In en, this message translates to:
-  /// **'{hours} h'**
-  String durationHours(int hours);
-
   /// Listening length with minutes, used below one hour
   ///
   /// In en, this message translates to:
   /// **'{minutes} min'**
   String durationMinutes(int minutes);
+
+  /// Statistics row that will open the lyrics screen
+  ///
+  /// In en, this message translates to:
+  /// **'Lyrics'**
+  String get lyrics;
+
+  /// Tracks with time-synced lyrics
+  ///
+  /// In en, this message translates to:
+  /// **'Synced'**
+  String get lyricsSynced;
+
+  /// Tracks with plain-text lyrics
+  ///
+  /// In en, this message translates to:
+  /// **'Text only'**
+  String get lyricsTextOnly;
+
+  /// Tracks without lyrics
+  ///
+  /// In en, this message translates to:
+  /// **'No lyrics'**
+  String get lyricsNone;
+
+  /// Count and share of one lyrics kind, such as 27 · 6%
+  ///
+  /// In en, this message translates to:
+  /// **'{count} · {percent}%'**
+  String lyricsStat(int count, int percent);
 }
 
 class _AppLocalizationsDelegate

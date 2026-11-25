@@ -320,12 +320,24 @@ class AppLocalizationsEs extends AppLocalizations {
   String get totalLength => 'Duración';
 
   @override
-  String durationHours(int hours) {
-    return '$hours h';
+  String durationMinutes(int minutes) {
+    return '$minutes min';
   }
 
   @override
-  String durationMinutes(int minutes) {
-    return '$minutes min';
+  String get lyrics => 'Letras';
+
+  @override
+  String get lyricsSynced => 'Sincronizadas';
+
+  @override
+  String get lyricsTextOnly => 'Solo texto';
+
+  @override
+  String get lyricsNone => 'Sin letra';
+
+  @override
+  String lyricsStat(int count, int percent) {
+    return '$count · $percent%';
   }
 }

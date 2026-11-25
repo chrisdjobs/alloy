@@ -86,6 +86,10 @@
   "dayCount": "{days, plural, =0{0 días} =1{1 día} other{{days} días}}",
   "durationHoursMinutes": "{hours} h {minutes} min",
   "totalLength": "Duración",
-  "durationHours": "{hours} h",
-  "durationMinutes": "{minutes} min"
+  "durationMinutes": "{minutes} min",
+  "lyrics": "Letras",
+  "lyricsSynced": "Sincronizadas",
+  "lyricsTextOnly": "Solo texto",
+  "lyricsNone": "Sin letra",
+  "lyricsStat": "{count} · {percent}%"
 }

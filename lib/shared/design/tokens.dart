@@ -174,6 +174,12 @@ abstract final class AppSizing {
   /// Gap between two bars of the Home activity chart.
   static const double activityBarGap = 2;
 
+  /// Height of the segmented lyrics bar of the statistics card.
+  static const double lyricsBarHeight = 8;
+
+  /// Diameter of a legend dot of the lyrics breakdown.
+  static const double lyricsDot = 10;
+
   /// Shortest bar of the Home activity chart, used for days without plays.
   static const double activityBarMinHeight = 2;
 

@@ -414,20 +414,39 @@
   "@totalLength": {
     "description": "Label of the total listening length in the statistics card"
   },
-  "durationHours": "{hours} h",
-  "@durationHours": {
-    "description": "Listening length with hours, such as 26 h",
-    "placeholders": {
-      "hours": {
-        "type": "int"
-      }
-    }
-  },
   "durationMinutes": "{minutes} min",
   "@durationMinutes": {
     "description": "Listening length with minutes, used below one hour",
     "placeholders": {
       "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "lyrics": "Lyrics",
+  "@lyrics": {
+    "description": "Statistics row that will open the lyrics screen"
+  },
+  "lyricsSynced": "Synced",
+  "@lyricsSynced": {
+    "description": "Tracks with time-synced lyrics"
+  },
+  "lyricsTextOnly": "Text only",
+  "@lyricsTextOnly": {
+    "description": "Tracks with plain-text lyrics"
+  },
+  "lyricsNone": "No lyrics",
+  "@lyricsNone": {
+    "description": "Tracks without lyrics"
+  },
+  "lyricsStat": "{count} · {percent}%",
+  "@lyricsStat": {
+    "description": "Count and share of one lyrics kind, such as 27 · 6%",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "percent": {
         "type": "int"
       }
     }
