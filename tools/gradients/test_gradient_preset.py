@@ -99,7 +99,7 @@ class DeriveGlowTest(unittest.TestCase):
         preset = gp.normalize_preset(_raw_preset())
         self.assertEqual(gp.derive_glow(preset), gp.derive_glow(preset))
 
-    def test_normalize_overwrites_the_glow_and_ignores_a_stored_home(self):
+    def test_normalize_overwrites_the_glow_and_drops_old_fields(self):
         raw = _raw_preset()
         raw["glow"] = [
             {
@@ -115,6 +115,7 @@ class DeriveGlowTest(unittest.TestCase):
 
         self.assertEqual(preset["glow"], gp.derive_glow(preset))
         self.assertNotIn("home", preset)
+        self.assertNotIn("pill", preset)
         self.assertTrue(
             all(
                 stop["color"] != "#00FF00"
@@ -129,17 +130,11 @@ class DeriveGlowTest(unittest.TestCase):
         preset = gp.normalize_preset(raw)
         self.assertEqual(preset["glow"], gp.derive_glow(preset))
 
-    def test_pill_derived_from_layers(self):
-        preset = gp.normalize_preset(_raw_preset())
-        pill = preset["pill"]
-        # Pill uses dominant color at start, accent color at end
-        self.assertEqual(pill["stops"][0]["color"], "#FFB300")  # dominant
-        self.assertEqual(pill["stops"][1]["color"], "#FF5A1F")  # accent
-        self.assertEqual(pill["stops"][2]["color"], "#FF5A1F")  # accent
-        # All alphas are 1.0 (opaque)
-        self.assertTrue(all(stop["alpha"] == 1.0 for stop in pill["stops"]))
-        # Positions are correct
-        self.assertEqual([s["position"] for s in pill["stops"]], [0.0, 0.5, 1.0])
+    def test_normalize_accepts_old_files_without_home(self):
+        raw = _raw_preset()
+        del raw["home"]
+        preset = gp.normalize_preset(raw)
+        self.assertEqual(preset["glow"], gp.derive_glow(preset))
 
 
 if __name__ == "__main__":

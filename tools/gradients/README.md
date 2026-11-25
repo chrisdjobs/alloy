@@ -13,8 +13,9 @@ icon's own `layers`, one glow layer per icon layer, so the wash keeps the icon's
 colors left to right. Only the center (squeezed into the top half, x clamped),
 the radius and the alphas change; every stop keeps its source layer's rgb. Its
 knobs are the `GLOW_*` constants in `gradient_preset.py` — the glow has no
-other tuning. Schema 3 dropped `home`; files that still carry it are accepted
-and the key is ignored.
+other tuning. The nav pill and the Me identity card reuse the same `glow`.
+Schema 5 is the only derived gradient; old files with a `home` (schema 2) or a
+`pill` (schemas 3-4) are accepted and those keys are ignored.
 
 Requires Python 3, Pillow and numpy. Run every command from the repo root.
 
@@ -28,9 +29,8 @@ python3 tools/gradients/generate_gradients.py \
 ```
 
 Writes `grad_001.json` + `grad_001.png` (and so on) with your palette only. The
-base is derived dark and slightly tinted; layout, dominant color and pill are
-seeded, the glow is derived from the icon's layers, and the grain lives in the
-PNG only. Each PNG embeds its full preset in a text chunk, so the PNG alone is
+base is derived dark and slightly tinted; layout and dominant color are seeded,
+the glow is derived from the icon's layers, and the grain lives in the PNG only. Each PNG embeds its full preset in a text chunk, so the PNG alone is
 enough to apply it. New runs continue after the highest `grad_###` already in
 the folder instead of overwriting it. Without `--seed` the run picks one and
 prints it.
@@ -109,9 +109,15 @@ circle and warns without resizing it. Applying the same name again updates it in
 place and rewrites identical bytes, so the flow is idempotent.
 
 In the app, read `AppGradientPresets.active` (or the
-`activeGradientPresetProvider`) for `base`, `glow` and `pill`. Home and Me paint
-`glow` through `lib/shared/widgets/preset_glow.dart`: one `DecoratedBox` per
-glow layer, each radial stretched horizontally by `width / height` (horizontal
-radius `radius * width`, vertical `radius * height`), the stack faded top to
-bottom by a `ShaderMask` that mirrors `GLOW_FADE`. The agent-facing checklist
-lives in `.opencode/skills/gradient-preset/SKILL.md`.
+`activeGradientPresetProvider`) for `base` and `glow`. Home, Me's identity card
+and the nav pill all paint `glow` through
+`lib/shared/widgets/preset_glow.dart`: one `DecoratedBox` per glow layer, each
+radial stretched horizontally by `width / height` (horizontal radius
+`radius * width`, vertical `radius * height`). Only Home masks the stack with
+`PresetGlow.fadeMask` (mirrors `GLOW_FADE`) so it blends into the page; the Me
+card and the pill use `fadeOut: false`, clip the wash to their own radius and
+keep it opaque: a left-to-right underlay of the layers' colors, pushed towards
+black to match the page glow's darkness, fills the gaps where the radials reach
+zero, so no black or surface color shows. The selected
+tab's icon and label are light, not `onAccent`. The agent-facing checklist lives in
+`.opencode/skills/gradient-preset/SKILL.md`.

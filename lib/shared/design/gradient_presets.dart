@@ -13,7 +13,6 @@ final class GradientPreset {
     required this.name,
     required this.base,
     required this.glow,
-    required this.pill,
   });
 
   /// Stable slug used by [AppGradientPresets.byId].
@@ -25,13 +24,10 @@ final class GradientPreset {
   /// Opaque page background color.
   final Color base;
 
-  /// One radial gradient per glow layer, painted behind the Home and Me
-  /// headers. The same order as the icon's layers, so the wash keeps the
-  /// icon's colors.
+  /// One radial gradient per glow layer, painted behind the Home header,
+  /// inside the Me identity card and inside the nav pill. The same order as the
+  /// icon's layers, so the wash keeps the icon's colors.
   final List<RadialGradient> glow;
-
-  /// Radial gradient of the selected navigation pill.
-  final RadialGradient pill;
 }
 
 /// Every applied preset, sorted by id.
@@ -56,12 +52,6 @@ abstract final class AppGradientPresets {
           stops: [0, 0.55, 1],
         ),
       ],
-      pill: RadialGradient(
-        center: Alignment(-0.3, -0.6),
-        radius: 2,
-        colors: [Color(0xFFFFB300), Color(0xFFFF5A1F), Color(0xFFFF5A1F)],
-        stops: [0, 0.5, 1],
-      ),
     ),
     GradientPreset(
       id: 'neon-dusk',
@@ -81,12 +71,6 @@ abstract final class AppGradientPresets {
           stops: [0, 0.55, 1],
         ),
       ],
-      pill: RadialGradient(
-        center: Alignment(-0.3, -0.6),
-        radius: 2,
-        colors: [Color(0xFF7B2FF7), Color(0xFFFF5A1F), Color(0xFFFF5A1F)],
-        stops: [0, 0.5, 1],
-      ),
     ),
   ];
 

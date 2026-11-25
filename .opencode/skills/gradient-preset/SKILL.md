@@ -40,13 +40,22 @@ without a path, ask for the file name; never guess which file they mean.
   `assets/icon/presets.json` by hand; both are generated.
 - `glow` is derived from the icon's own `layers` by `derive_glow` in
   `gradient_preset.py`: one glow layer per icon layer, same colors and stops,
-  re-aimed at a wide box. Never randomize or hand-edit it. Its knobs are the
-  `GLOW_*` constants there, including `GLOW_FADE`, which the Dart
-  `PresetGlow.fade` mirrors; change both together.
-- Home and Me paint `glow` through `lib/shared/widgets/preset_glow.dart`: a
-  stretched `RadialGradient` per layer, faded top to bottom by a `ShaderMask`.
-  Do not add another glow, clip it to a header row, or edit the generated Dart
-  for it. The glow box is taller than the content so the fade can reach zero.
+  re-aimed at a wide box. Never randomize or hand-edit it; old files' `home`
+  and `pill` keys are ignored. The `GLOW_*` constants there are the tuning
+  knobs, including `GLOW_FADE`, which the Dart `PresetGlow.fadeMask` mirrors;
+  change both together.
+- Home, the Me identity card and the nav pill paint `glow` through
+  `lib/shared/widgets/preset_glow.dart`: a stretched `RadialGradient` per layer.
+  Only Home sets `fadeOut` (default true), so its wash blends into the page at
+  the bottom; the card and the pill pass `fadeOut: false`, clip the wash to
+  their own radius and keep it opaque: a left-to-right underlay of the layers'
+  own colors, pushed towards black (`_Underlay._dim`) to match the page glow's
+  darkness, fills the gaps where the radials reach zero, so no background
+  shows through and the three surfaces share one palette. Do not add another
+  glow, clip it to a header row, or edit the generated Dart for it. The Home
+  glow box is taller than the content so the fade can reach zero. The selected
+  tab's icon and label are light (`AppColors.textPrimary`), never `onAccent`,
+  so they stay readable on the wash.
 - Never pick or infer a preset visually. A PNG without metadata is an error:
   ask for the matching `.json` or use `--from-image`, do not guess.
 - Ask nothing else. Only ask for a name if none was given and the candidate id

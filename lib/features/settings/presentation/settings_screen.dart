@@ -31,64 +31,53 @@ class SettingsScreen extends ConsumerWidget {
     final preset = ref.watch(activeGradientPresetProvider);
     final library = tracks.value;
 
-    return Stack(
-      clipBehavior: Clip.none,
-      children: [
-        Positioned(
-          top: 0,
-          left: 0,
-          right: 0,
-          height: AppSizing.meGlowHeight,
-          child: PresetGlow(layers: preset.glow),
+    return SafeArea(
+      bottom: false,
+      child: ListView(
+        padding: const EdgeInsets.only(
+          top: AppSpacing.xl,
+          bottom: AppSpacing.xl,
         ),
-        SafeArea(
-          bottom: false,
-          child: ListView(
-            padding: const EdgeInsets.only(
-              top: AppSpacing.xl,
-              bottom: AppSpacing.xl,
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg),
+            child: _IdentityCard(
+              title: l10n.appTitle,
+              initial: l10n.appTitle.substring(0, 1),
+              glow: preset.glow,
+              stats: library == null
+                  ? null
+                  : l10n.libraryStats(
+                      l10n.trackCount(library.length),
+                      l10n.albumCount(_albums(library)),
+                    ),
             ),
-            children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg),
-                child: _IdentityCard(
-                  title: l10n.appTitle,
-                  initial: l10n.appTitle.substring(0, 1),
-                  stats: library == null
-                      ? null
-                      : l10n.libraryStats(
-                          l10n.trackCount(library.length),
-                          l10n.albumCount(_albums(library)),
-                        ),
-                ),
-              ),
-              const SizedBox(height: AppSpacing.xl),
-              SettingsRow(
-                icon: context.icons.appearance,
-                title: l10n.appearanceTitle,
-                subtitle: l10n.appearanceSummary(
-                  iconPackName(l10n, settings.iconPack),
-                ),
-                onTap: () => context.push('/settings/appearance'),
-              ),
-              SettingsRow(
-                icon: context.icons.language,
-                title: l10n.languageTitle,
-                subtitle: languageName(l10n, settings.localeCode),
-                onTap: () => context.push('/settings/language'),
-              ),
-              SettingsRow(
-                icon: context.icons.folder,
-                title: l10n.musicAndStorageTitle,
-                subtitle: l10n.musicFoldersSummary(
-                  l10n.trackCount(library?.length ?? 0),
-                ),
-                onTap: () => context.push('/settings/storage'),
-              ),
-            ],
           ),
-        ),
-      ],
+          const SizedBox(height: AppSpacing.xl),
+          SettingsRow(
+            icon: context.icons.appearance,
+            title: l10n.appearanceTitle,
+            subtitle: l10n.appearanceSummary(
+              iconPackName(l10n, settings.iconPack),
+            ),
+            onTap: () => context.push('/settings/appearance'),
+          ),
+          SettingsRow(
+            icon: context.icons.language,
+            title: l10n.languageTitle,
+            subtitle: languageName(l10n, settings.localeCode),
+            onTap: () => context.push('/settings/language'),
+          ),
+          SettingsRow(
+            icon: context.icons.folder,
+            title: l10n.musicAndStorageTitle,
+            subtitle: l10n.musicFoldersSummary(
+              l10n.trackCount(library?.length ?? 0),
+            ),
+            onTap: () => context.push('/settings/storage'),
+          ),
+        ],
+      ),
     );
   }
 }
@@ -98,11 +87,20 @@ int _albums(List<Track> tracks) {
 }
 
 /// Identity card: gradient monogram, app name and the library counts.
+///
+/// The preset glow is painted inside the card and clipped to its radius, so
+/// the card itself carries the wash instead of sitting on a page-level glow.
 class _IdentityCard extends StatelessWidget {
-  const new({required this.title, required this.initial, this.stats});
+  const new({
+    required this.title,
+    required this.initial,
+    required this.glow,
+    this.stats,
+  });
 
   final String title;
   final String initial;
+  final List<RadialGradient> glow;
   final String? stats;
 
   @override
@@ -113,46 +111,51 @@ class _IdentityCard extends StatelessWidget {
       borderRadius: AppRadii.cardLarge,
       child: ColoredBox(
         color: AppColors.surface,
-        child: Padding(
-          padding: const EdgeInsets.all(AppSpacing.lg),
-          child: Row(
-            children: [
-              Container(
-                width: AppSizing.profileAvatar,
-                height: AppSizing.profileAvatar,
-                alignment: Alignment.center,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  gradient: AppGradients.accent(accent),
-                ),
-                child: Text(
-                  initial,
-                  style: AppTextStyles.headline.copyWith(
-                    color: AppColors.onAccent,
-                  ),
-                ),
-              ),
-              const SizedBox(width: AppSpacing.lg),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(title, style: AppTextStyles.playerTitle),
-                    if (stats case final stats?) ...[
-                      const SizedBox(height: AppSpacing.xs),
-                      Text(
-                        stats,
-                        style: AppTextStyles.body.copyWith(
-                          color: AppColors.textSecondary,
-                        ),
+        child: Stack(
+          children: [
+            Positioned.fill(child: PresetGlow(layers: glow, fadeOut: false)),
+            Padding(
+              padding: const EdgeInsets.all(AppSpacing.lg),
+              child: Row(
+                children: [
+                  Container(
+                    width: AppSizing.profileAvatar,
+                    height: AppSizing.profileAvatar,
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      gradient: AppGradients.accent(accent),
+                    ),
+                    child: Text(
+                      initial,
+                      style: AppTextStyles.headline.copyWith(
+                        color: AppColors.onAccent,
                       ),
-                    ],
-                  ],
-                ),
+                    ),
+                  ),
+                  const SizedBox(width: AppSpacing.lg),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(title, style: AppTextStyles.playerTitle),
+                        if (stats case final stats?) ...[
+                          const SizedBox(height: AppSpacing.xs),
+                          Text(
+                            stats,
+                            style: AppTextStyles.body.copyWith(
+                              color: AppColors.textSecondary,
+                            ),
+                          ),
+                        ],
+                      ],
+                    ),
+                  ),
+                ],
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

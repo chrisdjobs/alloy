@@ -21,7 +21,6 @@ final class GradientPreset {
     required this.name,
     required this.base,
     required this.glow,
-    required this.pill,
   });
 
   /// Stable slug used by [AppGradientPresets.byId].
@@ -33,13 +32,10 @@ final class GradientPreset {
   /// Opaque page background color.
   final Color base;
 
-  /// One radial gradient per glow layer, painted behind the Home and Me
-  /// headers. The same order as the icon's layers, so the wash keeps the
-  /// icon's colors.
+  /// One radial gradient per glow layer, painted behind the Home header,
+  /// inside the Me identity card and inside the nav pill. The same order as the
+  /// icon's layers, so the wash keeps the icon's colors.
   final List<RadialGradient> glow;
-
-  /// Radial gradient of the selected navigation pill.
-  final RadialGradient pill;
 }
 
 /// Every applied preset, sorted by id.
@@ -84,33 +80,29 @@ def render_dart(registry: dict) -> str:
 
 
 def _preset_block(preset: dict) -> str:
-    glow = "".join(
-        f"{_gradient(layer, indent=8)},\n" for layer in preset["glow"]
-    )
     return (
         "    GradientPreset(\n"
         f"      id: '{preset['id']}',\n"
         f"      name: '{preset['name']}',\n"
         f"      base: Color({gp.argb_hex(preset['base'])}),\n"
-        "      glow: [\n"
-        f"{glow}"
-        "      ],\n"
-        f"      pill: {_gradient(preset['pill'], indent=0, fields=8)},\n"
+        f"{_gradient_list('glow', preset['glow'])}"
         "    ),\n"
     )
 
 
-def _gradient(gradient: dict, indent: int = 6, fields: int | None = None) -> str:
+def _gradient_list(name: str, gradients: list[dict]) -> str:
+    body = "".join(f"{_gradient(gradient, indent=8)},\n" for gradient in gradients)
+    return f"      {name}: [\n{body}      ],\n"
+
+
+def _gradient(gradient: dict, indent: int = 6) -> str:
     x, y = gradient["center"]
     stops = ", ".join(_decimal(stop["position"]) for stop in gradient["stops"])
     colors = [
         f"Color({gp.argb_hex(stop['color'], stop['alpha'])})"
         for stop in gradient["stops"]
     ]
-    field = " " * (indent + 2 if fields is None else fields)
-    # Inline after `pill:`, the gradient starts at column 0 but the closing
-    # paren belongs to the preset's field indent.
-    closing = " " * (indent or 6)
+    field = " " * (indent + 2)
     one_line = f"{field}colors: [{', '.join(colors)}],"
     if len(one_line) <= 80:
         color_block = f"{one_line}\n"
@@ -125,7 +117,7 @@ def _gradient(gradient: dict, indent: int = 6, fields: int | None = None) -> str
         f"{field}radius: {_decimal(gradient['radius'])},\n"
         f"{color_block}"
         f"{field}stops: [{stops}],\n"
-        + closing
+        + " " * indent
         + ")"
     )
 

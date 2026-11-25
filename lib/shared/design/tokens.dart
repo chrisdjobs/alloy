@@ -214,10 +214,6 @@ abstract final class AppSizing {
   /// vertical fade of `PresetGlow` has room to reach zero.
   static const double homeGlowHeight = 320;
 
-  /// Height of the page-level glow behind the Me header: the identity card,
-  /// its top padding and the fade.
-  static const double meGlowHeight = 260;
-
   /// Icon size of a row in the settings screens.
   static const double settingsRowIcon = 24;
 }

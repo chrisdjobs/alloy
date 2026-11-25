@@ -8,6 +8,7 @@ import 'package:bars/shared/design/gradient_presets_provider.dart';
 import 'package:bars/shared/design/text_styles.dart';
 import 'package:bars/shared/design/tokens.dart';
 import 'package:bars/shared/design/visual_theme.dart';
+import 'package:bars/shared/widgets/preset_glow.dart';
 import 'package:bars/shared/widgets/tbd_placeholder.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -39,7 +40,7 @@ class AdaptiveShell extends ConsumerWidget {
       settingsProvider.select((settings) => settings.navOrder),
     );
     final current = AppTab.values[navigationShell.currentIndex];
-    final pill = ref.watch(activeGradientPresetProvider).pill;
+    final glow = ref.watch(activeGradientPresetProvider).glow;
 
     return LayoutBuilder(
       builder: (context, constraints) {
@@ -66,13 +67,13 @@ class AdaptiveShell extends ConsumerWidget {
                             tab: tab,
                             selected: false,
                             width: 180,
-                            pill: pill,
+                            glow: glow,
                           ),
                           selectedIcon: _NavPill(
                             tab: tab,
                             selected: true,
                             width: 180,
-                            pill: pill,
+                            glow: glow,
                           ),
                           label: Text(_labelOf(tab, context).toUpperCase()),
                         ),
@@ -92,7 +93,7 @@ class AdaptiveShell extends ConsumerWidget {
             tabs: order,
             current: current,
             onSelected: _select,
-            pill: pill,
+            glow: glow,
           ),
         );
       },
@@ -135,13 +136,13 @@ class _BarsBottomBar extends StatelessWidget {
     required this.tabs,
     required this.current,
     required this.onSelected,
-    required this.pill,
+    required this.glow,
   });
 
   final List<AppTab> tabs;
   final AppTab current;
   final ValueChanged<AppTab> onSelected;
-  final RadialGradient pill;
+  final List<RadialGradient> glow;
 
   @override
   Widget build(BuildContext context) {
@@ -180,11 +181,9 @@ class _BarsBottomBar extends StatelessWidget {
                   top: top,
                   width: AppSizing.navPillWidth,
                   height: AppSizing.navPillHeight,
-                  child: DecoratedBox(
-                    decoration: BoxDecoration(
-                      gradient: pill,
-                      borderRadius: AppRadii.navPill,
-                    ),
+                  child: ClipRRect(
+                    borderRadius: AppRadii.navPill,
+                    child: PresetGlow(layers: glow, fadeOut: false),
                   ),
                 ),
                 Row(
@@ -273,7 +272,7 @@ class _BottomTabState extends State<_BottomTab> {
                       size: AppSizing.navIcon,
                       color: Color.lerp(
                         AppColors.textSecondary,
-                        AppColors.onAccent,
+                        AppColors.textPrimary,
                         tint,
                       ),
                     ),
@@ -307,42 +306,51 @@ class _NavPill extends StatelessWidget {
   const new({
     required this.tab,
     required this.selected,
-    required this.pill,
+    required this.glow,
     this.width,
   });
 
   final AppTab tab;
   final bool selected;
-  final RadialGradient pill;
+  final List<RadialGradient> glow;
   final double? width;
 
   @override
   Widget build(BuildContext context) {
-    final foreground = selected ? AppColors.onAccent : AppColors.textSecondary;
+    final foreground = selected
+        ? AppColors.textPrimary
+        : AppColors.textSecondary;
 
     return AnimatedContainer(
       duration: AppDurations.navPill,
       curve: Curves.easeOut,
       width: width,
-      padding: const EdgeInsets.symmetric(
-        horizontal: AppSpacing.md,
-        vertical: AppSpacing.sm,
-      ),
-      decoration: BoxDecoration(
-        gradient: selected ? pill : null,
-        borderRadius: AppRadii.pill,
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        mainAxisAlignment: MainAxisAlignment.center,
+      clipBehavior: selected ? Clip.antiAlias : Clip.none,
+      decoration: const BoxDecoration(borderRadius: AppRadii.pill),
+      child: Stack(
+        fit: StackFit.passthrough,
         children: [
-          Icon(_iconOf(tab, context.icons), size: 18, color: foreground),
-          const SizedBox(width: AppSpacing.xs),
-          Text(
-            _labelOf(tab, context).toUpperCase(),
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-            style: AppTextStyles.label.copyWith(color: foreground),
+          if (selected)
+            Positioned.fill(child: PresetGlow(layers: glow, fadeOut: false)),
+          Padding(
+            padding: const EdgeInsets.symmetric(
+              horizontal: AppSpacing.md,
+              vertical: AppSpacing.sm,
+            ),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(_iconOf(tab, context.icons), size: 18, color: foreground),
+                const SizedBox(width: AppSpacing.xs),
+                Text(
+                  _labelOf(tab, context).toUpperCase(),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: AppTextStyles.label.copyWith(color: foreground),
+                ),
+              ],
+            ),
           ),
         ],
       ),

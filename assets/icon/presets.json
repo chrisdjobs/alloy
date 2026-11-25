@@ -1,9 +1,9 @@
 {
-  "schema": 3,
+  "schema": 5,
   "active": "neon-dusk",
   "presets": {
     "bars-default": {
-      "schema": 3,
+      "schema": 5,
       "id": "bars-default",
       "name": "bars-default",
       "approximate": false,
@@ -108,30 +108,6 @@
           ]
         }
       ],
-      "pill": {
-        "center": [
-          -0.3,
-          -0.6
-        ],
-        "radius": 2.0,
-        "stops": [
-          {
-            "color": "#FFB300",
-            "position": 0.0,
-            "alpha": 1.0
-          },
-          {
-            "color": "#FF5A1F",
-            "position": 0.5,
-            "alpha": 1.0
-          },
-          {
-            "color": "#FF5A1F",
-            "position": 1.0,
-            "alpha": 1.0
-          }
-        ]
-      },
       "render": {
         "grain": 0.012,
         "seed": 7
@@ -145,7 +121,7 @@
       }
     },
     "neon-dusk": {
-      "schema": 3,
+      "schema": 5,
       "id": "neon-dusk",
       "name": "neon-dusk",
       "approximate": false,
@@ -250,30 +226,6 @@
           ]
         }
       ],
-      "pill": {
-        "center": [
-          -0.3,
-          -0.6
-        ],
-        "radius": 2.0,
-        "stops": [
-          {
-            "color": "#7B2FF7",
-            "position": 0.0,
-            "alpha": 1.0
-          },
-          {
-            "color": "#FF5A1F",
-            "position": 0.5,
-            "alpha": 1.0
-          },
-          {
-            "color": "#FF5A1F",
-            "position": 1.0,
-            "alpha": 1.0
-          }
-        ]
-      },
       "render": {
         "grain": 0.0121,
         "seed": 2004182514
