@@ -13,8 +13,8 @@ export PATH="$HOME/flutter/bin:$PATH"
 
 SERIAL="${SERIAL:-emulator-5554}"
 AVD="${AVD:-Pixel_10_Pro}"
-PIDFILE="${PIDFILE:-/tmp/opencode/bars.pid}"
-LOG="${LOG:-/tmp/opencode/bars-flutter-run.log}"
+PIDFILE="${PIDFILE:-/tmp/opencode/alloy.pid}"
+LOG="${LOG:-/tmp/opencode/alloy-flutter-run.log}"
 
 device_ready() {
   adb devices | awk 'NR > 1 { print $1 }' | grep -qx "$SERIAL"

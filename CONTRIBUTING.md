@@ -1,6 +1,6 @@
-# Contributing to Bars
+# Contributing to Alloy
 
-Thanks for helping. Bars is a small, opinionated Flutter project; reading this
+Thanks for helping. Alloy is a small, opinionated Flutter project; reading this
 file before the first pull request saves review time.
 
 ## Before you start

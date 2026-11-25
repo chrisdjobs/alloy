@@ -1,4 +1,4 @@
-# Bars — Spec
+# Alloy — Spec
 
 > Working name (a codename, it may still change). Draft built from the decisions taken so far: edit anything that is not right.
 
@@ -36,7 +36,7 @@ Open source, local-first music player in Flutter: dark, minimal UI with gradient
 - License: GPL-3.0 by default (revisit before the first public release; GPLv3 conflicts with Apple App Store terms)
 - Routing: go_router
 - Localization: gen-l10n (en, es)
-- App id: `com.dynamjobs.bars`, project name `bars`
+- App id: `com.dynamjobs.alloy`, project name `alloy`
 
 Domain contracts
 - `MusicSource`: lists/scans tracks from a source and resolves a playable `Uri` for a track. First implementation: `LocalMusicSource`. Jellyfin comes later.

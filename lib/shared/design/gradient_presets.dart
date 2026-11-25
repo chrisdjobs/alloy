@@ -35,8 +35,8 @@ abstract final class AppGradientPresets {
   /// All presets in `assets/icon/presets.json`.
   static const List<GradientPreset> all = [
     GradientPreset(
-      id: 'bars-default',
-      name: 'bars-default',
+      id: 'alloy-default',
+      name: 'alloy-default',
       base: Color(0xFF0D0D0D),
       glow: [
         RadialGradient(

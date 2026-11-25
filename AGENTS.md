@@ -18,7 +18,7 @@ If the step touches `.arb` files: run `flutter gen-l10n`.
 
 ## Environment / network
 - Never use download mirrors (no `FLUTTER_STORAGE_BASE_URL`, no pub mirrors). If pub.dev or Flutter's artifact host is blocked, stop and ask the user; they fix network access with a VPN.
-- Visual work is the exception to the long-running rule: the agent may boot the `Pixel_10_Pro` AVD (`flutter emulators --launch Pixel_10_Pro`) and run `flutter run -d emulator-5554 --pid-file /tmp/opencode/bars.pid --no-devtools` in the background; reload with `kill -USR1 $(cat /tmp/opencode/bars.pid)` (`-USR2` = hot restart) and capture with `tool/visual/shot.sh`. Stop the run when the work is over; never leave it alive. Only when the user requests it or is part of the plan to open the emulator and visual polish with this method.
+- Visual work is the exception to the long-running rule: the agent may boot the `Pixel_10_Pro` AVD (`flutter emulators --launch Pixel_10_Pro`) and run `flutter run -d emulator-5554 --pid-file /tmp/opencode/alloy.pid --no-devtools` in the background; reload with `kill -USR1 $(cat /tmp/opencode/alloy.pid)` (`-USR2` = hot restart) and capture with `tool/visual/shot.sh`. Stop the run when the work is over; never leave it alive. Only when the user requests it or is part of the plan to open the emulator and visual polish with this method.
 - Still ask before release builds and before running anything on the physical phone.
 
 ## Project-specific
@@ -27,7 +27,7 @@ If the step touches `.arb` files: run `flutter gen-l10n`.
 - Backend / data layer: none, local-first. Drift (SQLite) for the library. Music comes through `MusicSource` implementations (local now, Jellyfin later).
 - Min SDK / platforms: Android and Linux are first-class (must build and run). iOS, macOS and Windows: do not block them, do not test them. Min SDK is set at scaffold time from the audio packages' requirements.
 - Audio: `PlaybackEngine` interface. Android = just_audio + audio_service. Linux = media_kit backend + MPRIS.
-- App id: `com.dynamjobs.bars` (project name `bars`).
+- App id: `com.dynamjobs.alloy` (project name `alloy`).
 
 ## Structure
 Pragmatic Clean Architecture: feature-first folders, with domain/data/presentation layers inside each feature.

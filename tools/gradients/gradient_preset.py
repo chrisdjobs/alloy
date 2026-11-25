@@ -28,7 +28,7 @@ from PIL import Image
 from PIL.PngImagePlugin import PngInfo
 
 SCHEMA = 5
-METADATA_KEY = "bars_gradient_preset"
+METADATA_KEY = "alloy_gradient_preset"
 PREVIEW_SIZE = 1024
 
 # Glow knobs: the only place the Home/Me glow is tuned. The glow reuses the

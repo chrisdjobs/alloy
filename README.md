@@ -1,8 +1,8 @@
-# Bars
+# Alloy
 
 Open source, local-first music player for Android and Linux, built with Flutter.
 
-Bars plays the music you already own: pick one or more folders, scan them, and
+Alloy plays the music you already own: pick one or more folders, scan them, and
 the library lives in a local SQLite database. Dark, minimal UI with gradient
 accents, one identity on every platform.
 

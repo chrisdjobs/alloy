@@ -1,7 +1,7 @@
 {
   "schema": 1,
-  "id": "bars-default",
-  "name": "bars-default",
+  "id": "alloy-default",
+  "name": "alloy-default",
   "approximate": false,
   "base": "#0D0D0D",
   "layers": [
@@ -112,9 +112,9 @@
     "seed": 7
   },
   "icon": {
-    "dir": "assets/icon/presets/bars-default",
-    "legacy": "assets/icon/presets/bars-default/icon_legacy_1024.png",
-    "adaptive_background": "assets/icon/presets/bars-default/icon_adaptive_background.png",
+    "dir": "assets/icon/presets/alloy-default",
+    "legacy": "assets/icon/presets/alloy-default/icon_legacy_1024.png",
+    "adaptive_background": "assets/icon/presets/alloy-default/icon_adaptive_background.png",
     "foreground": "assets/icon/ic_launcher_foreground.png",
     "monochrome": "assets/icon/ic_launcher_monochrome.png"
   }
