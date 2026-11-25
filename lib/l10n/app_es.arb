@@ -87,6 +87,7 @@
   "durationHoursMinutes": "{hours} h {minutes} min",
   "totalLength": "Duración",
   "durationMinutes": "{minutes} min",
+  "durationHours": "{hours} h",
   "lyrics": "Letras",
   "lyricsSynced": "Sincronizadas",
   "lyricsTextOnly": "Solo texto",

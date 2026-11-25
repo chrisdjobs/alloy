@@ -621,6 +621,12 @@ abstract class AppLocalizations {
   /// **'{minutes} min'**
   String durationMinutes(int minutes);
 
+  /// Listening length in whole hours, such as 26 h
+  ///
+  /// In en, this message translates to:
+  /// **'{hours} h'**
+  String durationHours(int hours);
+
   /// Statistics row that will open the lyrics screen
   ///
   /// In en, this message translates to:

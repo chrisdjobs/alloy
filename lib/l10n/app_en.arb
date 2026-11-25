@@ -423,6 +423,15 @@
       }
     }
   },
+  "durationHours": "{hours} h",
+  "@durationHours": {
+    "description": "Listening length in whole hours, such as 26 h",
+    "placeholders": {
+      "hours": {
+        "type": "int"
+      }
+    }
+  },
   "lyrics": "Lyrics",
   "@lyrics": {
     "description": "Statistics row that will open the lyrics screen"

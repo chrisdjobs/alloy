@@ -325,6 +325,11 @@ class AppLocalizationsEs extends AppLocalizations {
   }
 
   @override
+  String durationHours(int hours) {
+    return '$hours h';
+  }
+
+  @override
   String get lyrics => 'Letras';
 
   @override

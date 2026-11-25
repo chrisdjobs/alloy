@@ -1,5 +1,4 @@
 import 'package:alloy/features/home/domain/home_sections.dart';
-import 'package:alloy/features/home/presentation/widgets/listening_duration.dart';
 import 'package:alloy/l10n/app_localizations.dart';
 import 'package:alloy/shared/design/text_styles.dart';
 import 'package:alloy/shared/design/tokens.dart';
@@ -48,10 +47,7 @@ class StatisticsCard extends StatelessWidget {
                     label: l10n.libraryArtists,
                   ),
                   _StatTile(
-                    value: formatListeningDuration(
-                      l10n,
-                      statistics.totalDuration,
-                    ),
+                    value: _compactDuration(l10n, statistics.totalDuration),
                     label: l10n.totalLength,
                   ),
                 ],
@@ -105,6 +101,9 @@ class _LyricsBar extends StatelessWidget {
       child: SizedBox(
         height: AppSizing.lyricsBarHeight,
         child: Row(
+          // Stretch gives every segment the full height of the bar; a plain
+          // ColoredBox would collapse under the loose constraints.
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           spacing: AppSizing.activityBarGap,
           children: [
             for (final (count, color) in [
@@ -179,6 +178,14 @@ class _LyricsLegend extends StatelessWidget {
 
   int _percent(int count, int total) =>
       total == 0 ? 0 : (count * 100 / total).round();
+}
+
+/// Whole hours as "26 h", or "42 min" below one hour.
+///
+/// The Length tile is narrow, and the references show whole hours there.
+String _compactDuration(AppLocalizations l10n, Duration duration) {
+  if (duration.inHours >= 1) return l10n.durationHours(duration.inHours);
+  return l10n.durationMinutes(duration.inMinutes);
 }
 
 /// Colors of the lyrics bar and its legend, derived from the active accent.
