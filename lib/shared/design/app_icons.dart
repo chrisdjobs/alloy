@@ -28,6 +28,8 @@ final class AppIconSet {
     required this.stop,
     required this.more,
     required this.recent,
+    required this.mixes,
+    required this.favorite,
     required this.sort,
     required this.calendar,
     required this.duration,
@@ -98,6 +100,12 @@ final class AppIconSet {
 
   /// Recently added shortcut.
   final IconData recent;
+
+  /// Generated mixes shortcut.
+  final IconData mixes;
+
+  /// Favorites shortcut.
+  final IconData favorite;
 
   /// Orders a list.
   final IconData sort;
@@ -192,6 +200,12 @@ abstract final class AppIcons {
   /// Recently added shortcut (Lucide).
   static const IconData recent = LucideIcons.clock;
 
+  /// Generated mixes shortcut (Lucide).
+  static const IconData mixes = LucideIcons.layers;
+
+  /// Favorites shortcut (Lucide).
+  static const IconData favorite = LucideIcons.heart;
+
   /// Orders a list (Lucide).
   static const IconData sort = LucideIcons.arrowDownWideNarrow;
 
@@ -241,6 +255,8 @@ abstract final class AppIcons {
     stop: AppIcons.stop,
     more: AppIcons.more,
     recent: AppIcons.recent,
+    mixes: AppIcons.mixes,
+    favorite: AppIcons.favorite,
     sort: AppIcons.sort,
     calendar: AppIcons.calendar,
     duration: AppIcons.duration,
@@ -274,6 +290,8 @@ abstract final class AppIcons {
     stop: Icons.stop_rounded,
     more: Icons.more_vert_rounded,
     recent: Icons.schedule_rounded,
+    mixes: Icons.layers_outlined,
+    favorite: Icons.favorite_border_rounded,
     sort: Icons.sort_rounded,
     calendar: Icons.calendar_today_rounded,
     duration: Icons.schedule_rounded,

@@ -291,6 +291,14 @@
   "@shuffleAll": {
     "description": "Library action that plays the whole library in random order"
   },
+  "favorites": "Favorites",
+  "@favorites": {
+    "description": "Home shortcut and screen title for the favorited tracks"
+  },
+  "favoritesComingSoon": "Your favorite tracks will live here",
+  "@favoritesComingSoon": {
+    "description": "Caption of the favorites placeholder screen"
+  },
   "rescanLibrary": "Rescan library",
   "@rescanLibrary": {
     "description": "Tooltip for the action that scans the last folder again"
@@ -313,6 +321,142 @@
     "placeholders": {
       "duration": {
         "type": "String"
+      }
+    }
+  },
+  "mixesForYou": "Mixes for you",
+  "@mixesForYou": {
+    "description": "Home section with generated track mixes"
+  },
+  "mixOnRotationTitle": "Your rotation",
+  "@mixOnRotationTitle": {
+    "description": "Name of the mix built from the tracks played most right now"
+  },
+  "mixOnRotationSubtitle": "What you keep coming back to",
+  "@mixOnRotationSubtitle": {
+    "description": "Description of the rotation mix"
+  },
+  "mixDeepCutsTitle": "Deep cuts",
+  "@mixDeepCutsTitle": {
+    "description": "Name of the mix built from less played library tracks"
+  },
+  "mixDeepCutsSubtitle": "Hidden gems from your library",
+  "@mixDeepCutsSubtitle": {
+    "description": "Description of the deep cuts mix"
+  },
+  "mostPlayed": "Most played",
+  "@mostPlayed": {
+    "description": "Home section that ranks the tracks with the most plays"
+  },
+  "week": "Week",
+  "@week": {
+    "description": "Statistics window of the last seven days"
+  },
+  "month": "Month",
+  "@month": {
+    "description": "Statistics window of the last thirty days"
+  },
+  "playCount": "{count, plural, =0{No plays} =1{1 play} other{{count} plays}}",
+  "@playCount": {
+    "description": "Number of plays of a track inside the selected window",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "seeAll": "See all",
+  "@seeAll": {
+    "description": "Expands the most played ranking to the whole list"
+  },
+  "activity": "Activity",
+  "@activity": {
+    "description": "Home section with the daily plays bar chart"
+  },
+  "statistics": "Statistics",
+  "@statistics": {
+    "description": "Home section with the library totals"
+  },
+  "today": "Today",
+  "@today": {
+    "description": "Activity label for the listening time of today"
+  },
+  "thisWeek": "This week",
+  "@thisWeek": {
+    "description": "Activity label for the listening time of the last seven days"
+  },
+  "streak": "Streak",
+  "@streak": {
+    "description": "Activity label for the consecutive listening days"
+  },
+  "dayCount": "{days, plural, =0{0 days} =1{1 day} other{{days} days}}",
+  "@dayCount": {
+    "description": "Number of consecutive listening days",
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  },
+  "durationHoursMinutes": "{hours} h {minutes} min",
+  "@durationHoursMinutes": {
+    "description": "Listening time with hours and minutes, such as 1 h 07 min",
+    "placeholders": {
+      "hours": {
+        "type": "int"
+      },
+      "minutes": {
+        "type": "String"
+      }
+    }
+  },
+  "totalLength": "Length",
+  "@totalLength": {
+    "description": "Label of the total listening length in the statistics card"
+  },
+  "durationMinutes": "{minutes} min",
+  "@durationMinutes": {
+    "description": "Listening length with minutes, used below one hour",
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "durationHours": "{hours} h",
+  "@durationHours": {
+    "description": "Listening length in whole hours, such as 26 h",
+    "placeholders": {
+      "hours": {
+        "type": "int"
+      }
+    }
+  },
+  "lyrics": "Lyrics",
+  "@lyrics": {
+    "description": "Statistics row that will open the lyrics screen"
+  },
+  "lyricsSynced": "Synced",
+  "@lyricsSynced": {
+    "description": "Tracks with time-synced lyrics"
+  },
+  "lyricsTextOnly": "Text only",
+  "@lyricsTextOnly": {
+    "description": "Tracks with plain-text lyrics"
+  },
+  "lyricsNone": "No lyrics",
+  "@lyricsNone": {
+    "description": "Tracks without lyrics"
+  },
+  "lyricsStat": "{count} · {percent}%",
+  "@lyricsStat": {
+    "description": "Count and share of one lyrics kind, such as 27 · 6%",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "percent": {
+        "type": "int"
       }
     }
   }

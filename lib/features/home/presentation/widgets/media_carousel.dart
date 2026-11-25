@@ -7,13 +7,16 @@ import 'package:alloy/shared/design/tokens.dart';
 import 'package:alloy/shared/widgets/artwork_image.dart';
 import 'package:material_ui/material_ui.dart';
 
-/// Uppercase title above a Home section.
+/// Uppercase title above a Home section, with an optional trailing control.
 class SectionHeader extends StatelessWidget {
   /// Creates the header for [title].
-  const new({required this.title, super.key});
+  const new({required this.title, this.trailing, super.key});
 
   /// Section title, drawn in uppercase.
   final String title;
+
+  /// Control drawn after the title, such as a period toggle.
+  final Widget? trailing;
 
   @override
   Widget build(BuildContext context) {
@@ -24,13 +27,20 @@ class SectionHeader extends StatelessWidget {
         AppSpacing.page,
         AppSpacing.md,
       ),
-      child: Text(
-        title.toUpperCase(),
-        maxLines: 1,
-        overflow: TextOverflow.ellipsis,
-        style: AppTextStyles.sectionHeader.copyWith(
-          color: AppColors.textPrimary,
-        ),
+      child: Row(
+        children: [
+          Expanded(
+            child: Text(
+              title.toUpperCase(),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: AppTextStyles.sectionHeader.copyWith(
+                color: AppColors.textPrimary,
+              ),
+            ),
+          ),
+          ?trailing,
+        ],
       ),
     );
   }
@@ -58,7 +68,7 @@ class TrackCarousel extends StatelessWidget {
         separatorBuilder: (_, _) => const SizedBox(width: AppSpacing.md),
         itemBuilder: (context, index) {
           final track = tracks[index];
-          return _MediaCard(
+          return MediaCard(
             artworkRef: track.artworkRef,
             title: track.title,
             subtitle: track.artist,
@@ -92,7 +102,7 @@ class AlbumCarousel extends StatelessWidget {
         separatorBuilder: (_, _) => const SizedBox(width: AppSpacing.md),
         itemBuilder: (context, index) {
           final album = albums[index];
-          return _MediaCard(
+          return MediaCard(
             artworkRef: album.artworkRef,
             title: album.title,
             subtitle: album.artist,
@@ -104,18 +114,36 @@ class AlbumCarousel extends StatelessWidget {
   }
 }
 
-class _MediaCard extends StatelessWidget {
+/// Card of a Home carousel: cover, title and an optional subtitle.
+class MediaCard extends StatelessWidget {
+  /// Creates the card.
   const new({
-    required this.artworkRef,
     required this.title,
     required this.subtitle,
     required this.onTap,
+    this.artworkRef,
+    this.cover,
+    this.subtitleMaxLines = 1,
+    super.key,
   });
 
+  /// Cover shown on top of the card, unless [cover] replaces it.
   final ArtworkRef? artworkRef;
+
+  /// Primary line, usually a title.
   final String title;
+
+  /// Secondary line, omitted when null.
   final String? subtitle;
+
+  /// Action of the card.
   final VoidCallback onTap;
+
+  /// Replaces the plain cover, for example with a cover collage.
+  final Widget? cover;
+
+  /// Lines the subtitle may use before ellipsis.
+  final int subtitleMaxLines;
 
   @override
   Widget build(BuildContext context) {
@@ -127,10 +155,11 @@ class _MediaCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            ArtworkImage(
-              artworkRef: artworkRef,
-              size: AppSizing.homeCarouselCover,
-            ),
+            cover ??
+                ArtworkImage(
+                  artworkRef: artworkRef,
+                  size: AppSizing.homeCarouselCover,
+                ),
             const SizedBox(height: AppSpacing.sm),
             Text(
               title,
@@ -143,7 +172,7 @@ class _MediaCard extends StatelessWidget {
             if (subtitle != null)
               Text(
                 subtitle!,
-                maxLines: 1,
+                maxLines: subtitleMaxLines,
                 overflow: TextOverflow.ellipsis,
                 style: AppTextStyles.trackArtist.copyWith(
                   color: AppColors.textSecondary,

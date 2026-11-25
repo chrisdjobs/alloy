@@ -107,6 +107,12 @@ abstract final class AppRadii {
 
   /// Caps of the bars of the playing indicator.
   static const BorderRadius playingBar = BorderRadius.all(Radius.circular(2));
+
+  /// Caps of the bars of the Home activity chart.
+  static const BorderRadius activityBar = BorderRadius.all(Radius.circular(2));
+
+  /// Tiles inside a cover collage.
+  static const BorderRadius collageTile = BorderRadius.all(Radius.circular(2));
 }
 
 /// Fixed sizes shared by the player and library surfaces.
@@ -159,11 +165,32 @@ abstract final class AppSizing {
   /// Height of a quick-access card on the Home screen.
   static const double quickAccessHeight = 100;
 
+  /// Height of the Home activity chart's plot area.
+  static const double activityChartHeight = 96;
+
+  /// Gap between two bars of the Home activity chart.
+  static const double activityBarGap = 2;
+
+  /// Height of the segmented lyrics bar of the statistics card.
+  static const double lyricsBarHeight = 8;
+
+  /// Diameter of a legend dot of the lyrics breakdown.
+  static const double lyricsDot = 10;
+
+  /// Shortest bar of the Home activity chart, used for days without plays.
+  static const double activityBarMinHeight = 2;
+
   /// Cover size of the Home carousels.
   static const double homeCarouselCover = 120;
 
   /// Height of a Home carousel, cover plus its two text lines.
   static const double homeCarouselHeight = 176;
+
+  /// Height of the Home mix carousel, cover plus a two-line description.
+  static const double homeMixCarouselHeight = 192;
+
+  /// Gap between the tiles of a cover collage.
+  static const double collageGap = 2;
 
   /// Maximum size of the discovery card.
   static const double discoverCardMax = 420;

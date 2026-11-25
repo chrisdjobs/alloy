@@ -1,7 +1,11 @@
 import 'package:alloy/features/home/domain/home_sections.dart';
 import 'package:alloy/features/home/presentation/home_callbacks.dart';
+import 'package:alloy/features/home/presentation/widgets/activity_chart.dart';
 import 'package:alloy/features/home/presentation/widgets/home_header.dart';
 import 'package:alloy/features/home/presentation/widgets/media_carousel.dart';
+import 'package:alloy/features/home/presentation/widgets/mix_carousel.dart';
+import 'package:alloy/features/home/presentation/widgets/most_played_list.dart';
+import 'package:alloy/features/home/presentation/widgets/statistics_card.dart';
 import 'package:alloy/features/library/domain/track.dart';
 import 'package:alloy/l10n/app_localizations.dart';
 import 'package:alloy/shared/design/tokens.dart';
@@ -11,7 +15,7 @@ import 'package:alloy/shared/widgets/retry_message.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:material_ui/material_ui.dart';
 
-/// Home: accent glow, quick actions and the library's newest music.
+/// Home: accent glow, quick actions, mixes, recent music and statistics.
 ///
 /// The library stream and the playback callbacks come from the router, so this
 /// feature only imports the library's domain.
@@ -21,6 +25,7 @@ class HomeScreen extends StatefulWidget {
     required this.tracks,
     required this.onPlay,
     required this.onShuffleAll,
+    required this.onOpenFavorites,
     required this.onChooseFolder,
     required this.onRetry,
     super.key,
@@ -35,6 +40,9 @@ class HomeScreen extends StatefulWidget {
   /// Starts the whole library in shuffle mode.
   final ShuffleTracksCallback onShuffleAll;
 
+  /// Opens the favorites destination.
+  final VoidCallback onOpenFavorites;
+
   /// Opens the folder picker for the empty state.
   final VoidCallback onChooseFolder;
 
@@ -47,7 +55,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final GlobalKey _recentKey = GlobalKey();
-  final GlobalKey _albumsKey = GlobalKey();
+  HomePeriod _period = HomePeriod.week;
 
   Future<void> _scrollTo(GlobalKey key) async {
     final target = key.currentContext;
@@ -68,6 +76,14 @@ class _HomeScreenState extends State<HomeScreen> {
         ? const <Track>[]
         : recentlyAddedTracks(tracks);
     final albums = tracks == null ? const <HomeAlbum>[] : libraryAlbums(tracks);
+    final mixes = tracks == null ? const <HomeMix>[] : mixesForYou(tracks);
+    final played = tracks == null
+        ? const <MostPlayedEntry>[]
+        : mostPlayed(tracks, _period, limit: tracks.length);
+    final activity = activityPoints(_period);
+    final summary = activitySummary(activity);
+    final statistics = tracks == null ? null : homeStatistics(tracks);
+    final lyrics = tracks == null ? null : lyricsBreakdown(tracks);
 
     return ListView(
       padding: EdgeInsets.zero,
@@ -82,12 +98,11 @@ class _HomeScreenState extends State<HomeScreen> {
                     icon: context.icons.shuffle,
                     onTap: () => widget.onShuffleAll(tracks),
                   ),
-                  if (albums.isNotEmpty)
-                    QuickAccessCard(
-                      label: l10n.libraryAlbums,
-                      icon: context.icons.library,
-                      onTap: () => _scrollTo(_albumsKey),
-                    ),
+                  QuickAccessCard(
+                    label: l10n.favorites,
+                    icon: context.icons.favorite,
+                    onTap: widget.onOpenFavorites,
+                  ),
                   QuickAccessCard(
                     label: l10n.recentlyAdded,
                     icon: context.icons.recent,
@@ -107,15 +122,31 @@ class _HomeScreenState extends State<HomeScreen> {
             NoTracksState(onChooseFolder: widget.onChooseFolder),
           ],
           AsyncValue(hasValue: true) => [
+            SectionHeader(title: l10n.mixesForYou),
+            MixCarousel(
+              mixes: mixes,
+              onPlay: (mix) => widget.onPlay(mix.tracks, 0),
+            ),
             SectionHeader(key: _recentKey, title: l10n.recentlyAdded),
             TrackCarousel(tracks: recent, onPlay: widget.onPlay),
             if (albums.isNotEmpty) ...[
-              SectionHeader(key: _albumsKey, title: l10n.libraryAlbums),
+              SectionHeader(title: l10n.libraryAlbums),
               AlbumCarousel(
                 albums: albums,
                 onPlay: (album) => widget.onPlay(album.tracks, 0),
               ),
             ],
+            MostPlayedList(
+              entries: played,
+              period: _period,
+              onPeriodChanged: (period) => setState(() => _period = period),
+              onPlay: widget.onPlay,
+            ),
+            SectionHeader(title: l10n.activity),
+            ActivityChart(points: activity, summary: summary, period: _period),
+            SectionHeader(title: l10n.statistics),
+            if (statistics != null && lyrics != null)
+              StatisticsCard(statistics: statistics, lyrics: lyrics),
             const SizedBox(height: AppSpacing.xl),
           ],
           _ => const [
