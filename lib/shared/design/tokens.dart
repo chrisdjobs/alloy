@@ -107,6 +107,9 @@ abstract final class AppRadii {
 
   /// Caps of the bars of the playing indicator.
   static const BorderRadius playingBar = BorderRadius.all(Radius.circular(2));
+
+  /// Caps of the bars of the Home activity chart.
+  static const BorderRadius activityBar = BorderRadius.all(Radius.circular(2));
 }
 
 /// Fixed sizes shared by the player and library surfaces.
@@ -161,6 +164,15 @@ abstract final class AppSizing {
 
   /// Height of a quick-access card on the Home screen.
   static const double quickAccessHeight = 100;
+
+  /// Height of the Home activity chart's plot area.
+  static const double activityChartHeight = 96;
+
+  /// Gap between two bars of the Home activity chart.
+  static const double activityBarGap = 2;
+
+  /// Shortest bar of the Home activity chart, used for days without plays.
+  static const double activityBarMinHeight = 2;
 
   /// Cover size of the Home carousels.
   static const double homeCarouselCover = 120;
