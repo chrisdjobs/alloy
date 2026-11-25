@@ -70,5 +70,9 @@
   "mixOnRotationTitle": "Tu rotación",
   "mixOnRotationSubtitle": "Lo que más escuchas ahora",
   "mixDeepCutsTitle": "Joyas ocultas",
-  "mixDeepCutsSubtitle": "Tesoros escondidos en tu biblioteca"
+  "mixDeepCutsSubtitle": "Tesoros escondidos en tu biblioteca",
+  "mostPlayed": "Más escuchadas",
+  "week": "Semana",
+  "month": "Mes",
+  "playCount": "{count, plural, =0{Sin reproducciones} =1{1 reproducción} other{{count} reproducciones}}"
 }

@@ -335,5 +335,26 @@
   "mixDeepCutsSubtitle": "Hidden gems from your library",
   "@mixDeepCutsSubtitle": {
     "description": "Description of the deep cuts mix"
+  },
+  "mostPlayed": "Most played",
+  "@mostPlayed": {
+    "description": "Home section that ranks the tracks with the most plays"
+  },
+  "week": "Week",
+  "@week": {
+    "description": "Statistics window of the last seven days"
+  },
+  "month": "Month",
+  "@month": {
+    "description": "Statistics window of the last thirty days"
+  },
+  "playCount": "{count, plural, =0{No plays} =1{1 play} other{{count} plays}}",
+  "@playCount": {
+    "description": "Number of plays of a track inside the selected window",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
   }
 }

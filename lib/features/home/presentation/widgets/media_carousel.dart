@@ -7,13 +7,16 @@ import 'package:alloy/shared/design/tokens.dart';
 import 'package:alloy/shared/widgets/artwork_image.dart';
 import 'package:material_ui/material_ui.dart';
 
-/// Uppercase title above a Home section.
+/// Uppercase title above a Home section, with an optional trailing control.
 class SectionHeader extends StatelessWidget {
   /// Creates the header for [title].
-  const new({required this.title, super.key});
+  const new({required this.title, this.trailing, super.key});
 
   /// Section title, drawn in uppercase.
   final String title;
+
+  /// Control drawn after the title, such as a period toggle.
+  final Widget? trailing;
 
   @override
   Widget build(BuildContext context) {
@@ -24,13 +27,20 @@ class SectionHeader extends StatelessWidget {
         AppSpacing.page,
         AppSpacing.md,
       ),
-      child: Text(
-        title.toUpperCase(),
-        maxLines: 1,
-        overflow: TextOverflow.ellipsis,
-        style: AppTextStyles.sectionHeader.copyWith(
-          color: AppColors.textPrimary,
-        ),
+      child: Row(
+        children: [
+          Expanded(
+            child: Text(
+              title.toUpperCase(),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: AppTextStyles.sectionHeader.copyWith(
+                color: AppColors.textPrimary,
+              ),
+            ),
+          ),
+          ?trailing,
+        ],
       ),
     );
   }
