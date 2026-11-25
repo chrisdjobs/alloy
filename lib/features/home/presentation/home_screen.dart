@@ -1,7 +1,11 @@
 import 'package:alloy/features/home/domain/home_sections.dart';
 import 'package:alloy/features/home/presentation/home_callbacks.dart';
+import 'package:alloy/features/home/presentation/widgets/activity_chart.dart';
 import 'package:alloy/features/home/presentation/widgets/home_header.dart';
 import 'package:alloy/features/home/presentation/widgets/media_carousel.dart';
+import 'package:alloy/features/home/presentation/widgets/mix_carousel.dart';
+import 'package:alloy/features/home/presentation/widgets/most_played_list.dart';
+import 'package:alloy/features/home/presentation/widgets/statistics_card.dart';
 import 'package:alloy/features/library/domain/track.dart';
 import 'package:alloy/l10n/app_localizations.dart';
 import 'package:alloy/shared/design/tokens.dart';
@@ -11,7 +15,7 @@ import 'package:alloy/shared/widgets/retry_message.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:material_ui/material_ui.dart';
 
-/// Home: accent glow, quick actions and the library's newest music.
+/// Home: accent glow, quick actions, mixes, recent music and statistics.
 ///
 /// The library stream and the playback callbacks come from the router, so this
 /// feature only imports the library's domain.
@@ -49,6 +53,7 @@ class _HomeScreenState extends State<HomeScreen> {
   final GlobalKey _mixesKey = GlobalKey();
   final GlobalKey _recentKey = GlobalKey();
   final GlobalKey _albumsKey = GlobalKey();
+  HomePeriod _period = HomePeriod.week;
 
   Future<void> _scrollTo(GlobalKey key) async {
     final target = key.currentContext;
@@ -69,6 +74,12 @@ class _HomeScreenState extends State<HomeScreen> {
         ? const <Track>[]
         : recentlyAddedTracks(tracks);
     final albums = tracks == null ? const <HomeAlbum>[] : libraryAlbums(tracks);
+    final mixes = tracks == null ? const <HomeMix>[] : mixesForYou(tracks);
+    final played = tracks == null
+        ? const <MostPlayedEntry>[]
+        : mostPlayed(tracks, _period);
+    final activity = activityPoints(_period);
+    final statistics = tracks == null ? null : homeStatistics(tracks);
 
     return ListView(
       padding: EdgeInsets.zero,
@@ -108,6 +119,11 @@ class _HomeScreenState extends State<HomeScreen> {
             NoTracksState(onChooseFolder: widget.onChooseFolder),
           ],
           AsyncValue(hasValue: true) => [
+            SectionHeader(key: _mixesKey, title: l10n.mixesForYou),
+            MixCarousel(
+              mixes: mixes,
+              onPlay: (mix) => widget.onPlay(mix.tracks, 0),
+            ),
             SectionHeader(key: _recentKey, title: l10n.recentlyAdded),
             TrackCarousel(tracks: recent, onPlay: widget.onPlay),
             if (albums.isNotEmpty) ...[
@@ -117,6 +133,16 @@ class _HomeScreenState extends State<HomeScreen> {
                 onPlay: (album) => widget.onPlay(album.tracks, 0),
               ),
             ],
+            MostPlayedList(
+              entries: played,
+              period: _period,
+              onPeriodChanged: (period) => setState(() => _period = period),
+              onPlay: widget.onPlay,
+            ),
+            SectionHeader(title: l10n.activity),
+            ActivityChart(points: activity, period: _period),
+            SectionHeader(title: l10n.statistics),
+            if (statistics != null) StatisticsCard(statistics: statistics),
             const SizedBox(height: AppSpacing.xl),
           ],
           _ => const [
