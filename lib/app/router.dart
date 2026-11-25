@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:alloy/app/branch_fade.dart';
+import 'package:alloy/app/player_transition.dart';
 import 'package:alloy/app/shell.dart';
 import 'package:alloy/features/discover/presentation/discover_screen.dart';
 import 'package:alloy/features/home/presentation/home_screen.dart';
@@ -181,7 +182,8 @@ GoRouter createAppRouter({String initialLocation = '/library'}) {
       // covers can share one Hero.
       GoRoute(
         path: '/now-playing',
-        builder: (context, state) => const NowPlayingScreen(),
+        pageBuilder: (context, state) =>
+            playerPage(key: state.pageKey, child: const NowPlayingScreen()),
       ),
     ],
   );

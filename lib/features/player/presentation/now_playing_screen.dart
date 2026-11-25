@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:alloy/core/utils/duration_format.dart';
 import 'package:alloy/features/library/domain/track.dart';
 import 'package:alloy/features/player/domain/playback_state.dart';
+import 'package:alloy/features/player/presentation/drag_dismiss_route.dart';
 import 'package:alloy/features/player/presentation/player_hero.dart';
 import 'package:alloy/features/player/presentation/player_notifier.dart';
 import 'package:alloy/features/player/presentation/widgets/cover_gradient.dart';
@@ -31,10 +32,55 @@ class NowPlayingScreen extends ConsumerStatefulWidget {
 
 class _NowPlayingScreenState extends ConsumerState<NowPlayingScreen> {
   var _dragDistance = 0.0;
+  var _dragging = false;
+  DragDismissRoute? _dragRoute;
 
   void _dismiss() {
     _dragDistance = 0;
     Navigator.of(context).maybePop();
+  }
+
+  void _onDragStart() {
+    _dragDistance = 0;
+    _dragRoute = switch (ModalRoute.of(context)) {
+      final DragDismissRoute route => route,
+      _ => null,
+    };
+    // Without an interactive route (plain page routes) the screen falls back
+    // to accumulating the distance and popping on release.
+    _dragging = _dragRoute?.beginDrag() ?? true;
+  }
+
+  void _onDragUpdate(DragUpdateDetails details) {
+    if (!_dragging) return;
+    var dy = details.delta.dy;
+    if (_dragDistance + dy < 0) dy = -_dragDistance;
+    _dragDistance += dy;
+    _dragRoute?.updateDrag(dy / MediaQuery.sizeOf(context).height);
+  }
+
+  void _onDragEnd() {
+    if (!_dragging) return;
+    final route = _dragRoute;
+    if (_dragDistance >= AppSizing.nowPlayingDismissDistance) {
+      if (route != null) {
+        route.dismiss();
+      } else {
+        _dismiss();
+      }
+    } else {
+      route?.settle();
+    }
+    _dragDistance = 0;
+    _dragging = false;
+    _dragRoute = null;
+  }
+
+  void _onDragCancel() {
+    _dragRoute?.settle();
+    _dragDistance = 0;
+    _dragging = false;
+    _dragRoute = null;
   }
 
   @override
@@ -46,16 +92,10 @@ class _NowPlayingScreenState extends ConsumerState<NowPlayingScreen> {
       backgroundColor: AppColors.background,
       body: GestureDetector(
         behavior: HitTestBehavior.opaque,
-        onVerticalDragUpdate: (details) {
-          if (details.delta.dy > 0) _dragDistance += details.delta.dy;
-        },
-        onVerticalDragEnd: (_) {
-          if (_dragDistance >= AppSizing.nowPlayingDismissDistance) {
-            _dismiss();
-          } else {
-            _dragDistance = 0;
-          }
-        },
+        onVerticalDragStart: (_) => _onDragStart(),
+        onVerticalDragUpdate: _onDragUpdate,
+        onVerticalDragEnd: (_) => _onDragEnd(),
+        onVerticalDragCancel: _onDragCancel,
         child: Stack(
           fit: StackFit.expand,
           children: [

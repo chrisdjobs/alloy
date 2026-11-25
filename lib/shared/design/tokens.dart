@@ -234,4 +234,10 @@ abstract final class AppDurations {
 
   /// Cross-fade between the top-level branches of the shell.
   static const Duration branchFade = Duration(milliseconds: 220);
+
+  /// Slide of the now-playing screen in from the mini-player.
+  static const Duration playerOpen = Duration(milliseconds: 320);
+
+  /// Slide of the now-playing screen back down to the mini-player.
+  static const Duration playerClose = Duration(milliseconds: 260);
 }
