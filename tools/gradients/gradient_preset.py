@@ -9,7 +9,9 @@ The geometry mirrors Flutter's ``RadialGradient`` exactly:
 * ``stops`` are positions in [0, 1]; colors interpolate premultiplied, the way
   Skia rasterizes the gradient, so fades do not drift towards another hue.
 
-The same math paints the icon PNG and the Home/pill gradients in Flutter.
+The same math paints the icon PNG and the nav pill in Flutter. ``glow`` is not
+randomized: it reuses the icon's own ``layers`` by [derive_glow], so every
+Home/Me build picks up the same colors and old files are re-derived on load.
 """
 
 from __future__ import annotations
@@ -24,9 +26,27 @@ import numpy as np
 from PIL import Image
 from PIL.PngImagePlugin import PngInfo
 
-SCHEMA = 1
+SCHEMA = 3
 METADATA_KEY = "bars_gradient_preset"
 PREVIEW_SIZE = 1024
+
+# Glow knobs: the only place the Home/Me glow is tuned. The glow reuses the
+# icon's own layers, re-aimed at a wide, short box: every original y is squeezed
+# into GLOW_Y_RANGE, x is clamped so the wash stays on screen, and the alphas
+# are scaled down so several layers can add up without clipping. Flutter's
+# PresetGlow then fades the whole stack with GLOW_FADE.
+GLOW_RADIUS_SCALE = 0.95
+GLOW_ALPHA_GAIN = 0.6
+GLOW_Y_RANGE = (-0.75, 0.0)  # where the layers' icon-space y lands in the box
+GLOW_FADE = ((0.0, 1.0), (0.4, 0.65), (1.0, 0.0))  # (position, alpha) top->bottom
+GLOW_MAX_X = 0.9
+
+# Pill knobs: coordinated with the glow. Uses dominant layer color + accent
+# layer color so the navbar pill feels like the same visual family.
+PILL_CENTER_X = -0.3
+PILL_CENTER_Y = -0.6
+PILL_RADIUS = 2.0
+PILL_STOP_POSITIONS = (0.0, 0.5, 1.0)
 
 _HEX = re.compile(r"^#[0-9a-fA-F]{6}$")
 _SLUG = re.compile(r"^[a-z0-9][a-z0-9_-]{0,63}$")
@@ -93,17 +113,76 @@ def normalize_preset(raw: object) -> dict:
     if icon is not None and not isinstance(icon, dict):
         raise PresetError("icon must be an object or null")
 
-    return {
+    preset = {
         "schema": SCHEMA,
         "id": preset_id,
         "name": str(raw.get("name") or preset_id),
         "approximate": bool(raw.get("approximate", False)),
         "base": base,
         "layers": layers,
-        "home": _gradient(raw.get("home"), "home"),
-        "pill": _gradient(raw.get("pill"), "pill"),
+        # Replaced below: glow and pill are always derived, never read from the
+        # file. Files from schema 2 may still carry a ``home``; it is ignored.
+        "glow": None,
+        "pill": None,
         "render": {"grain": round(grain, 4), "seed": seed},
         "icon": icon,
+    }
+    preset["glow"] = derive_glow(preset)
+    preset["pill"] = derive_pill(preset)
+    return preset
+
+
+def derive_glow(preset: dict) -> list[dict]:
+    """Glow layers: the icon's own layers, re-aimed at a wide, short box.
+
+    One glow gradient per icon layer, in the same order, so the wash keeps the
+    icon's colors left to right. Only the center, the radius and the alphas
+    change; every stop keeps its source layer's rgb.
+    """
+    low, high = GLOW_Y_RANGE
+    glow = []
+    for layer in preset["layers"]:
+        x, y = layer["center"]
+        glow.append(
+            {
+                "center": [
+                    round(max(-GLOW_MAX_X, min(GLOW_MAX_X, x)), 4),
+                    round(low + (y + 1) / 2 * (high - low), 4),
+                ],
+                "radius": round(layer["radius"] * GLOW_RADIUS_SCALE, 4),
+                "stops": [
+                    {
+                        "color": stop["color"],
+                        "position": stop["position"],
+                        "alpha": round(min(1.0, stop["alpha"] * GLOW_ALPHA_GAIN), 4),
+                    }
+                    for stop in layer["stops"]
+                ],
+            }
+        )
+    return glow
+
+
+def derive_pill(preset: dict) -> dict:
+    """Derive the nav pill gradient from the preset's layers.
+
+    Uses the dominant layer (layers[0]) for the start color and the first accent
+    layer (layers[1] if present, else layers[0]) for the end color. Both colors
+    are at full opacity so the pill is vibrant and coordinates with the glow.
+    """
+    dominant = preset["layers"][0]
+    accent_layer = preset["layers"][1] if len(preset["layers"]) > 1 else dominant
+    start_color = dominant["stops"][0]["color"]
+    end_color = accent_layer["stops"][0]["color"]
+
+    return {
+        "center": [PILL_CENTER_X, PILL_CENTER_Y],
+        "radius": PILL_RADIUS,
+        "stops": [
+            {"color": start_color, "position": PILL_STOP_POSITIONS[0], "alpha": 1.0},
+            {"color": end_color, "position": PILL_STOP_POSITIONS[1], "alpha": 1.0},
+            {"color": end_color, "position": PILL_STOP_POSITIONS[2], "alpha": 1.0},
+        ],
     }
 
 

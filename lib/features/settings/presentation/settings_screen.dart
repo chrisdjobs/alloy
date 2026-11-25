@@ -3,10 +3,12 @@ import 'package:bars/features/settings/presentation/settings_labels.dart';
 import 'package:bars/features/settings/presentation/settings_notifier.dart';
 import 'package:bars/features/settings/presentation/widgets/settings_sub_screen.dart';
 import 'package:bars/l10n/app_localizations.dart';
+import 'package:bars/shared/design/gradient_presets_provider.dart';
 import 'package:bars/shared/design/gradients.dart';
 import 'package:bars/shared/design/text_styles.dart';
 import 'package:bars/shared/design/tokens.dart';
 import 'package:bars/shared/design/visual_theme.dart';
+import 'package:bars/shared/widgets/preset_glow.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:material_ui/material_ui.dart';
@@ -26,54 +28,67 @@ class SettingsScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context);
     final settings = ref.watch(settingsProvider);
+    final preset = ref.watch(activeGradientPresetProvider);
     final library = tracks.value;
 
-    return SafeArea(
-      bottom: false,
-      child: ListView(
-        padding: const EdgeInsets.only(
-          top: AppSpacing.xl,
-          bottom: AppSpacing.xl,
+    return Stack(
+      clipBehavior: Clip.none,
+      children: [
+        Positioned(
+          top: 0,
+          left: 0,
+          right: 0,
+          height: AppSizing.meGlowHeight,
+          child: PresetGlow(layers: preset.glow),
         ),
-        children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg),
-            child: _IdentityCard(
-              title: l10n.appTitle,
-              initial: l10n.appTitle.substring(0, 1),
-              stats: library == null
-                  ? null
-                  : l10n.libraryStats(
-                      l10n.trackCount(library.length),
-                      l10n.albumCount(_albums(library)),
-                    ),
+        SafeArea(
+          bottom: false,
+          child: ListView(
+            padding: const EdgeInsets.only(
+              top: AppSpacing.xl,
+              bottom: AppSpacing.xl,
             ),
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg),
+                child: _IdentityCard(
+                  title: l10n.appTitle,
+                  initial: l10n.appTitle.substring(0, 1),
+                  stats: library == null
+                      ? null
+                      : l10n.libraryStats(
+                          l10n.trackCount(library.length),
+                          l10n.albumCount(_albums(library)),
+                        ),
+                ),
+              ),
+              const SizedBox(height: AppSpacing.xl),
+              SettingsRow(
+                icon: context.icons.appearance,
+                title: l10n.appearanceTitle,
+                subtitle: l10n.appearanceSummary(
+                  iconPackName(l10n, settings.iconPack),
+                ),
+                onTap: () => context.push('/settings/appearance'),
+              ),
+              SettingsRow(
+                icon: context.icons.language,
+                title: l10n.languageTitle,
+                subtitle: languageName(l10n, settings.localeCode),
+                onTap: () => context.push('/settings/language'),
+              ),
+              SettingsRow(
+                icon: context.icons.folder,
+                title: l10n.musicAndStorageTitle,
+                subtitle: l10n.musicFoldersSummary(
+                  l10n.trackCount(library?.length ?? 0),
+                ),
+                onTap: () => context.push('/settings/storage'),
+              ),
+            ],
           ),
-          const SizedBox(height: AppSpacing.xl),
-          SettingsRow(
-            icon: context.icons.appearance,
-            title: l10n.appearanceTitle,
-            subtitle: l10n.appearanceSummary(
-              iconPackName(l10n, settings.iconPack),
-            ),
-            onTap: () => context.push('/settings/appearance'),
-          ),
-          SettingsRow(
-            icon: context.icons.language,
-            title: l10n.languageTitle,
-            subtitle: languageName(l10n, settings.localeCode),
-            onTap: () => context.push('/settings/language'),
-          ),
-          SettingsRow(
-            icon: context.icons.folder,
-            title: l10n.musicAndStorageTitle,
-            subtitle: l10n.musicFoldersSummary(
-              l10n.trackCount(library?.length ?? 0),
-            ),
-            onTap: () => context.push('/settings/storage'),
-          ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }
@@ -96,58 +111,49 @@ class _IdentityCard extends StatelessWidget {
 
     return ClipRRect(
       borderRadius: AppRadii.cardLarge,
-      child: Stack(
-        children: [
-          Positioned.fill(
-            child: DecoratedBox(
-              decoration: BoxDecoration(
-                color: AppColors.surface,
-                gradient: AppGradients.accentGlow(accent),
+      child: ColoredBox(
+        color: AppColors.surface,
+        child: Padding(
+          padding: const EdgeInsets.all(AppSpacing.lg),
+          child: Row(
+            children: [
+              Container(
+                width: AppSizing.profileAvatar,
+                height: AppSizing.profileAvatar,
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  gradient: AppGradients.accent(accent),
+                ),
+                child: Text(
+                  initial,
+                  style: AppTextStyles.headline.copyWith(
+                    color: AppColors.onAccent,
+                  ),
+                ),
               ),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(AppSpacing.lg),
-            child: Row(
-              children: [
-                Container(
-                  width: AppSizing.profileAvatar,
-                  height: AppSizing.profileAvatar,
-                  alignment: Alignment.center,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    gradient: AppGradients.accent(accent),
-                  ),
-                  child: Text(
-                    initial,
-                    style: AppTextStyles.headline.copyWith(
-                      color: AppColors.onAccent,
-                    ),
-                  ),
-                ),
-                const SizedBox(width: AppSpacing.lg),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text(title, style: AppTextStyles.playerTitle),
-                      if (stats case final stats?) ...[
-                        const SizedBox(height: AppSpacing.xs),
-                        Text(
-                          stats,
-                          style: AppTextStyles.body.copyWith(
-                            color: AppColors.textSecondary,
-                          ),
+              const SizedBox(width: AppSpacing.lg),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(title, style: AppTextStyles.playerTitle),
+                    if (stats case final stats?) ...[
+                      const SizedBox(height: AppSpacing.xs),
+                      Text(
+                        stats,
+                        style: AppTextStyles.body.copyWith(
+                          color: AppColors.textSecondary,
                         ),
-                      ],
+                      ),
                     ],
-                  ),
+                  ],
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }

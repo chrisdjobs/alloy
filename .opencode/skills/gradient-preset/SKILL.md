@@ -1,6 +1,6 @@
 ---
 name: gradient-preset
-description: Apply a gradient preset from a generated PNG or JSON (app icon, adaptive icon, Home and nav pill). Use when the user mentions gradient-preset and gives a preset path.
+description: Apply a gradient preset from a generated PNG or JSON (app icon, adaptive icon, Home/Me glow and nav pill). Use when the user mentions gradient-preset and gives a preset path.
 ---
 
 # Gradient preset
@@ -16,17 +16,37 @@ without a path, ask for the file name; never guess which file they mean.
    preset from the PNG metadata or the JSON, writes `assets/icon/presets/<name>/`,
    updates `assets/icon/presets.json`, regenerates the Dart file, points
    `flutter_launcher_icons.yaml` at the preset and runs the launcher tool.
-2. Run the AGENTS.md Verify steps with `~/flutter/bin` on PATH:
+2. When the generator changes a derived rule, run
+   `python3 tools/gradients/apply_gradient.py --refresh` (no source): it
+   re-normalizes every registered preset, re-derives the `glow`, and rewrites
+   the registry and the Dart file without touching icon assets or the launcher
+   config.
+3. To judge the Home/Me glow before touching Flutter, run
+   `python3 tools/gradients/preview_home.py <path>`: it writes
+   `memory/gradients/previews/<id>_home.png` with the layers and fade that
+   `PresetGlow` paints. Tuning lives in the `GLOW_*` constants of
+   `gradient_preset.py`, nowhere else.
+4. Run the AGENTS.md Verify steps with `~/flutter/bin` on PATH:
    `dart format --set-exit-if-changed .`, `flutter analyze`, `flutter test`.
-3. Update `memory/`: mark the task done, remove resolved items, add one line to
+   Run `python3 -m unittest discover -s tools/gradients -p "test_*.py"` too.
+5. Update `memory/`: mark the task done, remove resolved items, add one line to
    `SESSION-LOG.md`.
-4. Report in a short summary: preset id, files changed, launcher icon result and
+6. Report in a short summary: preset id, files changed, launcher icon result and
    the Verify result.
 
 **Rules**
 
 - Never edit `lib/shared/design/gradient_presets.dart` or
   `assets/icon/presets.json` by hand; both are generated.
+- `glow` is derived from the icon's own `layers` by `derive_glow` in
+  `gradient_preset.py`: one glow layer per icon layer, same colors and stops,
+  re-aimed at a wide box. Never randomize or hand-edit it. Its knobs are the
+  `GLOW_*` constants there, including `GLOW_FADE`, which the Dart
+  `PresetGlow.fade` mirrors; change both together.
+- Home and Me paint `glow` through `lib/shared/widgets/preset_glow.dart`: a
+  stretched `RadialGradient` per layer, faded top to bottom by a `ShaderMask`.
+  Do not add another glow, clip it to a header row, or edit the generated Dart
+  for it. The glow box is taller than the content so the fade can reach zero.
 - Never pick or infer a preset visually. A PNG without metadata is an error:
   ask for the matching `.json` or use `--from-image`, do not guess.
 - Ask nothing else. Only ask for a name if none was given and the candidate id

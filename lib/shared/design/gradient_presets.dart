@@ -5,14 +5,14 @@
 
 import 'package:material_ui/material_ui.dart';
 
-/// One applied gradient preset: base background, Home header and nav pill.
+/// One applied gradient preset: app background, Home/Me glow and nav pill.
 final class GradientPreset {
   /// Creates the preset registered as [id].
   const new({
     required this.id,
     required this.name,
     required this.base,
-    required this.home,
+    required this.glow,
     required this.pill,
   });
 
@@ -22,11 +22,13 @@ final class GradientPreset {
   /// Display name; defaults to [id].
   final String name;
 
-  /// Opaque color the Home gradient fades into.
+  /// Opaque page background color.
   final Color base;
 
-  /// Radial gradient painted behind the Home header.
-  final RadialGradient home;
+  /// One radial gradient per glow layer, painted behind the Home and Me
+  /// headers. The same order as the icon's layers, so the wash keeps the
+  /// icon's colors.
+  final List<RadialGradient> glow;
 
   /// Radial gradient of the selected navigation pill.
   final RadialGradient pill;
@@ -40,44 +42,50 @@ abstract final class AppGradientPresets {
       id: 'bars-default',
       name: 'bars-default',
       base: Color(0xFF0D0D0D),
-      home: RadialGradient(
-        center: Alignment(0.1, -0.55),
-        radius: 1.15,
-        colors: [
-          Color(0x6BFFB300),
-          Color(0x29FFB300),
-          Color(0xFF0D0D0D),
-          Color(0xFF0D0D0D),
-        ],
-        stops: [0.0, 0.28, 0.42, 1.0],
-      ),
+      glow: [
+        RadialGradient(
+          center: Alignment(0.1, -0.5813),
+          radius: 1.235,
+          colors: [Color(0x34FFB300), Color(0x12FFB300), Color(0x00FFB300)],
+          stops: [0, 0.5, 1],
+        ),
+        RadialGradient(
+          center: Alignment(-0.65, -0.7312),
+          radius: 0.76,
+          colors: [Color(0x22FF5A1F), Color(0x0BFF5A1F), Color(0x00FF5A1F)],
+          stops: [0, 0.55, 1],
+        ),
+      ],
       pill: RadialGradient(
         center: Alignment(-0.3, -0.6),
-        radius: 2.4,
-        colors: [Color(0xFFFFC400), Color(0xFFFFB300), Color(0xFFFF5A1F)],
-        stops: [0.0, 0.45, 1.0],
+        radius: 2,
+        colors: [Color(0xFFFFB300), Color(0xFFFF5A1F), Color(0xFFFF5A1F)],
+        stops: [0, 0.5, 1],
       ),
     ),
     GradientPreset(
       id: 'neon-dusk',
       name: 'neon-dusk',
       base: Color(0xFF120B0A),
-      home: RadialGradient(
-        center: Alignment(-0.224, -0.544),
-        radius: 1.02,
-        colors: [
-          Color(0x6E7B2FF7),
-          Color(0x257B2FF7),
-          Color(0xFF120B0A),
-          Color(0xFF120B0A),
-        ],
-        stops: [0.0, 0.28, 0.425, 1.0],
-      ),
+      glow: [
+        RadialGradient(
+          center: Alignment(-0.211, -0.4575),
+          radius: 0.9319,
+          colors: [Color(0x8A7B2FF7), Color(0x2D7B2FF7), Color(0x007B2FF7)],
+          stops: [0, 0.578, 1],
+        ),
+        RadialGradient(
+          center: Alignment(0.499, -0.4406),
+          radius: 0.6773,
+          colors: [Color(0x51FF5A1F), Color(0x1CFF5A1F), Color(0x00FF5A1F)],
+          stops: [0, 0.55, 1],
+        ),
+      ],
       pill: RadialGradient(
-        center: Alignment(-0.235, -0.849),
-        radius: 2.01,
+        center: Alignment(-0.3, -0.6),
+        radius: 2,
         colors: [Color(0xFF7B2FF7), Color(0xFFFF5A1F), Color(0xFFFF5A1F)],
-        stops: [0.0, 0.475, 1.0],
+        stops: [0, 0.5, 1],
       ),
     ),
   ];

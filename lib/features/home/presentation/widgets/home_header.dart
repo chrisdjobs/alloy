@@ -2,6 +2,7 @@ import 'package:bars/shared/design/gradient_presets_provider.dart';
 import 'package:bars/shared/design/text_styles.dart';
 import 'package:bars/shared/design/tokens.dart';
 import 'package:bars/shared/widgets/bars_page_header.dart';
+import 'package:bars/shared/widgets/preset_glow.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:material_ui/material_ui.dart';
 
@@ -9,7 +10,9 @@ import 'package:material_ui/material_ui.dart';
 /// actions.
 ///
 /// The glow is part of the scrollable content, so it scrolls away with the
-/// content; its stops end in the preset's base color, so it needs no mask.
+/// content. Its box is taller than the header so [PresetGlow]'s vertical fade
+/// has room to reach zero; the carousels below paint over it, they never
+/// replace it.
 class HomeHeader extends ConsumerWidget {
   /// Creates the header with [quickActions] under the title.
   const new({required this.title, this.quickActions = const [], super.key});
@@ -22,14 +25,17 @@ class HomeHeader extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final gradient = ref.watch(activeGradientPresetProvider).home;
+    final preset = ref.watch(activeGradientPresetProvider);
 
     return Stack(
+      clipBehavior: Clip.none,
       children: [
-        Positioned.fill(
-          child: IgnorePointer(
-            child: DecoratedBox(decoration: BoxDecoration(gradient: gradient)),
-          ),
+        Positioned(
+          top: 0,
+          left: 0,
+          right: 0,
+          height: AppSizing.homeGlowHeight,
+          child: PresetGlow(layers: preset.glow),
         ),
         Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,

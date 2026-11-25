@@ -1,9 +1,9 @@
 {
-  "schema": 1,
+  "schema": 3,
   "active": "neon-dusk",
   "presets": {
     "bars-default": {
-      "schema": 1,
+      "schema": 3,
       "id": "bars-default",
       "name": "bars-default",
       "approximate": false,
@@ -58,50 +58,71 @@
           ]
         }
       ],
-      "home": {
-        "center": [
-          0.1,
-          -0.55
-        ],
-        "radius": 1.15,
-        "stops": [
-          {
-            "color": "#FFB300",
-            "position": 0.0,
-            "alpha": 0.42
-          },
-          {
-            "color": "#FFB300",
-            "position": 0.28,
-            "alpha": 0.16
-          },
-          {
-            "color": "#0D0D0D",
-            "position": 0.42,
-            "alpha": 1.0
-          },
-          {
-            "color": "#0D0D0D",
-            "position": 1.0,
-            "alpha": 1.0
-          }
-        ]
-      },
+      "glow": [
+        {
+          "center": [
+            0.1,
+            -0.5813
+          ],
+          "radius": 1.235,
+          "stops": [
+            {
+              "color": "#FFB300",
+              "position": 0.0,
+              "alpha": 0.204
+            },
+            {
+              "color": "#FFB300",
+              "position": 0.5,
+              "alpha": 0.072
+            },
+            {
+              "color": "#FFB300",
+              "position": 1.0,
+              "alpha": 0.0
+            }
+          ]
+        },
+        {
+          "center": [
+            -0.65,
+            -0.7312
+          ],
+          "radius": 0.76,
+          "stops": [
+            {
+              "color": "#FF5A1F",
+              "position": 0.0,
+              "alpha": 0.132
+            },
+            {
+              "color": "#FF5A1F",
+              "position": 0.55,
+              "alpha": 0.042
+            },
+            {
+              "color": "#FF5A1F",
+              "position": 1.0,
+              "alpha": 0.0
+            }
+          ]
+        }
+      ],
       "pill": {
         "center": [
           -0.3,
           -0.6
         ],
-        "radius": 2.4,
+        "radius": 2.0,
         "stops": [
           {
-            "color": "#FFC400",
+            "color": "#FFB300",
             "position": 0.0,
             "alpha": 1.0
           },
           {
-            "color": "#FFB300",
-            "position": 0.45,
+            "color": "#FF5A1F",
+            "position": 0.5,
             "alpha": 1.0
           },
           {
@@ -124,7 +145,7 @@
       }
     },
     "neon-dusk": {
-      "schema": 1,
+      "schema": 3,
       "id": "neon-dusk",
       "name": "neon-dusk",
       "approximate": false,
@@ -179,41 +200,62 @@
           ]
         }
       ],
-      "home": {
-        "center": [
-          -0.224,
-          -0.544
-        ],
-        "radius": 1.02,
-        "stops": [
-          {
-            "color": "#7B2FF7",
-            "position": 0.0,
-            "alpha": 0.431
-          },
-          {
-            "color": "#7B2FF7",
-            "position": 0.28,
-            "alpha": 0.147
-          },
-          {
-            "color": "#120B0A",
-            "position": 0.425,
-            "alpha": 1.0
-          },
-          {
-            "color": "#120B0A",
-            "position": 1.0,
-            "alpha": 1.0
-          }
-        ]
-      },
+      "glow": [
+        {
+          "center": [
+            -0.211,
+            -0.4575
+          ],
+          "radius": 0.9319,
+          "stops": [
+            {
+              "color": "#7B2FF7",
+              "position": 0.0,
+              "alpha": 0.5406
+            },
+            {
+              "color": "#7B2FF7",
+              "position": 0.578,
+              "alpha": 0.1764
+            },
+            {
+              "color": "#7B2FF7",
+              "position": 1.0,
+              "alpha": 0.0
+            }
+          ]
+        },
+        {
+          "center": [
+            0.499,
+            -0.4406
+          ],
+          "radius": 0.6773,
+          "stops": [
+            {
+              "color": "#FF5A1F",
+              "position": 0.0,
+              "alpha": 0.3192
+            },
+            {
+              "color": "#FF5A1F",
+              "position": 0.55,
+              "alpha": 0.1116
+            },
+            {
+              "color": "#FF5A1F",
+              "position": 1.0,
+              "alpha": 0.0
+            }
+          ]
+        }
+      ],
       "pill": {
         "center": [
-          -0.235,
-          -0.849
+          -0.3,
+          -0.6
         ],
-        "radius": 2.01,
+        "radius": 2.0,
         "stops": [
           {
             "color": "#7B2FF7",
@@ -222,7 +264,7 @@
           },
           {
             "color": "#FF5A1F",
-            "position": 0.475,
+            "position": 0.5,
             "alpha": 1.0
           },
           {

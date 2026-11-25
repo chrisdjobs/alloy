@@ -6,6 +6,10 @@ preview ``.png``. Nothing here judges colors: the script renders, copies the
 foreground untouched, checks the adaptive safe zone, updates the registry,
 regenerates the Dart file and, with ``--set-active``, points the launcher icon
 tooling at the new preset and runs it.
+
+``--refresh`` re-derives the registered presets instead of applying a file:
+derived fields such as ``glow`` update, while icon assets and the launcher
+config stay as they are.
 """
 
 from __future__ import annotations
@@ -43,9 +47,19 @@ SAFE_RADIUS = 33 / 108
 
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("source", type=Path, help="candidate .png or .json")
+    parser.add_argument(
+        "source",
+        type=Path,
+        nargs="?",
+        help="candidate .png or .json; omit with --refresh",
+    )
     parser.add_argument("--name", help="preset slug; defaults to the candidate id")
     parser.add_argument("--set-active", action="store_true", help="switch the icon")
+    parser.add_argument(
+        "--refresh",
+        action="store_true",
+        help="re-derive every registered preset; takes no source",
+    )
     parser.add_argument(
         "--project-root",
         type=Path,
@@ -55,6 +69,14 @@ def main() -> None:
     args = parser.parse_args()
 
     root = args.project_root.resolve()
+    if args.refresh:
+        if args.source is not None or args.name or args.set_active:
+            gp.fail("--refresh takes no source, --name or --set-active")
+        _refresh(root)
+        return
+    if args.source is None:
+        gp.fail("pass a candidate .png or .json, or --refresh")
+
     preset = gp.load_preset(args.source)
     preset_id = gp.slug(args.name) if args.name else preset["id"]
     preset["id"] = preset_id
@@ -113,6 +135,32 @@ def main() -> None:
         _update_launcher_config(config_path, config, preset, root)
         if not _run_launcher_icons(root):
             raise SystemExit(1)
+
+
+def _refresh(root: Path) -> None:
+    """Re-normalize the registry's presets and rewrite the derived outputs."""
+    registry = _load_registry(root)
+    if not registry["presets"]:
+        gp.fail(f"{REGISTRY} holds no presets to refresh")
+
+    refreshed = {}
+    for key in sorted(registry["presets"]):
+        preset = gp.normalize_preset(registry["presets"][key])
+        if preset["id"] != key:
+            gp.fail(f"{REGISTRY} preset {key!r} has id {preset['id']!r}")
+        refreshed[key] = preset
+    registry["presets"] = refreshed
+    if registry["active"] not in refreshed:
+        gp.fail(
+            f"{REGISTRY} is active={registry['active']!r}, "
+            "which is not one of its presets"
+        )
+
+    _write_registry(root, registry)
+    dart_gen.write_dart(registry, root / DART_FILE)
+    print(f"Refreshed {len(refreshed)} presets (active: {registry['active']})")
+    print(f"  {REGISTRY.as_posix()}")
+    print(f"  {DART_FILE.as_posix()}")
 
 
 def _write_legacy(preset: dict, path: Path, foreground: Path) -> None:

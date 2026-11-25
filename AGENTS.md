@@ -18,8 +18,7 @@ If the step touches `.arb` files: run `flutter gen-l10n`.
 
 ## Environment / network
 - Never use download mirrors (no `FLUTTER_STORAGE_BASE_URL`, no pub mirrors). If pub.dev or Flutter's artifact host is blocked, stop and ask the user; they fix network access with a VPN.
-- Toolchain: Flutter 3.50.1 / Dart 3.14, installed at `~/flutter` (not on `PATH`). Add `~/flutter/bin` per command.
-- Visual work is the exception to the long-running rule: the agent may boot the `Pixel_10_Pro` AVD (`flutter emulators --launch Pixel_10_Pro`) and run `flutter run -d emulator-5554 --pid-file /tmp/opencode/bars.pid --no-devtools` in the background; reload with `kill -USR1 $(cat /tmp/opencode/bars.pid)` (`-USR2` = hot restart) and capture with `tool/visual/shot.sh`. Stop the run when the work is over; never leave it alive.
+- Visual work is the exception to the long-running rule: the agent may boot the `Pixel_10_Pro` AVD (`flutter emulators --launch Pixel_10_Pro`) and run `flutter run -d emulator-5554 --pid-file /tmp/opencode/bars.pid --no-devtools` in the background; reload with `kill -USR1 $(cat /tmp/opencode/bars.pid)` (`-USR2` = hot restart) and capture with `tool/visual/shot.sh`. Stop the run when the work is over; never leave it alive. Only when the user requests it or is part of the plan to open the emulator and visual polish with this method.
 - Still ask before release builds and before running anything on the physical phone.
 
 ## Project-specific
