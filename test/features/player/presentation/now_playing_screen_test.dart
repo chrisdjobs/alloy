@@ -6,9 +6,9 @@ import 'package:alloy/features/library/domain/track.dart';
 import 'package:alloy/features/player/domain/playback_state.dart';
 import 'package:alloy/features/player/presentation/now_playing_screen.dart';
 import 'package:alloy/features/player/presentation/player_notifier.dart';
+import 'package:alloy/features/player/presentation/player_panel_provider.dart';
 import 'package:alloy/l10n/app_localizations.dart';
 import 'package:alloy/shared/design/cover_colors.dart';
-import 'package:alloy/shared/widgets/artwork_image.dart';
 import 'package:alloy/shared/widgets/seek_bar.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -122,7 +122,7 @@ void main() {
     await _pump(tester, engine, artwork: artwork);
     await _load(tester, engine, artworkRef: const ArtworkRef('cover-hash'));
 
-    expect(find.byType(ArtworkImage), findsOneWidget);
+    expect(find.byType(Image), findsOneWidget);
     expect(find.byType(BackdropFilter), findsNothing);
   });
 
@@ -138,25 +138,21 @@ void main() {
     expect(content.width, 520);
   });
 
-  testWidgets('the chevron closes the screen', (tester) async {
-    await _pumpRouted(tester, engine);
-    await _openNowPlaying(tester);
+  testWidgets('the chevron collapses the panel', (tester) async {
+    final controller = AnimationController(
+      vsync: const TestVSync(),
+      duration: const Duration(milliseconds: 300),
+      value: 1,
+    );
+    addTearDown(controller.dispose);
+
+    await _pump(tester, engine, controller: controller);
+    await _load(tester, engine);
 
     await tester.tap(find.byTooltip('Close'));
     await tester.pumpAndSettle();
 
-    expect(find.byType(NowPlayingScreen), findsNothing);
-    expect(find.text('open'), findsOneWidget);
-  });
-
-  testWidgets('a downward swipe closes the screen', (tester) async {
-    await _pumpRouted(tester, engine);
-    await _openNowPlaying(tester);
-
-    await tester.drag(find.byType(NowPlayingScreen), const Offset(0, 160));
-    await tester.pumpAndSettle();
-
-    expect(find.byType(NowPlayingScreen), findsNothing);
+    expect(controller.value, 0);
   });
 }
 
@@ -195,6 +191,7 @@ Future<void> _pump(
   FakePlaybackEngine engine, {
   FakeArtworkRepository? artwork,
   Size size = const Size(420, 900),
+  AnimationController? controller,
 }) async {
   tester.view.physicalSize = size;
   tester.view.devicePixelRatio = 1;
@@ -207,47 +204,25 @@ Future<void> _pump(
         artworkRepositoryProvider.overrideWithValue(
           artwork ?? FakeArtworkRepository(),
         ),
-      ],
-      child: _app(const NowPlayingScreen()),
-    ),
-  );
-  await tester.pump();
-}
-
-Future<void> _pumpRouted(WidgetTester tester, FakePlaybackEngine engine) async {
-  tester.view.physicalSize = const Size(420, 900);
-  tester.view.devicePixelRatio = 1;
-  addTearDown(tester.view.reset);
-
-  await tester.pumpWidget(
-    ProviderScope(
-      overrides: [
-        playbackEngineProvider.overrideWithValue(engine),
-        artworkRepositoryProvider.overrideWithValue(FakeArtworkRepository()),
+        playerPanelProvider.overrideWithValue(
+          PlayerPanelController()..controller = controller,
+        ),
       ],
       child: _app(
-        Builder(
-          builder: (context) => Scaffold(
-            body: TextButton(
-              onPressed: () => Navigator.of(context).push(
-                MaterialPageRoute<void>(
-                  builder: (context) => const NowPlayingScreen(),
-                ),
-              ),
-              child: const Text('open'),
-            ),
+        Scaffold(
+          body: NowPlayingPanel(
+            t: 1,
+            barHeight: 0,
+            onDragStart: (_) {},
+            onDragUpdate: (_) {},
+            onDragEnd: (_) {},
+            onDragCancel: () {},
           ),
         ),
       ),
     ),
   );
   await tester.pump();
-}
-
-Future<void> _openNowPlaying(WidgetTester tester) async {
-  await tester.tap(find.text('open'));
-  await tester.pumpAndSettle();
-  expect(find.byType(NowPlayingScreen), findsOneWidget);
 }
 
 Widget _app(Widget home) {

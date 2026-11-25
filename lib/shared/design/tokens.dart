@@ -135,9 +135,6 @@ abstract final class AppSizing {
   /// Width of a square icon button in a header row.
   static const double iconButton = 48;
 
-  /// Vertical distance a downward swipe needs to close the player.
-  static const double nowPlayingDismissDistance = 96;
-
   /// Thickness of the accent seek bar.
   static const double waveformHeight = 40;
 

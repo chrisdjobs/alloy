@@ -1,13 +1,11 @@
 import 'dart:async';
 
 import 'package:alloy/app/branch_fade.dart';
-import 'package:alloy/app/player_transition.dart';
 import 'package:alloy/app/shell.dart';
 import 'package:alloy/features/discover/presentation/discover_screen.dart';
 import 'package:alloy/features/home/presentation/home_screen.dart';
 import 'package:alloy/features/library/presentation/library_notifier.dart';
 import 'package:alloy/features/library/presentation/library_screen.dart';
-import 'package:alloy/features/player/presentation/now_playing_screen.dart';
 import 'package:alloy/features/player/presentation/player_notifier.dart';
 import 'package:alloy/features/settings/presentation/appearance_screen.dart';
 import 'package:alloy/features/settings/presentation/general_screen.dart';
@@ -177,13 +175,6 @@ GoRouter createAppRouter({String initialLocation = '/library'}) {
             ],
           ),
         ],
-      ),
-      // Above the shell so the mini-player stays put underneath and both
-      // covers can share one Hero.
-      GoRoute(
-        path: '/now-playing',
-        pageBuilder: (context, state) =>
-            playerPage(key: state.pageKey, child: const NowPlayingScreen()),
       ),
     ],
   );

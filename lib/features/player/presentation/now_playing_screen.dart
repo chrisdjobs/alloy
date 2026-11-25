@@ -1,125 +1,259 @@
 import 'dart:async';
+import 'dart:ui' show lerpDouble;
 
+import 'package:alloy/core/artwork/artwork_providers.dart';
+import 'package:alloy/core/artwork/artwork_ref.dart';
+import 'package:alloy/core/artwork/artwork_visual.dart';
 import 'package:alloy/core/utils/duration_format.dart';
 import 'package:alloy/features/library/domain/track.dart';
 import 'package:alloy/features/player/domain/playback_state.dart';
-import 'package:alloy/features/player/presentation/drag_dismiss_route.dart';
-import 'package:alloy/features/player/presentation/player_hero.dart';
 import 'package:alloy/features/player/presentation/player_notifier.dart';
+import 'package:alloy/features/player/presentation/player_panel_provider.dart';
 import 'package:alloy/features/player/presentation/widgets/cover_gradient.dart';
 import 'package:alloy/features/player/presentation/widgets/overflow_menu.dart';
 import 'package:alloy/l10n/app_localizations.dart';
 import 'package:alloy/shared/design/text_styles.dart';
 import 'package:alloy/shared/design/tokens.dart';
 import 'package:alloy/shared/design/visual_theme.dart';
-import 'package:alloy/shared/widgets/artwork_image.dart';
+import 'package:alloy/shared/widgets/no_cover_tile.dart';
 import 'package:alloy/shared/widgets/seek_bar.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 // Flutter also exports a RepeatMode; playback has the one that matters here.
 import 'package:material_ui/material_ui.dart' hide RepeatMode;
 
-/// Full-screen player.
+/// Height of the panel header row that holds the close button.
+const double _headerHeight = AppSizing.iconButton;
+
+/// Fraction of the expansion over which the player content fades in.
 ///
-/// Renders only controls that exist today; the rows keep room for favorites,
-/// lyrics or sharing without re-laying out the screen.
-class NowPlayingScreen extends ConsumerStatefulWidget {
-  /// Creates the screen.
-  const new({super.key});
+/// The mini-player fades out in the first stretch of the expansion, so its
+/// cover and the panel cover cross-fade without a visible double image.
+const double _contentFadeStart = 0.6;
+
+/// Expandable now-playing panel drawn on top of the shell content.
+///
+/// The shell owns the animation: [t] goes from 0 (collapsed, the panel sits
+/// behind the mini-player) to 1 (full screen). Everything inside is a pure
+/// function of [t], so a drag that updates the controller tracks the finger
+/// one to one and the release animation continues from the same frame.
+class NowPlayingPanel extends ConsumerWidget {
+  /// Creates the panel.
+  const new({
+    required this.t,
+    required this.barHeight,
+    required this.onDragStart,
+    required this.onDragUpdate,
+    required this.onDragEnd,
+    required this.onDragCancel,
+    super.key,
+  });
+
+  /// Expansion of the panel: 0 collapsed, 1 expanded.
+  final double t;
+
+  /// Height of the shell bar (mini-player plus navigation bar) below the panel.
+  final double barHeight;
+
+  /// Vertical drag callbacks forwarded to the shell's controller.
+  final GestureDragStartCallback onDragStart;
+
+  /// Vertical drag update callback.
+  final GestureDragUpdateCallback onDragUpdate;
+
+  /// Vertical drag end callback.
+  final GestureDragEndCallback onDragEnd;
+
+  /// Vertical drag cancel callback.
+  final GestureDragCancelCallback onDragCancel;
 
   @override
-  ConsumerState<NowPlayingScreen> createState() => _NowPlayingScreenState();
-}
-
-class _NowPlayingScreenState extends ConsumerState<NowPlayingScreen> {
-  var _dragDistance = 0.0;
-  var _dragging = false;
-  DragDismissRoute? _dragRoute;
-
-  void _dismiss() {
-    _dragDistance = 0;
-    Navigator.of(context).maybePop();
-  }
-
-  void _onDragStart() {
-    _dragDistance = 0;
-    _dragRoute = switch (ModalRoute.of(context)) {
-      final DragDismissRoute route => route,
-      _ => null,
-    };
-    // Without an interactive route (plain page routes) the screen falls back
-    // to accumulating the distance and popping on release.
-    _dragging = _dragRoute?.beginDrag() ?? true;
-  }
-
-  void _onDragUpdate(DragUpdateDetails details) {
-    if (!_dragging) return;
-    var dy = details.delta.dy;
-    if (_dragDistance + dy < 0) dy = -_dragDistance;
-    _dragDistance += dy;
-    _dragRoute?.updateDrag(dy / MediaQuery.sizeOf(context).height);
-  }
-
-  void _onDragEnd() {
-    if (!_dragging) return;
-    final route = _dragRoute;
-    if (_dragDistance >= AppSizing.nowPlayingDismissDistance) {
-      if (route != null) {
-        route.dismiss();
-      } else {
-        _dismiss();
-      }
-    } else {
-      route?.settle();
-    }
-    _dragDistance = 0;
-    _dragging = false;
-    _dragRoute = null;
-  }
-
-  void _onDragCancel() {
-    _dragRoute?.settle();
-    _dragDistance = 0;
-    _dragging = false;
-    _dragRoute = null;
-  }
-
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final state = ref.watch(playerProvider).value;
     final track = state?.track;
+    final media = MediaQuery.of(context);
+    final safeTop = media.padding.top;
+    final safeBottom = media.padding.bottom;
 
-    return Scaffold(
-      backgroundColor: AppColors.background,
-      body: GestureDetector(
-        behavior: HitTestBehavior.opaque,
-        onVerticalDragStart: (_) => _onDragStart(),
-        onVerticalDragUpdate: _onDragUpdate,
-        onVerticalDragEnd: (_) => _onDragEnd(),
-        onVerticalDragCancel: _onDragCancel,
-        child: Stack(
-          fit: StackFit.expand,
-          children: [
-            CoverGradient(artworkRef: track?.artworkRef),
-            SafeArea(
-              child: Center(
-                child: ConstrainedBox(
-                  key: const ValueKey('now-playing-content'),
-                  constraints: const BoxConstraints(
-                    maxWidth: AppSizing.nowPlayingMaxWidth,
-                  ),
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final width = constraints.maxWidth;
+        final expandedCoverSize =
+            (width.clamp(0.0, AppSizing.nowPlayingMaxWidth) - 2 * AppSpacing.xl)
+                .clamp(0.0, double.infinity);
+
+        // The cover travels from the mini-player thumbnail to the big cover.
+        final coverSize = lerpDouble(
+          AppSizing.coverMiniPlayer,
+          expandedCoverSize,
+          t,
+        )!;
+        final coverTop = lerpDouble(
+          AppSpacing.sm,
+          safeTop + _headerHeight + AppSpacing.xxl,
+          t,
+        )!;
+        final coverLeft = lerpDouble(
+          AppSpacing.sm + AppSpacing.md,
+          (width - expandedCoverSize) / 2,
+          t,
+        )!;
+
+        // The body fades in only in the final stretch, after the cover is in
+        // place; the top padding keeps the first line under the cover.
+        final contentOpacity =
+            ((t - _contentFadeStart) / (1 - _contentFadeStart)).clamp(0.0, 1.0);
+        final contentTop =
+            coverTop + coverSize + AppSpacing.xxl - safeTop * t - _headerHeight;
+        final bottomInset = barHeight * (1 - t) + safeBottom * t;
+
+        return GestureDetector(
+          behavior: HitTestBehavior.opaque,
+          onVerticalDragStart: onDragStart,
+          onVerticalDragUpdate: onDragUpdate,
+          onVerticalDragEnd: onDragEnd,
+          onVerticalDragCancel: onDragCancel,
+          child: Stack(
+            fit: StackFit.expand,
+            children: [
+              CoverGradient(artworkRef: track?.artworkRef),
+              Positioned(
+                left: coverLeft,
+                top: coverTop,
+                width: coverSize,
+                height: coverSize,
+                child: _PanelCover(
+                  artworkRef: track?.artworkRef,
+                  size: coverSize,
+                ),
+              ),
+              Opacity(
+                opacity: contentOpacity,
+                child: IgnorePointer(
+                  ignoring: contentOpacity < 1,
                   child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: AppSpacing.xl,
-                      vertical: AppSpacing.sm,
+                    padding: EdgeInsets.only(top: safeTop * t),
+                    child: _PanelContent(
+                      state: state,
+                      track: track,
+                      contentTop: contentTop,
+                      bottomInset: bottomInset,
                     ),
-                    child: track == null
-                        ? _EmptyPlayer(onClose: _dismiss)
-                        : _PlayerBody(state: state!, track: track),
                   ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
+        );
+      },
+    );
+  }
+}
+
+/// Cover of the panel, drawn at the interpolated size.
+///
+/// The artwork is resolved once at the large variant and only its box changes,
+/// so the drag never re-decodes the image frame by frame.
+class _PanelCover extends ConsumerWidget {
+  const new({required this.artworkRef, required this.size});
+
+  final ArtworkRef? artworkRef;
+  final double size;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final reference = artworkRef;
+    final visual = reference == null
+        ? null
+        : ref
+              .watch(
+                artworkVisualProvider((
+                  artworkRef: reference,
+                  size: ArtworkSize.large,
+                )),
+              )
+              .value;
+
+    return ClipRRect(
+      borderRadius: AppRadii.artworkLarge,
+      child: SizedBox.square(
+        dimension: size,
+        child: visual == null
+            ? NoCoverTile(size: size)
+            : Image.memory(
+                visual.cover,
+                fit: BoxFit.cover,
+                gaplessPlayback: true,
+              ),
+      ),
+    );
+  }
+}
+
+/// Header, body and overflow menu of the expanded panel.
+class _PanelContent extends ConsumerWidget {
+  const new({
+    required this.state,
+    required this.track,
+    required this.contentTop,
+    required this.bottomInset,
+  });
+
+  final PlaybackState? state;
+  final Track? track;
+  final double contentTop;
+  final double bottomInset;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context);
+
+    void close() => ref.read(playerPanelProvider).collapse();
+
+    return Center(
+      child: ConstrainedBox(
+        key: const ValueKey('now-playing-content'),
+        constraints: const BoxConstraints(
+          maxWidth: AppSizing.nowPlayingMaxWidth,
+        ),
+        child: Padding(
+          padding: EdgeInsets.fromLTRB(
+            AppSpacing.xl,
+            0,
+            AppSpacing.xl,
+            AppSpacing.sm + bottomInset,
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              SizedBox(
+                height: _headerHeight,
+                child: _Header(
+                  title: track?.album ?? l10n.nowPlaying,
+                  onClose: close,
+                ),
+              ),
+              Expanded(
+                child: SingleChildScrollView(
+                  child: Padding(
+                    padding: EdgeInsets.only(top: contentTop),
+                    child: track == null || state == null
+                        ? const SizedBox.shrink()
+                        : _PlayerBody(state: state!, track: track!),
+                  ),
+                ),
+              ),
+              if (track != null) ...[
+                const SizedBox(height: AppSpacing.sm),
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: NowPlayingOverflowMenu(
+                    onStop: () =>
+                        unawaited(ref.read(playerProvider.notifier).stop()),
+                  ),
+                ),
+              ],
+            ],
+          ),
         ),
       ),
     );
@@ -141,100 +275,60 @@ class _PlayerBody extends ConsumerWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        _Header(title: track.album ?? l10n.nowPlaying),
-        Expanded(
-          child: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                const SizedBox(height: AppSpacing.xxl),
-                LayoutBuilder(
-                  builder: (context, constraints) => Hero(
-                    tag: nowPlayingCoverHeroTag,
-                    child: ArtworkImage(
-                      artworkRef: track.artworkRef,
-                      size: constraints.maxWidth,
-                      borderRadius: AppRadii.artworkLarge,
-                    ),
-                  ),
-                ),
-                const SizedBox(height: AppSpacing.xxl),
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text(
-                        track.title,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: AppTextStyles.playerTitle.copyWith(
-                          color: AppColors.textPrimary,
-                        ),
-                      ),
-                      if (track.artist != null)
-                        Text(
-                          track.artist!,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: AppTextStyles.body.copyWith(
-                            color: AppColors.textSecondary,
-                          ),
-                        ),
-                    ],
-                  ),
-                ),
-                const SizedBox(height: AppSpacing.md),
-                SeekBar(
-                  position: state.position,
-                  duration: state.duration,
-                  seed: track.id.hashCode,
-                  onSeek: (position) => unawaited(notifier.seek(position)),
-                ),
-                const SizedBox(height: AppSpacing.xs),
-                Row(
-                  children: [
-                    Text(
-                      formatTrackDuration(state.position),
-                      style: _timeStyle,
-                    ),
-                    Expanded(
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: AppSpacing.sm,
-                        ),
-                        child: Text(
-                          technical ?? '',
-                          maxLines: 1,
-                          textAlign: TextAlign.center,
-                          overflow: TextOverflow.ellipsis,
-                          style: _timeStyle.copyWith(
-                            color: AppColors.textMuted,
-                          ),
-                        ),
-                      ),
-                    ),
-                    Text(
-                      formatTrackDuration(state.duration),
-                      style: _timeStyle,
-                    ),
-                  ],
-                ),
-                const SizedBox(height: AppSpacing.lg),
-                _Controls(state: state),
-              ],
-            ),
-          ),
-        ),
-        const SizedBox(height: AppSpacing.sm),
-        // The reference keeps its secondary actions at the bottom right.
         Align(
-          alignment: Alignment.centerRight,
-          child: NowPlayingOverflowMenu(
-            onStop: () => unawaited(notifier.stop()),
+          alignment: Alignment.centerLeft,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                track.title,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: AppTextStyles.playerTitle.copyWith(
+                  color: AppColors.textPrimary,
+                ),
+              ),
+              if (track.artist != null)
+                Text(
+                  track.artist!,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: AppTextStyles.body.copyWith(
+                    color: AppColors.textSecondary,
+                  ),
+                ),
+            ],
           ),
         ),
+        const SizedBox(height: AppSpacing.md),
+        SeekBar(
+          position: state.position,
+          duration: state.duration,
+          seed: track.id.hashCode,
+          onSeek: (position) => unawaited(notifier.seek(position)),
+        ),
+        const SizedBox(height: AppSpacing.xs),
+        Row(
+          children: [
+            Text(formatTrackDuration(state.position), style: _timeStyle),
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: AppSpacing.sm),
+                child: Text(
+                  technical ?? '',
+                  maxLines: 1,
+                  textAlign: TextAlign.center,
+                  overflow: TextOverflow.ellipsis,
+                  style: _timeStyle.copyWith(color: AppColors.textMuted),
+                ),
+              ),
+            ),
+            Text(formatTrackDuration(state.duration), style: _timeStyle),
+          ],
+        ),
+        const SizedBox(height: AppSpacing.lg),
+        _Controls(state: state),
       ],
     );
   }
@@ -336,10 +430,10 @@ class _Controls extends ConsumerWidget {
 }
 
 class _Header extends StatelessWidget {
-  const new({required this.title, this.onClose});
+  const new({required this.title, required this.onClose});
 
   final String title;
-  final VoidCallback? onClose;
+  final VoidCallback onClose;
 
   @override
   Widget build(BuildContext context) {
@@ -348,7 +442,7 @@ class _Header extends StatelessWidget {
     return Row(
       children: [
         IconButton(
-          onPressed: onClose ?? () => Navigator.of(context).maybePop(),
+          onPressed: onClose,
           tooltip: l10n.close,
           color: AppColors.textPrimary,
           icon: Icon(context.icons.collapse),
@@ -364,27 +458,7 @@ class _Header extends StatelessWidget {
             ),
           ),
         ),
-        // Mirrors the icon so the title stays centered.
         const SizedBox(width: AppSizing.iconButton),
-      ],
-    );
-  }
-}
-
-class _EmptyPlayer extends StatelessWidget {
-  const new({required this.onClose});
-
-  final VoidCallback onClose;
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        _Header(
-          title: AppLocalizations.of(context).nowPlaying,
-          onClose: onClose,
-        ),
-        const Spacer(),
       ],
     );
   }

@@ -1,5 +1,4 @@
 import 'package:alloy/features/player/domain/playback_state.dart';
-import 'package:alloy/features/player/presentation/player_hero.dart';
 import 'package:alloy/features/player/presentation/player_notifier.dart';
 import 'package:alloy/l10n/app_localizations.dart';
 import 'package:alloy/shared/design/text_styles.dart';
@@ -20,7 +19,7 @@ class MiniPlayer extends ConsumerWidget {
   /// to the track's cover thumbnail and an accent-tinted placeholder.
   ///
   /// [onOpen] receives a tap anywhere outside the buttons; the shell opens the
-  /// now-playing screen from it.
+  /// now-playing panel from it.
   const new({this.leading, this.backdrop, this.onOpen, super.key});
 
   /// Cover slot on the left of the bar.
@@ -72,124 +71,125 @@ class _PlayerBar extends ConsumerWidget {
     final track = state.track!;
     final accent = Theme.of(context).colorScheme.primary;
 
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(
-        AppSpacing.sm,
-        0,
-        AppSpacing.sm,
-        AppSpacing.sm,
-      ),
-      child: ClipRRect(
-        borderRadius: AppRadii.cardLarge,
-        child: Stack(
-          children: [
-            Positioned.fill(
-              child:
-                  backdrop ??
-                  CoverBackdrop(
-                    artworkRef: track.artworkRef,
-                    fallback: DecoratedBox(
-                      decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                          begin: Alignment.topLeft,
-                          end: Alignment.bottomRight,
-                          colors: [
-                            accent.withValues(alpha: 0.16),
-                            AppColors.surfaceHigh,
-                          ],
+    return GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      onTap: onOpen,
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(
+          AppSpacing.sm,
+          0,
+          AppSpacing.sm,
+          AppSpacing.sm,
+        ),
+        child: ClipRRect(
+          borderRadius: AppRadii.cardLarge,
+          child: Stack(
+            children: [
+              Positioned.fill(
+                child:
+                    backdrop ??
+                    CoverBackdrop(
+                      artworkRef: track.artworkRef,
+                      fallback: DecoratedBox(
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
+                            colors: [
+                              accent.withValues(alpha: 0.16),
+                              AppColors.surfaceHigh,
+                            ],
+                          ),
                         ),
                       ),
                     ),
-                  ),
-            ),
-            Material(
-              type: MaterialType.transparency,
-              child: InkWell(
-                onTap: onOpen,
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(
-                        AppSpacing.md,
-                        AppSpacing.sm,
-                        AppSpacing.sm,
-                        AppSpacing.sm,
-                      ),
-                      child: Row(
-                        children: [
-                          leading ??
-                              Hero(
-                                tag: nowPlayingCoverHeroTag,
-                                child: ArtworkImage(
+              ),
+              Material(
+                type: MaterialType.transparency,
+                child: InkWell(
+                  onTap: onOpen,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(
+                          AppSpacing.md,
+                          AppSpacing.sm,
+                          AppSpacing.sm,
+                          AppSpacing.sm,
+                        ),
+                        child: Row(
+                          children: [
+                            leading ??
+                                ArtworkImage(
                                   artworkRef: track.artworkRef,
                                   size: AppSizing.coverMiniPlayer,
                                 ),
-                              ),
-                          const SizedBox(width: AppSpacing.md),
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Text(
-                                  track.title,
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: AppTextStyles.trackTitle.copyWith(
-                                    color: AppColors.textPrimary,
-                                  ),
-                                ),
-                                if (track.artist != null)
+                            const SizedBox(width: AppSpacing.md),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
                                   Text(
-                                    track.artist!,
+                                    track.title,
                                     maxLines: 1,
                                     overflow: TextOverflow.ellipsis,
-                                    style: AppTextStyles.trackArtist.copyWith(
-                                      color: AppColors.textSecondary,
+                                    style: AppTextStyles.trackTitle.copyWith(
+                                      color: AppColors.textPrimary,
                                     ),
                                   ),
-                              ],
+                                  if (track.artist != null)
+                                    Text(
+                                      track.artist!,
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: AppTextStyles.trackArtist.copyWith(
+                                        color: AppColors.textSecondary,
+                                      ),
+                                    ),
+                                ],
+                              ),
                             ),
-                          ),
-                          IconButton(
-                            onPressed: () async {
-                              await notifier.togglePlayPause();
-                            },
-                            tooltip: state.playing ? l10n.pause : l10n.play,
-                            icon: Icon(
-                              state.playing
-                                  ? context.icons.pause
-                                  : context.icons.play,
-                              color: accent,
+                            IconButton(
+                              onPressed: () async {
+                                await notifier.togglePlayPause();
+                              },
+                              tooltip: state.playing ? l10n.pause : l10n.play,
+                              icon: Icon(
+                                state.playing
+                                    ? context.icons.pause
+                                    : context.icons.play,
+                                color: accent,
+                              ),
                             ),
-                          ),
-                          IconButton(
-                            onPressed: () async {
-                              await notifier.next();
-                            },
-                            tooltip: l10n.next,
-                            icon: Icon(
-                              context.icons.next,
-                              color: AppColors.textPrimary,
+                            IconButton(
+                              onPressed: () async {
+                                await notifier.next();
+                              },
+                              tooltip: l10n.next,
+                              icon: Icon(
+                                context.icons.next,
+                                color: AppColors.textPrimary,
+                              ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
-                    ),
-                    SizedBox(
-                      height: 2,
-                      child: LinearProgressIndicator(
-                        value: _progress(state),
-                        backgroundColor: Colors.transparent,
-                        color: accent,
+                      SizedBox(
+                        height: 2,
+                        child: LinearProgressIndicator(
+                          value: _progress(state),
+                          backgroundColor: Colors.transparent,
+                          color: accent,
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
