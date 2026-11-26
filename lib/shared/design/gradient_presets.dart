@@ -35,21 +35,27 @@ abstract final class AppGradientPresets {
   /// All presets in `assets/icon/presets.json`.
   static const List<GradientPreset> all = [
     GradientPreset(
-      id: 'alloy-default',
-      name: 'alloy-default',
-      base: Color(0xFF0D0D0D),
+      id: 'cpunk',
+      name: 'cpunk',
+      base: Color(0xFF0C110B),
       glow: [
         RadialGradient(
-          center: Alignment(0.1, -0.5813),
-          radius: 1.235,
-          colors: [Color(0x34FFB300), Color(0x12FFB300), Color(0x00FFB300)],
-          stops: [0, 0.5, 1],
+          center: Alignment(-0.408, -0.5959),
+          radius: 1.0222,
+          colors: [Color(0x9019F2A5), Color(0x2F19F2A5), Color(0x0019F2A5)],
+          stops: [0, 0.466, 1],
         ),
         RadialGradient(
-          center: Alignment(-0.65, -0.7312),
-          radius: 0.76,
-          colors: [Color(0x22FF5A1F), Color(0x0BFF5A1F), Color(0x00FF5A1F)],
-          stops: [0, 0.55, 1],
+          center: Alignment(0.69, -0.2482),
+          radius: 0.6412,
+          colors: [Color(0x4FFCEE0A), Color(0x1CFCEE0A), Color(0x00FCEE0A)],
+          stops: [0, 0.583, 1],
+        ),
+        RadialGradient(
+          center: Alignment(-0.254, -0.213),
+          radius: 0.5871,
+          colors: [Color(0x530B2A3A), Color(0x1D0B2A3A), Color(0x000B2A3A)],
+          stops: [0, 0.535, 1],
         ),
       ],
     ),
@@ -82,7 +88,7 @@ abstract final class AppGradientPresets {
     return null;
   }
 
-  static const String _activeId = 'neon-dusk';
+  static const String _activeId = 'cpunk';
 
   /// Preset selected by the active id in `assets/icon/presets.json`.
   static final GradientPreset active = byId(_activeId)!;

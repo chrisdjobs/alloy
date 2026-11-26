@@ -1,33 +1,33 @@
 {
   "schema": 5,
-  "active": "neon-dusk",
+  "active": "cpunk",
   "presets": {
-    "alloy-default": {
+    "cpunk": {
       "schema": 5,
-      "id": "alloy-default",
-      "name": "alloy-default",
+      "id": "cpunk",
+      "name": "cpunk",
       "approximate": false,
-      "base": "#0D0D0D",
+      "base": "#0C110B",
       "layers": [
         {
           "center": [
-            0.1,
-            -0.55
+            -0.408,
+            -0.589
           ],
-          "radius": 1.3,
+          "radius": 1.076,
           "stops": [
             {
-              "color": "#FFB300",
+              "color": "#19F2A5",
               "position": 0.0,
-              "alpha": 0.34
+              "alpha": 0.942
             },
             {
-              "color": "#FFB300",
-              "position": 0.5,
-              "alpha": 0.12
+              "color": "#19F2A5",
+              "position": 0.466,
+              "alpha": 0.31
             },
             {
-              "color": "#FFB300",
+              "color": "#19F2A5",
               "position": 1.0,
               "alpha": 0.0
             }
@@ -35,23 +35,47 @@
         },
         {
           "center": [
-            -0.65,
-            -0.95
+            0.69,
+            0.338
           ],
-          "radius": 0.8,
+          "radius": 0.675,
           "stops": [
             {
-              "color": "#FF5A1F",
+              "color": "#FCEE0A",
               "position": 0.0,
-              "alpha": 0.22
+              "alpha": 0.519
             },
             {
-              "color": "#FF5A1F",
-              "position": 0.55,
-              "alpha": 0.07
+              "color": "#FCEE0A",
+              "position": 0.583,
+              "alpha": 0.182
             },
             {
-              "color": "#FF5A1F",
+              "color": "#FCEE0A",
+              "position": 1.0,
+              "alpha": 0.0
+            }
+          ]
+        },
+        {
+          "center": [
+            -0.254,
+            0.432
+          ],
+          "radius": 0.618,
+          "stops": [
+            {
+              "color": "#0B2A3A",
+              "position": 0.0,
+              "alpha": 0.54
+            },
+            {
+              "color": "#0B2A3A",
+              "position": 0.535,
+              "alpha": 0.189
+            },
+            {
+              "color": "#0B2A3A",
               "position": 1.0,
               "alpha": 0.0
             }
@@ -61,23 +85,23 @@
       "glow": [
         {
           "center": [
-            0.1,
-            -0.5813
+            -0.408,
+            -0.5959
           ],
-          "radius": 1.235,
+          "radius": 1.0222,
           "stops": [
             {
-              "color": "#FFB300",
+              "color": "#19F2A5",
               "position": 0.0,
-              "alpha": 0.204
+              "alpha": 0.5652
             },
             {
-              "color": "#FFB300",
-              "position": 0.5,
-              "alpha": 0.072
+              "color": "#19F2A5",
+              "position": 0.466,
+              "alpha": 0.186
             },
             {
-              "color": "#FFB300",
+              "color": "#19F2A5",
               "position": 1.0,
               "alpha": 0.0
             }
@@ -85,23 +109,47 @@
         },
         {
           "center": [
-            -0.65,
-            -0.7312
+            0.69,
+            -0.2482
           ],
-          "radius": 0.76,
+          "radius": 0.6412,
           "stops": [
             {
-              "color": "#FF5A1F",
+              "color": "#FCEE0A",
               "position": 0.0,
-              "alpha": 0.132
+              "alpha": 0.3114
             },
             {
-              "color": "#FF5A1F",
-              "position": 0.55,
-              "alpha": 0.042
+              "color": "#FCEE0A",
+              "position": 0.583,
+              "alpha": 0.1092
             },
             {
-              "color": "#FF5A1F",
+              "color": "#FCEE0A",
+              "position": 1.0,
+              "alpha": 0.0
+            }
+          ]
+        },
+        {
+          "center": [
+            -0.254,
+            -0.213
+          ],
+          "radius": 0.5871,
+          "stops": [
+            {
+              "color": "#0B2A3A",
+              "position": 0.0,
+              "alpha": 0.324
+            },
+            {
+              "color": "#0B2A3A",
+              "position": 0.535,
+              "alpha": 0.1134
+            },
+            {
+              "color": "#0B2A3A",
               "position": 1.0,
               "alpha": 0.0
             }
@@ -109,13 +157,13 @@
         }
       ],
       "render": {
-        "grain": 0.012,
-        "seed": 7
+        "grain": 0.0108,
+        "seed": 501085430
       },
       "icon": {
-        "dir": "assets/icon/presets/alloy-default",
-        "legacy": "assets/icon/presets/alloy-default/icon_legacy_1024.png",
-        "adaptive_background": "assets/icon/presets/alloy-default/icon_adaptive_background.png",
+        "dir": "assets/icon/presets/cpunk",
+        "legacy": "assets/icon/presets/cpunk/icon_legacy_1024.png",
+        "adaptive_background": "assets/icon/presets/cpunk/icon_adaptive_background.png",
         "foreground": "assets/icon/ic_launcher_foreground.png",
         "monochrome": "assets/icon/ic_launcher_monochrome.png"
       }
