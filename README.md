@@ -74,10 +74,11 @@ After editing `.arb` files, run `flutter gen-l10n` (its output is committed).
 
 ## Tooling
 
-Gradient presets (app icon, Home/Me glow, nav pill) are generated from JSON by
-the Python scripts in `tools/gradients/`; see
-[`tools/gradients/README.md`](tools/gradients/README.md). `tool/visual/` holds
-the emulator capture and hot-reload scripts used for visual review.
+Gradient presets (Home/Me glow, nav pill and launcher icon) are generated from
+JSON by the Python scripts in `tools/gradients/`; see
+[`tools/gradients/README.md`](tools/gradients/README.md). The install default is
+the hand-made four-bar icon in `assets/icon/presets/default/`. `tool/visual/`
+holds the emulator capture and hot-reload scripts used for visual review.
 
 ## Architecture
 

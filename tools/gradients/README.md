@@ -100,6 +100,14 @@ sets `"hand_made": true` in its `icon` block: the tool validates the four files,
 skips rendering and leaves them untouched, but still registers the preset and
 updates the launcher config when it is active.
 
+The installed default icon is hand-made in `assets/icon/presets/default/`: the
+colored four-bar mark (three `#E8E8EA` bars and one `#FF5A1F`) over a flat
+`#111114` background. The active preset `neon-dusk` points its `icon` block there
+with `hand_made: true`, so it only supplies the glow and never re-renders the
+icon. The shared `assets/icon/ic_launcher_foreground.*` is the all-white mark
+used by rendered presets (for example `cpunk`); `assets/icon/icon.svg` stays the
+colored master and `ic_launcher_monochrome.*` the themed white mark.
+
 ## Where things land
 
 | Path | What | Git |
@@ -110,6 +118,10 @@ updates the launcher config when it is active.
 | `assets/icon/presets/<name>/preset.json` | the applied preset as given | tracked |
 | `assets/icon/presets/<name>/icon_legacy_1024.png` | legacy icon, rounded corners | tracked |
 | `assets/icon/presets/<name>/icon_adaptive_background.png` | 432 px adaptive background | tracked |
+| `assets/icon/presets/default/` | hand-made default icon: legacy, flat background, colored foreground | tracked |
+| `assets/icon/ic_launcher_foreground.*` | shared white adaptive foreground for rendered presets | tracked |
+| `assets/icon/ic_launcher_monochrome.*` | themed white mark | tracked |
+| `assets/icon/icon.svg` | colored master icon | tracked |
 | `lib/shared/design/gradient_presets.dart` | generated Dart data | tracked, never edited |
 
 The script also checks the existing foreground against Android's 66dp safe

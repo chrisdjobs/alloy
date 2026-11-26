@@ -15,7 +15,8 @@ without a path, ask for the file name; never guess which file they mean.
    Add `--name <slug>` only if the user gave a name. The script reads the
    preset from the PNG metadata or the JSON, writes `assets/icon/presets/<name>/`,
    updates `assets/icon/presets.json`, regenerates the Dart file, points
-   `flutter_launcher_icons.yaml` at the preset and runs the launcher tool.
+   `flutter_launcher_icons.yaml` at the preset's legacy, background, foreground
+   and monochrome files and runs the launcher tool.
 2. When the generator changes a derived rule, run
    `python3 tools/gradients/apply_gradient.py --refresh` (no source): it
    re-normalizes every registered preset, re-derives the `glow`, and rewrites
@@ -38,6 +39,13 @@ without a path, ask for the file name; never guess which file they mean.
 
 - Never edit `lib/shared/design/gradient_presets.dart` or
   `assets/icon/presets.json` by hand; both are generated.
+- The install default is the hand-made icon in `assets/icon/presets/default/`
+  (colored four-bar mark on flat `#111114`). `neon-dusk` references it with
+  `"hand_made": true` and only supplies the glow: never re-render or move that
+  icon, and never point `flutter_launcher_icons.yaml` back at a generated
+  foreground for it. Rendered presets (for example `cpunk`) use the shared
+  all-white `assets/icon/ic_launcher_foreground.*`; `assets/icon/icon.svg`
+  stays colored and `ic_launcher_monochrome.*` is the themed mark.
 - `glow` is derived from the icon's own `layers` by `derive_glow` in
   `gradient_preset.py`: one glow layer per icon layer, same colors and stops,
   re-aimed at a wide box. Never randomize or hand-edit it; old files' `home`
