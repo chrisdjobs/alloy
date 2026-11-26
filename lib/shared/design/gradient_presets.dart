@@ -59,25 +59,6 @@ abstract final class AppGradientPresets {
         ),
       ],
     ),
-    GradientPreset(
-      id: 'neon-dusk',
-      name: 'neon-dusk',
-      base: Color(0xFF120B0A),
-      glow: [
-        RadialGradient(
-          center: Alignment(-0.211, -0.4575),
-          radius: 0.9319,
-          colors: [Color(0x8A7B2FF7), Color(0x2D7B2FF7), Color(0x007B2FF7)],
-          stops: [0, 0.578, 1],
-        ),
-        RadialGradient(
-          center: Alignment(0.499, -0.4406),
-          radius: 0.6773,
-          colors: [Color(0x51FF5A1F), Color(0x1CFF5A1F), Color(0x00FF5A1F)],
-          stops: [0, 0.55, 1],
-        ),
-      ],
-    ),
   ];
 
   /// The preset with [id], or null when it was never applied.

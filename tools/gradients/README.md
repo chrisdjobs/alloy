@@ -100,13 +100,13 @@ sets `"hand_made": true` in its `icon` block: the tool validates the four files,
 skips rendering and leaves them untouched, but still registers the preset and
 updates the launcher config when it is active.
 
-The installed default icon is hand-made in `assets/icon/presets/default/`: the
-colored four-bar mark (three `#E8E8EA` bars and one `#FF5A1F`) over a flat
-`#111114` background. The hand-made preset `neon-dusk` points its `icon` block there
-with `hand_made: true`, so it only supplies the glow and never re-renders the
-icon. The shared `assets/icon/ic_launcher_foreground.*` is the all-white mark
-used by rendered presets (for example `cpunk`); `assets/icon/icon.svg` stays the
-colored master and `ic_launcher_monochrome.*` the themed white mark.
+The hand-made icon lives in `assets/icon/presets/default/`: the colored
+four-bar mark (three `#E8E8EA` bars and one `#FF5A1F`) over a flat `#111114`
+background. A preset can point its `icon` block there with `"hand_made": true`;
+the tool then validates the four files and skips rendering. The shared
+`assets/icon/ic_launcher_foreground.*` is the all-white mark used by rendered
+presets (for example `cpunk`); `assets/icon/icon.svg` stays the colored master
+and `ic_launcher_monochrome.*` the themed white mark.
 
 ## Where things land
 
