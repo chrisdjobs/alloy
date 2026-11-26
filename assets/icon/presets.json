@@ -1,6 +1,6 @@
 {
   "schema": 5,
-  "active": "cpunk",
+  "active": "neon-dusk",
   "presets": {
     "cpunk": {
       "schema": 5,
@@ -279,11 +279,12 @@
         "seed": 2004182514
       },
       "icon": {
-        "dir": "assets/icon/presets/neon-dusk",
-        "legacy": "assets/icon/presets/neon-dusk/icon_legacy_1024.png",
-        "adaptive_background": "assets/icon/presets/neon-dusk/icon_adaptive_background.png",
-        "foreground": "assets/icon/ic_launcher_foreground.png",
-        "monochrome": "assets/icon/ic_launcher_monochrome.png"
+        "dir": "assets/icon/presets/default",
+        "legacy": "assets/icon/presets/default/icon_legacy_1024.png",
+        "adaptive_background": "assets/icon/presets/default/icon_adaptive_background.png",
+        "foreground": "assets/icon/presets/default/ic_launcher_foreground.png",
+        "monochrome": "assets/icon/ic_launcher_monochrome.png",
+        "hand_made": true
       }
     }
   }
