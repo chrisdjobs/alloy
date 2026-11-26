@@ -81,7 +81,7 @@ Preview the Home/Me glow without an emulator:
 # Writes memory/gradients/previews/<id>_home.png. The renderer mirrors what
 # PresetGlow paints (stretched radials + the GLOW_FADE mask); check a glow change
 # here before touching Flutter.
-python3 tools/gradients/preview_home.py assets/icon/presets/neon-dusk/preset.json
+python3 tools/gradients/preview_home.py assets/icon/presets/cpunk/preset.json
 ```
 
 Run the Python unit tests (the derived `glow` rules):
@@ -102,7 +102,7 @@ updates the launcher config when it is active.
 
 The installed default icon is hand-made in `assets/icon/presets/default/`: the
 colored four-bar mark (three `#E8E8EA` bars and one `#FF5A1F`) over a flat
-`#111114` background. The active preset `neon-dusk` points its `icon` block there
+`#111114` background. The hand-made preset `neon-dusk` points its `icon` block there
 with `hand_made: true`, so it only supplies the glow and never re-renders the
 icon. The shared `assets/icon/ic_launcher_foreground.*` is the all-white mark
 used by rendered presets (for example `cpunk`); `assets/icon/icon.svg` stays the

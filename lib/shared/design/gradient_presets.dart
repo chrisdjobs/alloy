@@ -88,7 +88,7 @@ abstract final class AppGradientPresets {
     return null;
   }
 
-  static const String _activeId = 'neon-dusk';
+  static const String _activeId = 'cpunk';
 
   /// Preset selected by the active id in `assets/icon/presets.json`.
   static final GradientPreset active = byId(_activeId)!;
