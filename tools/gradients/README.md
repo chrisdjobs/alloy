@@ -1,8 +1,10 @@
 # Gradient presets
 
-One JSON preset is the source of truth for the app icon, the adaptive icon
-background, the Home/Me glow and the nav pill. The Python renderer mirrors
-Flutter's `RadialGradient` math, so the icon PNG and the Flutter gradients agree:
+One JSON preset is the source of truth for the page base, the Home/Me glow and
+the nav pill, and it carries the icon paths used by the launcher. The icon can be
+rendered from the preset's own layers and foreground, or hand-made
+(`"hand_made": true` in the `icon` block). The Python renderer mirrors Flutter's
+`RadialGradient` math, so the icon PNG and the Flutter gradients agree:
 
 - `center` is an `Alignment` in `[-1, 1]`, mapped onto the paint box.
 - `radius` is a fraction of the paint box's shortest side.
@@ -88,9 +90,15 @@ Run the Python unit tests (the derived `glow` rules):
 python3 -m unittest discover -s tools/gradients -p "test_*.py"
 ```
 
-`--set-active` rewrites `flutter_launcher_icons.yaml` to the preset's legacy and
-adaptive-background files, keeps the existing foreground/monochrome untouched,
-and runs `dart run flutter_launcher_icons`. The Android manifest is not touched.
+`--set-active` rewrites `flutter_launcher_icons.yaml` to the preset's legacy,
+adaptive-background, foreground and monochrome files, and runs
+`dart run flutter_launcher_icons`. The Android manifest is not touched.
+
+Each preset carries its own `icon.foreground` and `icon.monochrome`; the tool
+renders the legacy icon with that foreground. A preset whose icon is hand-made
+sets `"hand_made": true` in its `icon` block: the tool validates the four files,
+skips rendering and leaves them untouched, but still registers the preset and
+updates the launcher config when it is active.
 
 ## Where things land
 

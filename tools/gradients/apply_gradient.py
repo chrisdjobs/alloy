@@ -86,25 +86,40 @@ def main() -> None:
     if not config_path.is_file():
         gp.fail(f"{LAUNCHER_CONFIG} not found under {root}")
     config = config_path.read_text(encoding="utf8")
-    configured = _config_value(config, "adaptive_icon_foreground")
-    foreground = root / (configured or FOREGROUND.as_posix())
-    if not foreground.is_file():
-        gp.fail(f"adaptive foreground {foreground} does not exist")
 
     preset_dir = PRESETS_DIR / preset_id
-    legacy_path = preset_dir / "icon_legacy_1024.png"
-    background_path = preset_dir / "icon_adaptive_background.png"
-    preset["icon"] = {
-        "dir": preset_dir.as_posix(),
-        "legacy": legacy_path.as_posix(),
-        "adaptive_background": background_path.as_posix(),
-        "foreground": _relative(foreground, root),
-        "monochrome": _config_value(config, "adaptive_icon_monochrome")
-        or MONOCHROME.as_posix(),
-    }
+    icon = preset.get("icon") or {}
+    hand_made = bool(icon.get("hand_made"))
+    changed = [f"{preset_dir}/preset.json"]
+    if hand_made:
+        for key in ("legacy", "adaptive_background", "foreground", "monochrome"):
+            value = icon.get(key)
+            if not value or not (root / value).is_file():
+                gp.fail(f"hand-made icon is missing {key}: {value!r}")
+        foreground = root / icon["foreground"]
+    else:
+        configured = _config_value(config, "adaptive_icon_foreground")
+        foreground = root / (
+            icon.get("foreground") or configured or FOREGROUND.as_posix()
+        )
+        if not foreground.is_file():
+            gp.fail(f"adaptive foreground {foreground} does not exist")
 
-    _write_legacy(preset, root / legacy_path, foreground)
-    _write_background(preset, root / background_path)
+        legacy_path = preset_dir / "icon_legacy_1024.png"
+        background_path = preset_dir / "icon_adaptive_background.png"
+        preset["icon"] = {
+            "dir": preset_dir.as_posix(),
+            "legacy": legacy_path.as_posix(),
+            "adaptive_background": background_path.as_posix(),
+            "foreground": _relative(foreground, root),
+            "monochrome": icon.get("monochrome")
+            or _config_value(config, "adaptive_icon_monochrome")
+            or MONOCHROME.as_posix(),
+        }
+        _write_legacy(preset, root / legacy_path, foreground)
+        _write_background(preset, root / background_path)
+        changed += [legacy_path.as_posix(), background_path.as_posix()]
+
     (root / preset_dir).mkdir(parents=True, exist_ok=True)
     (root / preset_dir / "preset.json").write_text(
         gp.to_json(preset),
@@ -120,13 +135,7 @@ def main() -> None:
 
     _check_safe_zone(foreground, config)
 
-    changed = [
-        f"{preset_dir}/preset.json",
-        legacy_path.as_posix(),
-        background_path.as_posix(),
-        REGISTRY.as_posix(),
-        DART_FILE.as_posix(),
-    ]
+    changed += [REGISTRY.as_posix(), DART_FILE.as_posix()]
     print(f"Applied preset {preset_id!r} (active: {registry['active']})")
     for path in changed:
         print(f"  {path}")
@@ -285,6 +294,16 @@ def _update_launcher_config(
         updated,
         "adaptive_icon_background",
         icon["adaptive_background"],
+    )
+    updated = _set_config_value(
+        updated,
+        "adaptive_icon_foreground",
+        icon["foreground"],
+    )
+    updated = _set_config_value(
+        updated,
+        "adaptive_icon_monochrome",
+        icon["monochrome"],
     )
     path.write_text(updated, encoding="utf8")
     print(f"Updated {_relative(path, root)}")
