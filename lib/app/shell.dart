@@ -19,11 +19,15 @@ import 'package:material_ui/material_ui.dart';
 /// Width at which the shell switches from bottom navigation to a sidebar.
 const double shellBreakpoint = 600;
 
-/// Fraction of the expansion over which the mini-player fades out.
-const double _miniPlayerFadeEnd = 0.25;
-
-/// Vertical speed (px/s) that settles the panel in the fling direction.
+/// Vertical speed (px/s) that closes the panel in the fling direction.
 const double _panelFlingVelocity = 500;
+
+/// Fraction of the travel a downward drag must cover before a release without
+/// a fling closes the panel.
+///
+/// Below it the panel returns to full screen, so a short drag never leaves it
+/// half open over the mini-player.
+const double _panelCommitThreshold = 0.15;
 
 /// Spring used to settle the panel after a drag.
 const SpringDescription _panelSpring = SpringDescription(
@@ -56,6 +60,13 @@ class _AdaptiveShellState extends ConsumerState<AdaptiveShell>
   var _dragStartT = 0.0;
   var _isDragging = false;
 
+  /// Last non-zero vertical movement of the current drag, in logical pixels.
+  ///
+  /// Positive means the finger was moving down. A release on the way down
+  /// commits to closing once the drag passes the threshold; a release on the
+  /// way up returns the sheet to full screen.
+  var _dragDelta = 0.0;
+
   @override
   void initState() {
     super.initState();
@@ -87,14 +98,16 @@ class _AdaptiveShellState extends ConsumerState<AdaptiveShell>
   void _onPanelDragStart(DragStartDetails details) {
     _dragStartY = details.globalPosition.dy;
     _dragStartT = _panelController.value;
+    _dragDelta = 0;
     _isDragging = true;
     _panelController.stop();
   }
 
   void _onPanelDragUpdate(DragUpdateDetails details) {
     if (!_isDragging || _panelTravel <= 0) return;
+    if (details.delta.dy != 0) _dragDelta = details.delta.dy;
     final dy = details.globalPosition.dy - _dragStartY;
-    // Dragging up (negative dy) expands the panel; the top follows the finger.
+    // Dragging up expands the sheet; dragging down moves it off screen.
     _panelController.value = (_dragStartT - dy / _panelTravel).clamp(0.0, 1.0);
   }
 
@@ -111,20 +124,26 @@ class _AdaptiveShellState extends ConsumerState<AdaptiveShell>
   }
 
   /// Settles the panel to 0 or 1 with a spring, honouring the fling velocity.
+  ///
+  /// A downward fling or a downward drag past [_panelCommitThreshold] closes
+  /// the panel; anything else returns it to full screen. The panel never stays
+  /// half open over the mini-player. The spring snaps to the exact target,
+  /// since its tolerance alone would stop a hair short and keep the collapsed
+  /// panel on screen.
   void _settlePanel(double velocity) {
-    final target = velocity < -_panelFlingVelocity
-        ? 1.0
-        : velocity > _panelFlingVelocity
-        ? 0.0
-        : _panelController.value >= 0.5
-        ? 1.0
-        : 0.0;
+    final current = _panelController.value;
+    final movedDown = _dragStartT - current;
+    final closes =
+        velocity > _panelFlingVelocity ||
+        (movedDown >= _panelCommitThreshold && _dragDelta > 0);
+    final target = closes ? 0.0 : 1.0;
     _panelController.animateWith(
       SpringSimulation(
         _panelSpring,
-        _panelController.value,
+        current,
         target,
         _panelTravel <= 0 ? 0 : -velocity / _panelTravel,
+        snapToEnd: true,
       ),
     );
   }
@@ -147,16 +166,11 @@ class _AdaptiveShellState extends ConsumerState<AdaptiveShell>
     // Rebuild when the mini-player appears or disappears so the reserved space
     // at the bottom is measured again.
     ref.watch(playerProvider.select((state) => state.value?.track != null));
-    final safeBottom = MediaQuery.paddingOf(context).bottom;
-    final navBarHeight = AppSizing.navBarHeight + safeBottom;
 
     return LayoutBuilder(
       builder: (context, constraints) {
         final wide = constraints.maxWidth >= shellBreakpoint;
-        _panelTravel = (constraints.maxHeight - _barHeight).clamp(
-          0.0,
-          double.infinity,
-        );
+        _panelTravel = constraints.maxHeight;
         WidgetsBinding.instance.addPostFrameCallback((_) => _syncBarHeight());
 
         final base = Column(
@@ -172,7 +186,7 @@ class _AdaptiveShellState extends ConsumerState<AdaptiveShell>
             final t = _panelController.value;
             return PopScope(
               // Back closes the panel before it leaves the shell.
-              canPop: t < 0.001,
+              canPop: t <= 0,
               onPopInvokedWithResult: (didPop, _) {
                 if (!didPop) _panelActions.collapse();
               },
@@ -180,29 +194,24 @@ class _AdaptiveShellState extends ConsumerState<AdaptiveShell>
                 fit: StackFit.expand,
                 children: [
                   child!,
-                  if (t > 0)
-                    Positioned(
-                      top: _panelTravel * (1 - t),
-                      left: 0,
-                      right: 0,
-                      bottom: 0,
-                      child: NowPlayingPanel(
-                        t: t,
-                        barHeight: _barHeight,
-                        onDragStart: _onPanelDragStart,
-                        onDragUpdate: _onPanelDragUpdate,
-                        onDragEnd: _onPanelDragEnd,
-                        onDragCancel: _onPanelDragCancel,
-                      ),
-                    ),
                   _barLayer(
-                    t: t,
                     wide: wide,
-                    navBarHeight: wide ? 0 : navBarHeight,
                     order: order,
                     current: current,
                     glow: glow,
                   ),
+                  if (t > 0)
+                    Positioned.fill(
+                      child: Transform.translate(
+                        offset: Offset(0, _panelTravel * (1 - t)),
+                        child: NowPlayingPanel(
+                          onDragStart: _onPanelDragStart,
+                          onDragUpdate: _onPanelDragUpdate,
+                          onDragEnd: _onPanelDragEnd,
+                          onDragCancel: _onPanelDragCancel,
+                        ),
+                      ),
+                    ),
                 ],
               ),
             );
@@ -256,18 +265,14 @@ class _AdaptiveShellState extends ConsumerState<AdaptiveShell>
 
   /// Bottom bar layer: mini-player plus navigation bar on compact layouts.
   ///
-  /// It sits above the panel so the mini-player fade and the navigation bar
-  /// slide stay visible while the panel expands behind them.
+  /// It sits behind the panel, which covers it completely while open. Nothing
+  /// fades or slides here: the panel is the only thing that moves.
   Widget _barLayer({
-    required double t,
     required bool wide,
-    required double navBarHeight,
     required List<AppTab> order,
     required AppTab current,
     required List<RadialGradient> glow,
   }) {
-    final miniOpacity = (1 - t / _miniPlayerFadeEnd).clamp(0.0, 1.0);
-
     return Positioned(
       left: 0,
       right: 0,
@@ -277,30 +282,13 @@ class _AdaptiveShellState extends ConsumerState<AdaptiveShell>
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            IgnorePointer(
-              // Once the panel moves, the mini-player must not eat its taps.
-              ignoring: t > 0.001,
-              child: Opacity(
-                opacity: miniOpacity,
-                child: GestureDetector(
-                  behavior: HitTestBehavior.opaque,
-                  onVerticalDragStart: _onPanelDragStart,
-                  onVerticalDragUpdate: _onPanelDragUpdate,
-                  onVerticalDragEnd: _onPanelDragEnd,
-                  onVerticalDragCancel: _onPanelDragCancel,
-                  child: MiniPlayer(onOpen: _panelActions.expand),
-                ),
-              ),
-            ),
+            MiniPlayer(onOpen: _panelActions.expand),
             if (!wide)
-              Transform.translate(
-                offset: Offset(0, t * navBarHeight),
-                child: _AlloyBottomBar(
-                  tabs: order,
-                  current: current,
-                  onSelected: _select,
-                  glow: glow,
-                ),
+              _AlloyBottomBar(
+                tabs: order,
+                current: current,
+                onSelected: _select,
+                glow: glow,
               ),
           ],
         ),

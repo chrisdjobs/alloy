@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:ui' show lerpDouble;
 
 import 'package:alloy/core/artwork/artwork_providers.dart';
 import 'package:alloy/core/artwork/artwork_ref.dart';
@@ -24,35 +23,20 @@ import 'package:material_ui/material_ui.dart' hide RepeatMode;
 /// Height of the panel header row that holds the close button.
 const double _headerHeight = AppSizing.iconButton;
 
-/// Fraction of the expansion over which the player content fades in.
+/// Full-screen now-playing sheet drawn on top of the shell.
 ///
-/// The mini-player fades out in the first stretch of the expansion, so its
-/// cover and the panel cover cross-fade without a visible double image.
-const double _contentFadeStart = 0.6;
-
-/// Expandable now-playing panel drawn on top of the shell content.
-///
-/// The shell owns the animation: [t] goes from 0 (collapsed, the panel sits
-/// behind the mini-player) to 1 (full screen). Everything inside is a pure
-/// function of [t], so a drag that updates the controller tracks the finger
-/// one to one and the release animation continues from the same frame.
+/// The shell owns the slide: it translates the whole panel from below the
+/// screen to full screen. Everything inside is laid out at its expanded size,
+/// so the sheet always looks complete while it moves.
 class NowPlayingPanel extends ConsumerWidget {
   /// Creates the panel.
   const new({
-    required this.t,
-    required this.barHeight,
     required this.onDragStart,
     required this.onDragUpdate,
     required this.onDragEnd,
     required this.onDragCancel,
     super.key,
   });
-
-  /// Expansion of the panel: 0 collapsed, 1 expanded.
-  final double t;
-
-  /// Height of the shell bar (mini-player plus navigation bar) below the panel.
-  final double barHeight;
 
   /// Vertical drag callbacks forwarded to the shell's controller.
   final GestureDragStartCallback onDragStart;
@@ -77,34 +61,15 @@ class NowPlayingPanel extends ConsumerWidget {
     return LayoutBuilder(
       builder: (context, constraints) {
         final width = constraints.maxWidth;
-        final expandedCoverSize =
+        final coverSize =
             (width.clamp(0.0, AppSizing.nowPlayingMaxWidth) - 2 * AppSpacing.xl)
                 .clamp(0.0, double.infinity);
+        final coverTop = safeTop + _headerHeight + AppSpacing.xxl;
+        final coverLeft = (width - coverSize) / 2;
 
-        // The cover travels from the mini-player thumbnail to the big cover.
-        final coverSize = lerpDouble(
-          AppSizing.coverMiniPlayer,
-          expandedCoverSize,
-          t,
-        )!;
-        final coverTop = lerpDouble(
-          AppSpacing.sm,
-          safeTop + _headerHeight + AppSpacing.xxl,
-          t,
-        )!;
-        final coverLeft = lerpDouble(
-          AppSpacing.sm + AppSpacing.md,
-          (width - expandedCoverSize) / 2,
-          t,
-        )!;
-
-        // The body fades in only in the final stretch, after the cover is in
-        // place; the top padding keeps the first line under the cover.
-        final contentOpacity =
-            ((t - _contentFadeStart) / (1 - _contentFadeStart)).clamp(0.0, 1.0);
+        // The top padding keeps the first line under the cover.
         final contentTop =
-            coverTop + coverSize + AppSpacing.xxl - safeTop * t - _headerHeight;
-        final bottomInset = barHeight * (1 - t) + safeBottom * t;
+            coverTop + coverSize + AppSpacing.xxl - safeTop - _headerHeight;
 
         return GestureDetector(
           behavior: HitTestBehavior.opaque,
@@ -126,19 +91,13 @@ class NowPlayingPanel extends ConsumerWidget {
                   size: coverSize,
                 ),
               ),
-              Opacity(
-                opacity: contentOpacity,
-                child: IgnorePointer(
-                  ignoring: contentOpacity < 1,
-                  child: Padding(
-                    padding: EdgeInsets.only(top: safeTop * t),
-                    child: _PanelContent(
-                      state: state,
-                      track: track,
-                      contentTop: contentTop,
-                      bottomInset: bottomInset,
-                    ),
-                  ),
+              Padding(
+                padding: EdgeInsets.only(top: safeTop),
+                child: _PanelContent(
+                  state: state,
+                  track: track,
+                  contentTop: contentTop,
+                  bottomInset: safeBottom,
                 ),
               ),
             ],

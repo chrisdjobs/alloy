@@ -211,8 +211,6 @@ Future<void> _pump(
       child: _app(
         Scaffold(
           body: NowPlayingPanel(
-            t: 1,
-            barHeight: 0,
             onDragStart: (_) {},
             onDragUpdate: (_) {},
             onDragEnd: (_) {},
