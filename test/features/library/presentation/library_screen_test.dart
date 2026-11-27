@@ -125,7 +125,9 @@ void main() {
     await _pump(tester, repository, played, shuffled);
     await tester.pumpAndSettle();
 
-    await tester.tap(find.byTooltip('Rescan library'));
+    await tester.tap(find.byTooltip('More options'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Rescan library'));
     await tester.pump();
 
     expect(repository.triggerScanCalls, 1);

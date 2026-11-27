@@ -10,6 +10,21 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'library_notifier.g.dart';
 
+/// Sections of the library screen.
+enum LibraryTab {
+  /// Every track.
+  tracks,
+
+  /// Playlists; designed but not built yet.
+  playlists,
+
+  /// Artists; designed but not built yet.
+  artists,
+
+  /// Albums; designed but not built yet.
+  albums,
+}
+
 /// Repository behind the library; bootstrap overrides it with the local one.
 final libraryRepositoryProvider = Provider<LibraryRepository>((ref) {
   throw UnimplementedError(
@@ -70,4 +85,43 @@ class LibraryNotifier extends _$LibraryNotifier {
 @Riverpod(keepAlive: true)
 Stream<ScanProgress> scanProgress(Ref ref) {
   return ref.watch(libraryRepositoryProvider).scanProgress;
+}
+
+/// Section shown by the library screen.
+@Riverpod(keepAlive: true)
+class LibraryTabNotifier extends _$LibraryTabNotifier {
+  @override
+  LibraryTab build() => LibraryTab.tracks;
+
+  /// Switches the visible section.
+  void select(LibraryTab value) {
+    if (state == value) return;
+    state = value;
+  }
+}
+
+/// Whether the library header shows the search field.
+@Riverpod(keepAlive: true)
+class LibrarySearchActiveNotifier extends _$LibrarySearchActiveNotifier {
+  @override
+  bool build() => false;
+
+  /// Shows or hides the search field.
+  void setActive(bool value) {
+    if (state == value) return;
+    state = value;
+  }
+}
+
+/// Text typed in the library search field.
+@Riverpod(keepAlive: true)
+class LibrarySearchQueryNotifier extends _$LibrarySearchQueryNotifier {
+  @override
+  String build() => '';
+
+  /// Replaces the query; an empty string shows the whole library.
+  void updateQuery(String value) {
+    if (state == value) return;
+    state = value;
+  }
 }
