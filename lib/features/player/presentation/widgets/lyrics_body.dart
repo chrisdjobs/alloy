@@ -57,10 +57,7 @@ class _LyricsContent extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: AppSpacing.lg),
       child: Text(
         lines.join('\n'),
-        style: AppTextStyles.body.copyWith(
-          color: AppColors.textPrimary,
-          height: 1.6,
-        ),
+        style: AppTextStyles.lyrics.copyWith(color: AppColors.textPrimary),
       ),
     );
   }

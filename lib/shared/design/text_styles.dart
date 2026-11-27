@@ -33,6 +33,13 @@ abstract final class AppTextStyles {
     fontWeight: FontWeight.w400,
   );
 
+  /// Lyrics text on the now-playing screen.
+  static const TextStyle lyrics = TextStyle(
+    fontSize: 18,
+    height: 1.6,
+    fontWeight: FontWeight.w400,
+  );
+
   /// Title of a track in a list row.
   static const TextStyle trackTitle = TextStyle(
     fontSize: 16,
