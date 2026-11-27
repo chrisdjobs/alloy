@@ -19,7 +19,11 @@ import 'package:alloy/features/library/data/artwork_repository_impl.dart';
 import 'package:alloy/features/library/data/database/app_database.dart';
 import 'package:alloy/features/library/data/library_repository_impl.dart';
 import 'package:alloy/features/library/data/local_artwork_source.dart';
+import 'package:alloy/features/library/data/local_lyrics_provider.dart';
 import 'package:alloy/features/library/data/local_music_source.dart';
+// The LyricsProvider interface is the provider's value type; used in the
+// ProviderScope overrides below.
+import 'package:alloy/features/library/domain/lyrics_provider.dart'; // ignore: unused_import
 import 'package:alloy/features/library/presentation/library_notifier.dart';
 import 'package:alloy/features/player/data/android_playback_engine.dart';
 import 'package:alloy/features/player/data/audio_handler.dart';
@@ -98,6 +102,10 @@ Future<void> bootstrap() async {
             unawaited(database.close());
           });
           return libraryRepository;
+        }),
+        lyricsProvider.overrideWith((ref) {
+          ref.onDispose(() {});
+          return LocalLyricsProvider(database: database);
         }),
         settingsRepositoryProvider.overrideWith((ref) {
           ref.onDispose(() {
