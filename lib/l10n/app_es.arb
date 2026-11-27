@@ -57,6 +57,8 @@
   "next": "Siguiente",
   "retry": "Reintentar",
   "close": "Cerrar",
+  "share": "Compartir",
+  "queue": "Cola",
   "previous": "Anterior",
   "stopPlayback": "Detener la reproducción",
   "moreOptions": "Más opciones",

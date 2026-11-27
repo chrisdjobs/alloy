@@ -29,6 +29,9 @@ final class AppIconSet {
     required this.stop,
     required this.more,
     required this.close,
+    required this.share,
+    required this.lyrics,
+    required this.queue,
     required this.recent,
     required this.mixes,
     required this.favorite,
@@ -105,6 +108,15 @@ final class AppIconSet {
 
   /// Clears or closes a temporary UI, such as the library search.
   final IconData close;
+
+  /// Shares the current track.
+  final IconData share;
+
+  /// Shows the lyrics of the current track.
+  final IconData lyrics;
+
+  /// Opens the playback queue.
+  final IconData queue;
 
   /// Recently added shortcut.
   final IconData recent;
@@ -211,6 +223,15 @@ abstract final class AppIcons {
   /// Clears or closes a temporary UI (Lucide).
   static const IconData close = LucideIcons.x;
 
+  /// Shares the current track (Lucide).
+  static const IconData share = LucideIcons.share2;
+
+  /// Shows the lyrics of the current track (Lucide).
+  static const IconData lyrics = LucideIcons.micVocal;
+
+  /// Opens the playback queue (Lucide).
+  static const IconData queue = LucideIcons.listMusic;
+
   /// Recently added shortcut (Lucide).
   static const IconData recent = LucideIcons.clock;
 
@@ -270,6 +291,9 @@ abstract final class AppIcons {
     stop: AppIcons.stop,
     more: AppIcons.more,
     close: AppIcons.close,
+    share: AppIcons.share,
+    lyrics: AppIcons.lyrics,
+    queue: AppIcons.queue,
     recent: AppIcons.recent,
     mixes: AppIcons.mixes,
     favorite: AppIcons.favorite,
@@ -307,6 +331,9 @@ abstract final class AppIcons {
     stop: Icons.stop_rounded,
     more: Icons.more_vert_rounded,
     close: Icons.close_rounded,
+    share: Icons.share_rounded,
+    lyrics: Icons.mic_none_rounded,
+    queue: Icons.queue_music_rounded,
     recent: Icons.schedule_rounded,
     mixes: Icons.layers_outlined,
     favorite: Icons.favorite_border_rounded,

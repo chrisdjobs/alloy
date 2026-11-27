@@ -208,6 +208,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get close => 'Close';
 
   @override
+  String get share => 'Share';
+
+  @override
+  String get queue => 'Queue';
+
+  @override
   String get previous => 'Previous';
 
   @override

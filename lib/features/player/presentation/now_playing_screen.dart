@@ -9,7 +9,7 @@ import 'package:alloy/features/player/domain/playback_state.dart';
 import 'package:alloy/features/player/presentation/player_notifier.dart';
 import 'package:alloy/features/player/presentation/player_panel_provider.dart';
 import 'package:alloy/features/player/presentation/widgets/cover_gradient.dart';
-import 'package:alloy/features/player/presentation/widgets/overflow_menu.dart';
+import 'package:alloy/features/player/presentation/widgets/now_playing_actions.dart';
 import 'package:alloy/l10n/app_localizations.dart';
 import 'package:alloy/shared/design/text_styles.dart';
 import 'package:alloy/shared/design/tokens.dart';
@@ -203,12 +203,9 @@ class _PanelContent extends ConsumerWidget {
               ),
               if (track != null) ...[
                 const SizedBox(height: AppSpacing.sm),
-                Align(
-                  alignment: Alignment.centerRight,
-                  child: NowPlayingOverflowMenu(
-                    onStop: () =>
-                        unawaited(ref.read(playerProvider.notifier).stop()),
-                  ),
+                NowPlayingActions(
+                  onStop: () =>
+                      unawaited(ref.read(playerProvider.notifier).stop()),
                 ),
               ],
             ],

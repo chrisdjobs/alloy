@@ -441,6 +441,18 @@ abstract class AppLocalizations {
   /// **'Close'**
   String get close;
 
+  /// Now-playing action that shares the current track
+  ///
+  /// In en, this message translates to:
+  /// **'Share'**
+  String get share;
+
+  /// Now-playing action that opens the playback queue
+  ///
+  /// In en, this message translates to:
+  /// **'Queue'**
+  String get queue;
+
   /// Playback action that goes back to the previous track
   ///
   /// In en, this message translates to:
@@ -681,7 +693,7 @@ abstract class AppLocalizations {
   /// **'{hours} h'**
   String durationHours(int hours);
 
-  /// Statistics row that will open the lyrics screen
+  /// Lyrics of the current track: statistics row and player action
   ///
   /// In en, this message translates to:
   /// **'Lyrics'**
