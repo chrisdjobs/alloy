@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:alloy/features/player/domain/playback_state.dart';
 import 'package:alloy/features/player/presentation/player_notifier.dart';
 import 'package:alloy/l10n/app_localizations.dart';
@@ -51,7 +53,16 @@ class MiniPlayer extends ConsumerWidget {
   }
 }
 
-class _PlayerBar extends ConsumerWidget {
+/// Horizontal travel (logical pixels) that switches track when a drag ends.
+const double _miniSwipeThreshold = 60;
+
+/// How much the title and artist fade out at the swipe threshold.
+const double _miniSwipeFade = 0.6;
+
+/// How far the title and artist follow the finger, as a fraction of the drag.
+const double _miniSwipeDrift = 0.25;
+
+class _PlayerBar extends ConsumerStatefulWidget {
   const new({
     required this.state,
     required this.leading,
@@ -65,15 +76,78 @@ class _PlayerBar extends ConsumerWidget {
   final VoidCallback? onOpen;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<_PlayerBar> createState() => _PlayerBarState();
+}
+
+class _PlayerBarState extends ConsumerState<_PlayerBar>
+    with SingleTickerProviderStateMixin {
+  /// Horizontal travel of the finger since the drag started.
+  var _dragStartX = 0.0;
+  var _dragDeltaX = 0.0;
+
+  /// Horizontal offset of the text while it follows the finger.
+  late final AnimationController _shift;
+
+  @override
+  void initState() {
+    super.initState();
+    _shift = AnimationController.unbounded(vsync: this);
+  }
+
+  @override
+  void dispose() {
+    _shift.dispose();
+    super.dispose();
+  }
+
+  void _onDragStart(DragStartDetails details) {
+    _dragStartX = details.globalPosition.dx;
+    _dragDeltaX = 0;
+    _shift.stop();
+  }
+
+  void _onDragUpdate(DragUpdateDetails details) {
+    _dragDeltaX = details.globalPosition.dx - _dragStartX;
+    _shift.value = _dragDeltaX;
+  }
+
+  void _onDragEnd(DragEndDetails details) {
+    final commit = _dragDeltaX.abs() >= _miniSwipeThreshold;
+    final direction = _dragDeltaX.sign;
+    _settle();
+    if (!commit) return;
+    final notifier = ref.read(playerProvider.notifier);
+    unawaited(direction < 0 ? notifier.next() : notifier.previous());
+  }
+
+  void _onDragCancel() {
+    _dragDeltaX = 0;
+    _settle();
+  }
+
+  /// Returns the text to its resting position after a drag.
+  void _settle() {
+    _shift.animateTo(
+      0,
+      duration: AppDurations.playerSwipe,
+      curve: Curves.easeOutCubic,
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
     final notifier = ref.read(playerProvider.notifier);
-    final track = state.track!;
+    final track = widget.state.track!;
     final accent = Theme.of(context).colorScheme.primary;
 
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
-      onTap: onOpen,
+      onTap: widget.onOpen,
+      onHorizontalDragStart: _onDragStart,
+      onHorizontalDragUpdate: _onDragUpdate,
+      onHorizontalDragEnd: _onDragEnd,
+      onHorizontalDragCancel: _onDragCancel,
       child: Padding(
         padding: const EdgeInsets.fromLTRB(
           AppSpacing.sm,
@@ -87,7 +161,7 @@ class _PlayerBar extends ConsumerWidget {
             children: [
               Positioned.fill(
                 child:
-                    backdrop ??
+                    widget.backdrop ??
                     CoverBackdrop(
                       artworkRef: track.artworkRef,
                       fallback: DecoratedBox(
@@ -107,7 +181,7 @@ class _PlayerBar extends ConsumerWidget {
               Material(
                 type: MaterialType.transparency,
                 child: InkWell(
-                  onTap: onOpen,
+                  onTap: widget.onOpen,
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
@@ -120,44 +194,65 @@ class _PlayerBar extends ConsumerWidget {
                         ),
                         child: Row(
                           children: [
-                            leading ??
+                            widget.leading ??
                                 ArtworkImage(
                                   artworkRef: track.artworkRef,
                                   size: AppSizing.coverMiniPlayer,
                                 ),
                             const SizedBox(width: AppSpacing.md),
                             Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Text(
-                                    track.title,
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: AppTextStyles.trackTitle.copyWith(
-                                      color: AppColors.textPrimary,
+                              child: AnimatedBuilder(
+                                animation: _shift,
+                                builder: (context, child) {
+                                  final progress =
+                                      (_shift.value.abs() / _miniSwipeThreshold)
+                                          .clamp(0.0, 1.0);
+                                  return Opacity(
+                                    opacity: 1 - _miniSwipeFade * progress,
+                                    child: Transform.translate(
+                                      offset: Offset(
+                                        _shift.value * _miniSwipeDrift,
+                                        0,
+                                      ),
+                                      child: child,
                                     ),
-                                  ),
-                                  if (track.artist != null)
+                                  );
+                                },
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
                                     Text(
-                                      track.artist!,
+                                      track.title,
                                       maxLines: 1,
                                       overflow: TextOverflow.ellipsis,
-                                      style: AppTextStyles.trackArtist.copyWith(
-                                        color: AppColors.textSecondary,
+                                      style: AppTextStyles.trackTitle.copyWith(
+                                        color: AppColors.textPrimary,
                                       ),
                                     ),
-                                ],
+                                    if (track.artist != null)
+                                      Text(
+                                        track.artist!,
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: AppTextStyles.trackArtist
+                                            .copyWith(
+                                              color: AppColors.textSecondary,
+                                            ),
+                                      ),
+                                  ],
+                                ),
                               ),
                             ),
                             IconButton(
                               onPressed: () async {
                                 await notifier.togglePlayPause();
                               },
-                              tooltip: state.playing ? l10n.pause : l10n.play,
+                              tooltip: widget.state.playing
+                                  ? l10n.pause
+                                  : l10n.play,
                               icon: Icon(
-                                state.playing
+                                widget.state.playing
                                     ? context.icons.pause
                                     : context.icons.play,
                                 color: accent,
@@ -179,7 +274,7 @@ class _PlayerBar extends ConsumerWidget {
                       SizedBox(
                         height: 2,
                         child: LinearProgressIndicator(
-                          value: _progress(state),
+                          value: _progress(widget.state),
                           backgroundColor: Colors.transparent,
                           color: accent,
                         ),
