@@ -11,7 +11,7 @@ void main() {
     verifier = SchemaVerifier(GeneratedHelper());
   });
 
-  test('version 1 upgrades to 2 keeping tracks and adding the index', () async {
+  test('version 1 upgrades to the latest schema keeping tracks', () async {
     final schema = await verifier.schemaAt(1);
     schema.rawDatabase.execute('''
       INSERT INTO tracks (id, source_id, source_item_id, title)
@@ -19,12 +19,13 @@ void main() {
     ''');
 
     final database = AppDatabase.withExecutor(schema.newConnection());
-    await verifier.migrateAndValidate(database, 2);
+    await verifier.migrateAndValidate(database, 3);
 
     final rows = await database.select(database.tracks).get();
     expect(rows.single.title, 'Kept');
     expect(rows.single.artworkRef, isNull);
-    expect(database.schemaVersion, 2);
+    expect(rows.single.lyrics, isNull);
+    expect(database.schemaVersion, 3);
 
     final indexes = await database
         .customSelect(

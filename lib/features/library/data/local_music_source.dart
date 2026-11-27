@@ -88,6 +88,7 @@ final class LocalMusicSource implements MusicSource {
       bitrateKbps: Value(tags.bitrateKbps),
       format: Value(tags.format),
       artworkRef: Value(tags.artworkRef),
+      lyrics: Value(tags.lyrics),
       // dateAdded is absent so a rescan keeps the original value.
     );
   }
