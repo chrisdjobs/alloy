@@ -15,6 +15,7 @@ class LocalAudioTags {
     this.bitrateKbps,
     this.format,
     this.artworkRef,
+    this.lyrics,
   });
 
   /// Absolute path of the audio file.
@@ -49,6 +50,12 @@ class LocalAudioTags {
   /// The hash is the opaque artwork reference stored on the track; it lets all
   /// tracks of one album share a single cached image.
   final String? artworkRef;
+
+  /// Lyrics embedded in the tags, plain text or LRC.
+  ///
+  /// Read on demand by the player; the track model never carries the whole
+  /// text, so lists do not load it for every row.
+  final String? lyrics;
 }
 
 /// Reads tags from local audio files.

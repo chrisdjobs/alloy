@@ -83,6 +83,7 @@ LocalAudioTags _readTags(String path, Map<String, Uint8List?> folderCovers) {
           : (metadata.bitrate! / 1000).round(),
       format: format.isEmpty ? null : format,
       artworkRef: _hash(cover),
+      lyrics: _clean(metadata.lyrics),
     );
   } on Exception {
     // Damaged files stay in the library under their file name.
