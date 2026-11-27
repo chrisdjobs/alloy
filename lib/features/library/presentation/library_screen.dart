@@ -1,11 +1,17 @@
 import 'dart:async';
 
+import 'package:alloy/features/library/domain/album.dart';
+import 'package:alloy/features/library/domain/artist.dart';
 import 'package:alloy/features/library/domain/track.dart';
 import 'package:alloy/features/library/domain/track_sort.dart';
+import 'package:alloy/features/library/presentation/album_grid.dart';
+import 'package:alloy/features/library/presentation/album_screen.dart';
+import 'package:alloy/features/library/presentation/artist_list.dart';
+import 'package:alloy/features/library/presentation/artist_screen.dart';
 import 'package:alloy/features/library/presentation/library_notifier.dart';
 import 'package:alloy/features/library/presentation/library_options_sheet.dart';
+import 'package:alloy/features/library/presentation/library_track_list.dart';
 import 'package:alloy/features/library/presentation/library_view_options.dart';
-import 'package:alloy/features/library/presentation/track_tile.dart';
 import 'package:alloy/l10n/app_localizations.dart';
 import 'package:alloy/shared/design/text_styles.dart';
 import 'package:alloy/shared/design/tokens.dart';
@@ -15,13 +21,7 @@ import 'package:alloy/shared/widgets/tbd_placeholder.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:material_ui/material_ui.dart';
 
-/// Plays [tracks] starting at [index].
-typedef PlayTracksCallback = void Function(List<Track> tracks, int index);
-
-/// Plays [tracks] in random order.
-typedef ShuffleTracksCallback = void Function(List<Track> tracks);
-
-/// Library screen: track list with empty, loading, error and data states.
+/// Library screen: browsable tracks, artists and albums.
 ///
 /// Playback callbacks are injected by the router so this feature never imports
 /// the player feature's presentation layer.
@@ -54,6 +54,8 @@ class LibraryScreen extends ConsumerStatefulWidget {
 class _LibraryScreenState extends ConsumerState<LibraryScreen>
     with SingleTickerProviderStateMixin {
   late final TabController _tabController;
+  Artist? _artist;
+  Album? _album;
 
   @override
   void initState() {
@@ -79,6 +81,13 @@ class _LibraryScreenState extends ConsumerState<LibraryScreen>
     }
   }
 
+  void _clearSelection() {
+    setState(() {
+      _artist = null;
+      _album = null;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
@@ -89,6 +98,39 @@ class _LibraryScreenState extends ConsumerState<LibraryScreen>
     final notifier = ref.read(libraryProvider.notifier);
     final searchActive = ref.watch(librarySearchActiveProvider);
     final query = ref.watch(librarySearchQueryProvider);
+    final library = tracks.value ?? const <Track>[];
+
+    final artist = _artist;
+    if (artist != null) {
+      return _DetailScope(
+        onBack: _clearSelection,
+        child: ArtistScreen(
+          artist: artist,
+          tracks: library,
+          onBack: _clearSelection,
+          onPlay: widget.onPlay,
+          onShuffleAll: widget.onShuffleAll,
+          currentTrackId: widget.currentTrackId,
+          isPlaying: widget.isPlaying,
+        ),
+      );
+    }
+
+    final album = _album;
+    if (album != null) {
+      return _DetailScope(
+        onBack: _clearSelection,
+        child: AlbumScreen(
+          album: album,
+          tracks: library,
+          onBack: _clearSelection,
+          onPlay: widget.onPlay,
+          onShuffleAll: widget.onShuffleAll,
+          currentTrackId: widget.currentTrackId,
+          isPlaying: widget.isPlaying,
+        ),
+      );
+    }
 
     // Keeps the bar in sync when another surface selects a section.
     ref.listen(libraryTabProvider, (previous, next) {
@@ -173,8 +215,14 @@ class _LibraryScreenState extends ConsumerState<LibraryScreen>
               children: [
                 _tracksBody(tracks, options, query),
                 const _ComingSoonTab(tab: LibraryTab.playlists),
-                const _ComingSoonTab(tab: LibraryTab.artists),
-                const _ComingSoonTab(tab: LibraryTab.albums),
+                _ArtistsBody(
+                  tracks: library,
+                  onOpen: (artist) => setState(() => _artist = artist),
+                ),
+                _AlbumsBody(
+                  tracks: library,
+                  onOpen: (album) => setState(() => _album = album),
+                ),
               ],
             ),
           ),
@@ -215,13 +263,32 @@ class _LibraryScreenState extends ConsumerState<LibraryScreen>
       return const _NoResultsState();
     }
 
-    return _TrackList(
+    return LibraryTrackList(
       tracks: filtered,
       showDuration: options.showDuration,
       currentTrackId: widget.currentTrackId,
       isPlaying: widget.isPlaying,
       onPlay: widget.onPlay,
       onShuffleAll: widget.onShuffleAll,
+    );
+  }
+}
+
+/// Turns the system back gesture into leaving a detail before the branch.
+class _DetailScope extends StatelessWidget {
+  const new({required this.onBack, required this.child});
+
+  final VoidCallback onBack;
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (didPop, _) {
+        if (!didPop) onBack();
+      },
+      child: child,
     );
   }
 }
@@ -258,6 +325,51 @@ List<Track> _filterTracks(List<Track> tracks, String query) {
           (track.album?.toLowerCase().contains(needle) ?? false))
         track,
   ];
+}
+
+class _ArtistsBody extends StatelessWidget {
+  const new({required this.tracks, required this.onOpen});
+
+  final List<Track> tracks;
+  final ValueChanged<Artist> onOpen;
+
+  @override
+  Widget build(BuildContext context) {
+    final artists = artistsFromTracks(tracks);
+    if (artists.isEmpty) return const _NothingHere();
+    return ArtistList(artists: artists, onOpen: onOpen);
+  }
+}
+
+class _AlbumsBody extends StatelessWidget {
+  const new({required this.tracks, required this.onOpen});
+
+  final List<Track> tracks;
+  final ValueChanged<Album> onOpen;
+
+  @override
+  Widget build(BuildContext context) {
+    final albums = albumsFromTracks(tracks);
+    if (albums.isEmpty) return const _NothingHere();
+    return AlbumGrid(albums: albums, onOpen: onOpen);
+  }
+}
+
+/// Empty artists and albums tabs: the tracks have no tag for the section.
+class _NothingHere extends StatelessWidget {
+  const new();
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+
+    return Center(
+      child: Text(
+        l10n.noTracksFound,
+        style: AppTextStyles.body.copyWith(color: AppColors.textSecondary),
+      ),
+    );
+  }
 }
 
 class _LibrarySearchField extends ConsumerStatefulWidget {
@@ -411,84 +523,6 @@ class _ScanBanner extends ConsumerWidget {
             ),
           ),
         ],
-      ),
-    );
-  }
-}
-
-class _TrackList extends StatelessWidget {
-  const new({
-    required this.tracks,
-    required this.showDuration,
-    required this.currentTrackId,
-    required this.isPlaying,
-    required this.onPlay,
-    required this.onShuffleAll,
-  });
-
-  final List<Track> tracks;
-  final bool showDuration;
-  final String? currentTrackId;
-  final bool isPlaying;
-  final PlayTracksCallback onPlay;
-  final ShuffleTracksCallback onShuffleAll;
-
-  @override
-  Widget build(BuildContext context) {
-    return ListView.builder(
-      padding: const EdgeInsets.only(bottom: AppSpacing.xl),
-      itemCount: tracks.length + 1,
-      itemBuilder: (context, index) {
-        if (index == 0) {
-          return _ShuffleAllRow(onTap: () => onShuffleAll(tracks));
-        }
-        final trackIndex = index - 1;
-        final track = tracks[trackIndex];
-        return TrackTile(
-          track: track,
-          showDuration: showDuration,
-          isCurrent: track.id == currentTrackId,
-          isPlaying: isPlaying,
-          onTap: () => onPlay(tracks, trackIndex),
-        );
-      },
-    );
-  }
-}
-
-class _ShuffleAllRow extends StatelessWidget {
-  const new({required this.onTap});
-
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context);
-
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: AppSpacing.page),
-      child: InkWell(
-        onTap: onTap,
-        borderRadius: AppRadii.card,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: AppSpacing.xl),
-          child: Row(
-            children: [
-              Icon(
-                context.icons.shuffle,
-                color: AppColors.textPrimary,
-                size: 20,
-              ),
-              const SizedBox(width: AppSpacing.xl),
-              Text(
-                l10n.shuffleAll.toUpperCase(),
-                style: AppTextStyles.action.copyWith(
-                  color: AppColors.textPrimary,
-                ),
-              ),
-            ],
-          ),
-        ),
       ),
     );
   }
