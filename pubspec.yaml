@@ -48,3 +48,6 @@ dev_dependencies:
 flutter:
   uses-material-design: true
   generate: true
+  assets:
+    - assets/icon/presets/default/icon_legacy_1024.png
+    - assets/icon/presets/cpunk/icon_legacy_1024.png

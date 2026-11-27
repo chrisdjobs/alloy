@@ -16,12 +16,18 @@ abstract final class AppTheme {
     Color? base,
   }) {
     final background = base ?? AppGradientPresets.active.base;
+    // Icon-derived accents can be dark, so the text over them follows the
+    // accent's own brightness instead of the fixed design default.
+    final onAccent =
+        ThemeData.estimateBrightnessForColor(accent) == Brightness.dark
+        ? AppColors.textPrimary
+        : AppColors.onAccent;
     final colorScheme =
         ColorScheme.dark(
           primary: accent,
-          onPrimary: AppColors.onAccent,
+          onPrimary: onAccent,
           secondary: accent,
-          onSecondary: AppColors.onAccent,
+          onSecondary: onAccent,
           surface: AppColors.background,
           onSurface: AppColors.textPrimary,
           error: AppColors.error,

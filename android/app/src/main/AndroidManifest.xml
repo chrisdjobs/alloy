@@ -32,11 +32,40 @@
               android:name="io.flutter.embedding.android.NormalTheme"
               android:resource="@style/NormalTheme"
               />
+        </activity>
+        <!-- One launcher alias per app icon. The app enables exactly one with
+             PackageManager; the disabled ones stay hidden from the drawer.
+             The aliases start the trampoline, never MainActivity: disabling an
+             alias must not finish the task that is running the app. -->
+        <activity-alias
+            android:name=".MainActivityDefault"
+            android:enabled="true"
+            android:exported="true"
+            android:icon="@mipmap/ic_launcher_default"
+            android:targetActivity=".LauncherActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
-        </activity>
+        </activity-alias>
+        <activity-alias
+            android:name=".MainActivityCpunk"
+            android:enabled="false"
+            android:exported="true"
+            android:icon="@mipmap/ic_launcher_cpunk"
+            android:targetActivity=".LauncherActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity-alias>
+        <!-- Hands the launcher intent to MainActivity and disappears. -->
+        <activity
+            android:name=".LauncherActivity"
+            android:excludeFromRecents="true"
+            android:exported="true"
+            android:noHistory="true"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
         <!-- Background playback service exposed to the system media session. -->
         <service android:name="com.ryanheise.audioservice.AudioService"
             android:foregroundServiceType="mediaPlayback"

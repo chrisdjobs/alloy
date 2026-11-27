@@ -12,7 +12,8 @@ The geometry mirrors Flutter's ``RadialGradient`` exactly:
 The same math paints the icon PNG and the Home/Me glow in Flutter. ``glow`` is
 not randomized: it is derived from the icon's own layers by [derive_glow], so
 every Home/Me/pill build picks up the same wash and old files are re-derived on
-load.
+load. ``accent`` is derived too: the first layer of a generated icon, or the
+dominant chromatic color of a hand-made PNG.
 """
 
 from __future__ import annotations
@@ -116,8 +117,10 @@ def normalize_preset(raw: object) -> dict:
         "layers": layers,
         # Replaced below: glow is always derived, never read from the file. Old
         # files may still carry ``home`` (schema 2) or ``pill`` (schema 4);
-        # both are ignored.
+        # both are ignored. ``accent`` needs the icon files, so apply_gradient
+        # fills it once the preset is written to disk.
         "glow": None,
+        "accent": None,
         "render": {"grain": round(grain, 4), "seed": seed},
         "icon": icon,
     }
@@ -154,6 +157,61 @@ def derive_glow(preset: dict) -> list[dict]:
             }
         )
     return glow
+
+
+def derive_accent(preset: dict, root: Path) -> str:
+    """Return the icon's dominant color as ``#RRGGBB``.
+
+    A generated preset paints its icon from ``layers``, so the first layer is
+    the dominant one. A hand-made icon is read from its legacy PNG: the bucket
+    with the most chroma wins, so a small bright mark beats a large dark
+    background and the grey/white details around it.
+    """
+    icon = preset.get("icon") or {}
+    if not icon.get("hand_made"):
+        return preset["layers"][0]["stops"][0]["color"]
+
+    legacy = icon.get("legacy")
+    if not legacy:
+        raise PresetError(
+            f"preset {preset['id']!r} is hand_made but has no icon.legacy"
+        )
+    path = root / legacy
+    try:
+        with Image.open(path) as image:
+            rgba = np.asarray(image.convert("RGBA"))
+    except OSError as error:
+        raise PresetError(
+            f"could not read the icon of {preset['id']!r}: {error}"
+        ) from error
+
+    color = _dominant_chromatic(rgba)
+    if color is None:
+        raise PresetError(
+            f"{path} has no chromatic pixels; a hand-made icon needs a colored mark"
+        )
+    return format_hex(color)
+
+
+def _dominant_chromatic(rgba: np.ndarray) -> tuple[int, int, int] | None:
+    """Most salient chromatic bucket of an RGBA icon, or None when it is grey."""
+    pixels = rgba[..., :3].astype(np.float32) / 255.0
+    alpha = rgba[..., 3]
+    high = pixels.max(axis=2)
+    low = pixels.min(axis=2)
+    chroma = high - low
+    saturation = np.divide(chroma, high, out=np.zeros_like(high), where=high > 0)
+    mask = (alpha > 128) & (saturation >= 0.35) & (high >= 0.15)
+    if not mask.any():
+        return None
+
+    selected = pixels[mask]
+    buckets = np.round(selected * 31).astype(np.int32)
+    keys = buckets[:, 0] * 1024 + buckets[:, 1] * 32 + buckets[:, 2]
+    scores = np.bincount(keys, weights=chroma[mask])
+    best = int(scores.argmax())
+    mean = np.round(selected[keys == best].mean(axis=0) * 255).astype(int)
+    return int(mean[0]), int(mean[1]), int(mean[2])
 
 
 def _gradient(raw: object, where: str) -> dict:

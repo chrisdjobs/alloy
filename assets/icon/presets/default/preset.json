@@ -1,0 +1,120 @@
+{
+  "schema": 5,
+  "id": "default",
+  "name": "default",
+  "approximate": false,
+  "base": "#0D0D0D",
+  "layers": [
+    {
+      "center": [
+        -0.4,
+        -0.55
+      ],
+      "radius": 1.1,
+      "stops": [
+        {
+          "color": "#FF5A1F",
+          "position": 0.0,
+          "alpha": 0.9
+        },
+        {
+          "color": "#FF5A1F",
+          "position": 0.5,
+          "alpha": 0.3
+        },
+        {
+          "color": "#FF5A1F",
+          "position": 1.0,
+          "alpha": 0.0
+        }
+      ]
+    },
+    {
+      "center": [
+        0.65,
+        0.3
+      ],
+      "radius": 0.7,
+      "stops": [
+        {
+          "color": "#FFB300",
+          "position": 0.0,
+          "alpha": 0.5
+        },
+        {
+          "color": "#FFB300",
+          "position": 0.6,
+          "alpha": 0.18
+        },
+        {
+          "color": "#FFB300",
+          "position": 1.0,
+          "alpha": 0.0
+        }
+      ]
+    }
+  ],
+  "glow": [
+    {
+      "center": [
+        -0.4,
+        -0.5813
+      ],
+      "radius": 1.045,
+      "stops": [
+        {
+          "color": "#FF5A1F",
+          "position": 0.0,
+          "alpha": 0.54
+        },
+        {
+          "color": "#FF5A1F",
+          "position": 0.5,
+          "alpha": 0.18
+        },
+        {
+          "color": "#FF5A1F",
+          "position": 1.0,
+          "alpha": 0.0
+        }
+      ]
+    },
+    {
+      "center": [
+        0.65,
+        -0.2625
+      ],
+      "radius": 0.665,
+      "stops": [
+        {
+          "color": "#FFB300",
+          "position": 0.0,
+          "alpha": 0.3
+        },
+        {
+          "color": "#FFB300",
+          "position": 0.6,
+          "alpha": 0.108
+        },
+        {
+          "color": "#FFB300",
+          "position": 1.0,
+          "alpha": 0.0
+        }
+      ]
+    }
+  ],
+  "accent": "#FF5A1F",
+  "render": {
+    "grain": 0.01,
+    "seed": 1024
+  },
+  "icon": {
+    "hand_made": true,
+    "dir": "assets/icon/presets/default",
+    "legacy": "assets/icon/presets/default/icon_legacy_1024.png",
+    "adaptive_background": "assets/icon/presets/default/icon_adaptive_background.png",
+    "foreground": "assets/icon/presets/default/ic_launcher_foreground.png",
+    "monochrome": "assets/icon/ic_launcher_monochrome.png"
+  }
+}

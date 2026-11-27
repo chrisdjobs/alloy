@@ -12,6 +12,8 @@ final class GradientPreset {
     required this.id,
     required this.name,
     required this.base,
+    required this.accent,
+    required this.iconAsset,
     required this.glow,
   });
 
@@ -23,6 +25,12 @@ final class GradientPreset {
 
   /// Opaque page background color.
   final Color base;
+
+  /// Dominant color of the icon, used as the accent when the user asks for it.
+  final Color accent;
+
+  /// Legacy icon declared in `pubspec.yaml`, shown in the app icon picker.
+  final String iconAsset;
 
   /// One radial gradient per glow layer, painted behind the Home header,
   /// inside the Me identity card and inside the nav pill. The same order as the
@@ -38,6 +46,8 @@ abstract final class AppGradientPresets {
       id: 'cpunk',
       name: 'cpunk',
       base: Color(0xFF0C110B),
+      accent: Color(0xFF19F2A5),
+      iconAsset: 'assets/icon/presets/cpunk/icon_legacy_1024.png',
       glow: [
         RadialGradient(
           center: Alignment(-0.408, -0.5959),
@@ -59,6 +69,27 @@ abstract final class AppGradientPresets {
         ),
       ],
     ),
+    GradientPreset(
+      id: 'default',
+      name: 'default',
+      base: Color(0xFF0D0D0D),
+      accent: Color(0xFFFF5A1F),
+      iconAsset: 'assets/icon/presets/default/icon_legacy_1024.png',
+      glow: [
+        RadialGradient(
+          center: Alignment(-0.4, -0.5813),
+          radius: 1.045,
+          colors: [Color(0x8AFF5A1F), Color(0x2EFF5A1F), Color(0x00FF5A1F)],
+          stops: [0, 0.5, 1],
+        ),
+        RadialGradient(
+          center: Alignment(0.65, -0.2625),
+          radius: 0.665,
+          colors: [Color(0x4CFFB300), Color(0x1CFFB300), Color(0x00FFB300)],
+          stops: [0, 0.6, 1],
+        ),
+      ],
+    ),
   ];
 
   /// The preset with [id], or null when it was never applied.
@@ -69,7 +100,7 @@ abstract final class AppGradientPresets {
     return null;
   }
 
-  static const String _activeId = 'cpunk';
+  static const String _activeId = 'default';
 
   /// Preset selected by the active id in `assets/icon/presets.json`.
   static final GradientPreset active = byId(_activeId)!;

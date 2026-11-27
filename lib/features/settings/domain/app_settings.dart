@@ -39,6 +39,12 @@ abstract class AppSettings with _$AppSettings {
     /// Accent color as ARGB; null keeps the design default.
     int? accentArgb,
 
+    /// Whether the accent follows the dominant color of the app icon.
+    @Default(false) bool accentFromIcon,
+
+    /// Launcher icon preset id; unknown ids fall back to the build default.
+    @Default('default') String appIconId,
+
     /// Icon pack drawn by [AppIconPack].
     @Default(AppIconPack.lucide) AppIconPack iconPack,
 

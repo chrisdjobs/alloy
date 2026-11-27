@@ -36,6 +36,18 @@
   "@libraryOptions": {
     "description": "Opens the sheet with the library sort and row options"
   },
+  "search": "Search",
+  "@search": {
+    "description": "Tooltip of the library search button"
+  },
+  "searchHint": "Search by title or artist",
+  "@searchHint": {
+    "description": "Hint of the library search field"
+  },
+  "noSearchResults": "No results",
+  "@noSearchResults": {
+    "description": "Empty state of the library search when nothing matches"
+  },
   "sortBy": "Sort",
   "@sortBy": {
     "description": "Section label above the sort chips of the library sheet"
@@ -83,6 +95,30 @@
   "iconsSection": "Icons",
   "@iconsSection": {
     "description": "Section of the general settings with the icon pack choices"
+  },
+  "appIconSection": "App icon",
+  "@appIconSection": {
+    "description": "Section of the general settings that picks the launcher icon"
+  },
+  "appIconHint": "The new icon is applied when you leave Alloy.",
+  "@appIconHint": {
+    "description": "Note under the app icon picker about when the launcher refreshes"
+  },
+  "iconNameDefault": "Default",
+  "@iconNameDefault": {
+    "description": "Name of the default four-bar app icon"
+  },
+  "iconNameCpunk": "cpunk",
+  "@iconNameCpunk": {
+    "description": "Name of the cpunk gradient app icon"
+  },
+  "accentFromIcon": "Icon Color",
+  "@accentFromIcon": {
+    "description": "Toggle that makes the accent follow the app icon's dominant color"
+  },
+  "accentFromIconSubtitle": "The accent takes your app icon's colour and changes with it.",
+  "@accentFromIconSubtitle": {
+    "description": "Explanation under the colour-of-your-icon toggle"
   },
   "appearanceSummary": "Accent color · {iconPack}",
   "@appearanceSummary": {

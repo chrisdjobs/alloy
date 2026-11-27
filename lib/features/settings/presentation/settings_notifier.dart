@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:alloy/core/logger.dart';
+import 'package:alloy/core/platform/app_icon_switcher.dart';
 import 'package:alloy/features/settings/domain/app_settings.dart';
 import 'package:alloy/features/settings/domain/settings_repository.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -14,6 +15,14 @@ part 'settings_notifier.g.dart';
 /// fallback keeps widgets and tests working without storage.
 final settingsRepositoryProvider = Provider<SettingsRepository>((ref) {
   return InMemorySettingsRepository();
+});
+
+/// Switches the launcher icon.
+///
+/// Bootstrap overrides it on Android and Linux; the no-op fallback keeps other
+/// hosts and tests working.
+final appIconSwitcherProvider = Provider<AppIconSwitcher>((ref) {
+  return const NoopAppIconSwitcher();
 });
 
 /// Exposes [AppSettings] and persists every change.
@@ -57,8 +66,24 @@ class SettingsNotifier extends _$SettingsNotifier {
   }
 
   /// Sets the accent color; null restores the design default.
+  ///
+  /// Picking a color also turns off [AppSettings.accentFromIcon].
   Future<void> setAccent(int? argb) {
-    return replace(state.copyWith(accentArgb: argb));
+    return replace(state.copyWith(accentArgb: argb, accentFromIcon: false));
+  }
+
+  /// Whether the accent follows the dominant color of the app icon.
+  Future<void> setAccentFromIcon(bool enabled) {
+    return replace(state.copyWith(accentFromIcon: enabled));
+  }
+
+  /// Selects the launcher icon preset and applies it to the host.
+  Future<void> setAppIcon(String id) async {
+    await replace(state.copyWith(appIconId: id));
+    final applied = await ref.read(appIconSwitcherProvider).setIcon(id);
+    if (!applied) {
+      Logger.warning('The host could not apply the app icon $id');
+    }
   }
 
   /// Sets the language override; null follows the system locale.

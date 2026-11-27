@@ -20,6 +20,8 @@ final class GradientPreset {
     required this.id,
     required this.name,
     required this.base,
+    required this.accent,
+    required this.iconAsset,
     required this.glow,
   });
 
@@ -31,6 +33,12 @@ final class GradientPreset {
 
   /// Opaque page background color.
   final Color base;
+
+  /// Dominant color of the icon, used as the accent when the user asks for it.
+  final Color accent;
+
+  /// Legacy icon declared in `pubspec.yaml`, shown in the app icon picker.
+  final String iconAsset;
 
   /// One radial gradient per glow layer, painted behind the Home header,
   /// inside the Me identity card and inside the nav pill. The same order as the
@@ -80,11 +88,25 @@ def render_dart(registry: dict) -> str:
 
 
 def _preset_block(preset: dict) -> str:
+    accent = preset.get("accent")
+    if not accent:
+        raise gp.PresetError(
+            f"preset {preset['id']!r} has no derived accent; "
+            "run apply_gradient.py --refresh"
+        )
+    icon = preset.get("icon") or {}
+    icon_asset = icon.get("legacy")
+    if not icon_asset:
+        raise gp.PresetError(
+            f"preset {preset['id']!r} has no icon.legacy for the icon picker"
+        )
     return (
         "    GradientPreset(\n"
         f"      id: '{preset['id']}',\n"
         f"      name: '{preset['name']}',\n"
         f"      base: Color({gp.argb_hex(preset['base'])}),\n"
+        f"      accent: Color({gp.argb_hex(accent)}),\n"
+        f"      iconAsset: '{icon_asset}',\n"
         f"{_gradient_list('glow', preset['glow'])}"
         "    ),\n"
     )

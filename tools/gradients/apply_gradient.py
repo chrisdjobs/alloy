@@ -32,6 +32,7 @@ REGISTRY = Path("assets/icon/presets.json")
 PRESETS_DIR = Path("assets/icon/presets")
 DART_FILE = Path("lib/shared/design/gradient_presets.dart")
 LAUNCHER_CONFIG = Path("flutter_launcher_icons.yaml")
+ANDROID_RES = Path("android/app/src/main/res")
 FOREGROUND = Path("assets/icon/ic_launcher_foreground.png")
 MONOCHROME = Path("assets/icon/ic_launcher_monochrome.png")
 
@@ -41,8 +42,42 @@ ADAPTIVE_SIZE = 432
 # foreground content spans 78% of the width.
 LEGACY_CORNER = 0.215
 LEGACY_CONTENT = 0.78
+# Keep adaptive artwork readable in the launcher: 62% of the canvas, centered,
+# which stays inside the safe circle for this icon's aspect.
+ADAPTIVE_CONTENT = 0.62
 # Android's 66dp safe circle on the 108dp adaptive canvas.
 SAFE_RADIUS = 33 / 108
+
+# Launcher resources addressed by the <activity-alias> of each preset.
+MIPMAP_SIZES = (
+    ("mdpi", 48),
+    ("hdpi", 72),
+    ("xhdpi", 96),
+    ("xxhdpi", 144),
+    ("xxxhdpi", 192),
+)
+DRAWABLE_SIZES = (
+    ("mdpi", 108),
+    ("hdpi", 162),
+    ("xhdpi", 216),
+    ("xxhdpi", 324),
+    ("xxxhdpi", 432),
+)
+ADAPTIVE_ICON = """<?xml version="1.0" encoding="utf-8"?>
+<adaptive-icon xmlns:android="http://schemas.android.com/apk/res/android">
+  <background android:drawable="@drawable/{name}_background"/>
+  <foreground>
+      <inset
+          android:drawable="@drawable/{name}_foreground"
+          android:inset="16%" />
+  </foreground>
+  <monochrome>
+      <inset
+          android:drawable="@drawable/{name}_monochrome"
+          android:inset="16%" />
+  </monochrome>
+</adaptive-icon>
+"""
 
 
 def main() -> None:
@@ -120,6 +155,7 @@ def main() -> None:
         _write_background(preset, root / background_path)
         changed += [legacy_path.as_posix(), background_path.as_posix()]
 
+    preset["accent"] = gp.derive_accent(preset, root)
     (root / preset_dir).mkdir(parents=True, exist_ok=True)
     (root / preset_dir / "preset.json").write_text(
         gp.to_json(preset),
@@ -130,8 +166,10 @@ def main() -> None:
     registry["presets"][preset_id] = preset
     if registry.get("active") is None or args.set_active:
         registry["active"] = preset_id
+    _derive_accents(registry, root)
     _write_registry(root, registry)
     dart_gen.write_dart(registry, root / DART_FILE)
+    _write_android_icons(registry, root)
 
     _check_safe_zone(foreground, config)
 
@@ -165,8 +203,14 @@ def _refresh(root: Path) -> None:
             "which is not one of its presets"
         )
 
+    _derive_accents(registry, root)
     _write_registry(root, registry)
     dart_gen.write_dart(registry, root / DART_FILE)
+    for key, preset in refreshed.items():
+        path = root / PRESETS_DIR / key / "preset.json"
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text(gp.to_json(preset), encoding="utf8")
+    _write_android_icons(registry, root)
     print(f"Refreshed {len(refreshed)} presets (active: {registry['active']})")
     print(f"  {REGISTRY.as_posix()}")
     print(f"  {DART_FILE.as_posix()}")
@@ -199,6 +243,105 @@ def _write_background(preset: dict, path: Path) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     image = Image.fromarray(gp.render_preset(preset, ADAPTIVE_SIZE), "RGB")
     image.save(path, format="PNG")
+
+
+def _recenter_content(image: Image.Image, fraction: float) -> Image.Image:
+    """Keep the visible content at ``fraction`` of the canvas, centered.
+
+    Artwork drawn small inside a large transparent canvas would otherwise
+    ship as a tiny launcher icon.
+    """
+    layer = image.convert("RGBA")
+    bounds = layer.getchannel("A").getbbox()
+    if bounds is None:
+        gp.fail("adaptive icon layer is fully transparent")
+
+    scale = image.width * fraction / (bounds[2] - bounds[0])
+    size = (round(layer.width * scale), round(layer.height * scale))
+    layer = layer.resize(size, Image.Resampling.LANCZOS)
+    # Center the visible content, not the transparent canvas of the layer.
+    left = round(image.width / 2 - (bounds[0] + bounds[2]) / 2 * scale)
+    top = round(image.height / 2 - (bounds[1] + bounds[3]) / 2 * scale)
+
+    canvas = Image.new("RGBA", image.size, (0, 0, 0, 0))
+    canvas.paste(layer, (left, top), layer)
+    return canvas
+
+
+def _derive_accents(registry: dict, root: Path) -> None:
+    """Fill the dominant icon color of every registered preset."""
+    for preset in registry["presets"].values():
+        preset["accent"] = gp.derive_accent(preset, root)
+
+
+def _write_android_icons(registry: dict, root: Path) -> None:
+    """Write one launcher icon per preset, addressed by its activity alias."""
+    for preset in registry["presets"].values():
+        _write_android_icon(preset, root)
+
+
+def _write_android_icon(preset: dict, root: Path) -> None:
+    """Resize a preset's icon into every Android density."""
+    icon = preset["icon"]
+    name = f"ic_launcher_{_resource_name(preset['id'])}"
+    sources = {
+        "legacy": root / icon["legacy"],
+        "background": root / icon["adaptive_background"],
+        "foreground": root / icon["foreground"],
+        "monochrome": root / icon["monochrome"],
+    }
+    for key, path in sources.items():
+        if not path.is_file():
+            gp.fail(f"preset {preset['id']!r} has no {key} icon: {path}")
+
+    with Image.open(sources["legacy"]) as image:
+        _write_densities(image, name, MIPMAP_SIZES, "mipmap", root)
+    with Image.open(sources["background"]) as image:
+        _write_densities(
+            image,
+            f"{name}_background",
+            DRAWABLE_SIZES,
+            "drawable",
+            root,
+        )
+    for key in ("foreground", "monochrome"):
+        with Image.open(sources[key]) as image:
+            recentered = _recenter_content(image, ADAPTIVE_CONTENT)
+        _write_densities(
+            recentered,
+            f"{name}_{key}",
+            DRAWABLE_SIZES,
+            "drawable",
+            root,
+        )
+
+    xml = root / ANDROID_RES / "mipmap-anydpi-v26" / f"{name}.xml"
+    xml.parent.mkdir(parents=True, exist_ok=True)
+    xml.write_text(ADAPTIVE_ICON.format(name=name), encoding="utf8")
+
+
+def _write_densities(
+    image: Image.Image,
+    name: str,
+    sizes: tuple[tuple[str, int], ...],
+    kind: str,
+    root: Path,
+) -> None:
+    for density, size in sizes:
+        target = root / ANDROID_RES / f"{kind}-{density}" / f"{name}.png"
+        target.parent.mkdir(parents=True, exist_ok=True)
+        _resize(image, size).save(target, format="PNG")
+
+
+def _resize(image: Image.Image, size: int) -> Image.Image:
+    if image.size == (size, size):
+        return image.copy()
+    return image.resize((size, size), Image.Resampling.LANCZOS)
+
+
+def _resource_name(preset_id: str) -> str:
+    """Android resource names only allow lowercase letters, digits and '_'."""
+    return re.sub(r"[^a-z0-9_]", "_", preset_id)
 
 
 def _rounded_mask(size: int, fraction: float) -> Image.Image:

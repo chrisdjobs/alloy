@@ -7,12 +7,18 @@ Run from the repo root:
 from __future__ import annotations
 
 import sys
+import tempfile
 import unittest
 from pathlib import Path
+
+from PIL import Image
+from PIL import ImageDraw
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 import gradient_preset as gp
+
+ROOT = Path(__file__).resolve().parents[2]
 
 
 def _raw_preset(center_x: float = 0.1, color: str = "#FFB300") -> dict:
@@ -135,6 +141,35 @@ class DeriveGlowTest(unittest.TestCase):
         del raw["home"]
         preset = gp.normalize_preset(raw)
         self.assertEqual(preset["glow"], gp.derive_glow(preset))
+
+
+class DeriveAccentTest(unittest.TestCase):
+    def test_generated_preset_uses_its_first_layer(self):
+        preset = gp.normalize_preset(_raw_preset(color="#19F2A5"))
+        self.assertEqual(gp.derive_accent(preset, ROOT), "#19F2A5")
+
+    def test_hand_made_preset_reads_its_dominant_chromatic_color(self):
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "icon.png"
+            image = Image.new("RGBA", (8, 8), (17, 17, 20, 255))
+            draw = ImageDraw.Draw(image)
+            draw.rectangle((2, 2, 3, 5), fill=(232, 232, 234, 255))
+            draw.rectangle((4, 2, 5, 5), fill=(255, 90, 31, 255))
+            image.save(path)
+
+            raw = _raw_preset()
+            raw["icon"] = {"hand_made": True, "legacy": "icon.png"}
+            preset = gp.normalize_preset(raw)
+            self.assertEqual(gp.derive_accent(preset, Path(directory)), "#FF5A1F")
+
+    def test_the_default_icon_accent_is_its_orange_bar(self):
+        raw = _raw_preset()
+        raw["icon"] = {
+            "hand_made": True,
+            "legacy": "assets/icon/presets/default/icon_legacy_1024.png",
+        }
+        preset = gp.normalize_preset(raw)
+        self.assertEqual(gp.derive_accent(preset, ROOT), "#FF5A1F")
 
 
 if __name__ == "__main__":

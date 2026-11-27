@@ -8,6 +8,12 @@ abstract final class SettingsCodec {
   /// Row holding the accent color as ARGB.
   static const accentArgbKey = 'accent_argb';
 
+  /// Row holding whether the accent follows the icon color.
+  static const accentFromIconKey = 'accent_from_icon';
+
+  /// Row holding the launcher icon preset id.
+  static const appIconIdKey = 'app_icon_id';
+
   /// Row holding the [AppIconPack] name.
   static const iconPackKey = 'icon_pack';
 
@@ -24,12 +30,14 @@ abstract final class SettingsCodec {
   static AppSettings decode(Map<String, String> entries) {
     return AppSettings(
       accentArgb: int.tryParse(entries[accentArgbKey] ?? ''),
+      accentFromIcon: entries[accentFromIconKey] == 'true',
+      appIconId: _decodeText(entries[appIconIdKey]) ?? 'default',
       iconPack:
           _decodeEnum(entries[iconPackKey], AppIconPack.values) ??
           AppIconPack.lucide,
       navOrder: _decodeNavOrder(entries[navOrderKey]),
       startTab: _decodeEnum(entries[startTabKey], AppTab.values) ?? AppTab.home,
-      localeCode: _decodeLocale(entries[localeKey]),
+      localeCode: _decodeText(entries[localeKey]),
     );
   }
 
@@ -40,6 +48,8 @@ abstract final class SettingsCodec {
 
     return {
       if (accent != null) accentArgbKey: '$accent',
+      accentFromIconKey: settings.accentFromIcon ? 'true' : 'false',
+      appIconIdKey: settings.appIconId,
       iconPackKey: settings.iconPack.name,
       navOrderKey: settings.navOrder.map((tab) => tab.name).join(','),
       startTabKey: settings.startTab.name,
@@ -60,9 +70,9 @@ abstract final class SettingsCodec {
     return ordered;
   }
 
-  static String? _decodeLocale(String? value) {
-    final locale = value?.trim();
-    return locale == null || locale.isEmpty ? null : locale;
+  static String? _decodeText(String? value) {
+    final text = value?.trim();
+    return text == null || text.isEmpty ? null : text;
   }
 
   static T? _decodeEnum<T extends Enum>(String? value, List<T> values) {

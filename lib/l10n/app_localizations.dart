@@ -153,6 +153,24 @@ abstract class AppLocalizations {
   /// **'Library options'**
   String get libraryOptions;
 
+  /// Tooltip of the library search button
+  ///
+  /// In en, this message translates to:
+  /// **'Search'**
+  String get search;
+
+  /// Hint of the library search field
+  ///
+  /// In en, this message translates to:
+  /// **'Search by title or artist'**
+  String get searchHint;
+
+  /// Empty state of the library search when nothing matches
+  ///
+  /// In en, this message translates to:
+  /// **'No results'**
+  String get noSearchResults;
+
   /// Section label above the sort chips of the library sheet
   ///
   /// In en, this message translates to:
@@ -224,6 +242,42 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Icons'**
   String get iconsSection;
+
+  /// Section of the general settings that picks the launcher icon
+  ///
+  /// In en, this message translates to:
+  /// **'App icon'**
+  String get appIconSection;
+
+  /// Note under the app icon picker about when the launcher refreshes
+  ///
+  /// In en, this message translates to:
+  /// **'The new icon is applied when you leave Alloy.'**
+  String get appIconHint;
+
+  /// Name of the default four-bar app icon
+  ///
+  /// In en, this message translates to:
+  /// **'Default'**
+  String get iconNameDefault;
+
+  /// Name of the cpunk gradient app icon
+  ///
+  /// In en, this message translates to:
+  /// **'cpunk'**
+  String get iconNameCpunk;
+
+  /// Toggle that makes the accent follow the app icon's dominant color
+  ///
+  /// In en, this message translates to:
+  /// **'Icon Color'**
+  String get accentFromIcon;
+
+  /// Explanation under the colour-of-your-icon toggle
+  ///
+  /// In en, this message translates to:
+  /// **'The accent takes your app icon\'s colour and changes with it.'**
+  String get accentFromIconSubtitle;
 
   /// Subtitle of the appearance row; names the active icon pack
   ///

@@ -4,6 +4,7 @@ import 'package:alloy/app/router.dart';
 import 'package:alloy/app/theme.dart';
 import 'package:alloy/core/artwork/artwork_providers.dart';
 import 'package:alloy/core/logger.dart';
+import 'package:alloy/core/platform/app_icon_switcher.dart';
 import 'package:alloy/core/platform/audio_permission.dart';
 import 'package:alloy/core/platform/dart_io_artwork_store.dart';
 import 'package:alloy/core/platform/dart_io_folder_store.dart';
@@ -31,6 +32,8 @@ import 'package:alloy/features/settings/data/drift_settings_repository.dart';
 import 'package:alloy/features/settings/domain/app_settings.dart';
 import 'package:alloy/features/settings/presentation/settings_notifier.dart';
 import 'package:alloy/l10n/app_localizations.dart';
+import 'package:alloy/shared/design/gradient_presets.dart';
+import 'package:alloy/shared/design/gradient_presets_provider.dart';
 import 'package:alloy/shared/design/tokens.dart';
 import 'package:alloy/shared/design/visual_theme.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -44,6 +47,9 @@ Future<void> bootstrap() async {
   JustAudioMediaKit.ensureInitialized();
 
   const platform = DartIoPlatformInfo();
+  final appIconSwitcher = platform.isAndroid || platform.isLinux
+      ? const MethodChannelAppIconSwitcher()
+      : const NoopAppIconSwitcher();
   final database = AppDatabase();
   final source = LocalMusicSource(
     database: database,
@@ -100,6 +106,12 @@ Future<void> bootstrap() async {
           });
           return settingsRepository;
         }),
+        appIconSwitcherProvider.overrideWithValue(appIconSwitcher),
+        activeGradientPresetProvider.overrideWith((ref) {
+          final settings = ref.watch(settingsProvider);
+          return AppGradientPresets.byId(settings.appIconId) ??
+              AppGradientPresets.active;
+        }),
         routerProvider.overrideWithValue(
           createAppRouter(
             initialLocation: _initialLocation(
@@ -111,6 +123,20 @@ Future<void> bootstrap() async {
       child: const AlloyApp(),
     ),
   );
+
+  if (platform.isAndroid || platform.isLinux) {
+    unawaited(
+      _syncAppIcon(appIconSwitcher, settingsRepository.current.appIconId),
+    );
+  }
+}
+
+/// Applies the saved launcher icon after a restore or a fresh install.
+Future<void> _syncAppIcon(AppIconSwitcher switcher, String id) async {
+  final applied = await switcher.setIcon(id);
+  if (!applied) {
+    Logger.warning('Could not apply the saved app icon $id');
+  }
 }
 
 /// Route the app opens on for [tab].
@@ -167,14 +193,19 @@ class AlloyApp extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final settings = ref.watch(settingsProvider);
+    final preset = ref.watch(activeGradientPresetProvider);
     final accentArgb = settings.accentArgb;
     final localeCode = settings.localeCode;
+    final accent = settings.accentFromIcon
+        ? preset.accent
+        : (accentArgb == null ? AppColors.accent : Color(accentArgb));
 
     return MaterialApp.router(
       onGenerateTitle: (context) => AppLocalizations.of(context).appTitle,
       theme: AppTheme.dark(
-        accent: accentArgb == null ? AppColors.accent : Color(accentArgb),
+        accent: accent,
         icons: _iconSet(settings.iconPack),
+        base: preset.base,
       ),
       themeMode: ThemeMode.dark,
       routerConfig: ref.watch(routerProvider),

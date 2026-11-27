@@ -231,6 +231,12 @@ abstract final class AppSizing {
   /// Thickness of the ring around the selected accent swatch.
   static const double accentSwatchRing = 2;
 
+  /// Width and height of one app icon in the general settings.
+  static const double appIconTile = 96;
+
+  /// Thickness of the ring around the selected app icon.
+  static const double appIconRing = 2;
+
   /// Diameter of the identity avatar on the Me screen.
   static const double profileAvatar = 68;
 
@@ -264,4 +270,7 @@ abstract final class AppDurations {
 
   /// Slide of the now-playing screen back down to the mini-player.
   static const Duration playerClose = Duration(milliseconds: 260);
+
+  /// Return of a swiped cover or title to its resting position.
+  static const Duration playerSwipe = Duration(milliseconds: 200);
 }

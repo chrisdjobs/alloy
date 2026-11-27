@@ -39,6 +39,15 @@ class AppLocalizationsEn extends AppLocalizations {
   String get libraryOptions => 'Library options';
 
   @override
+  String get search => 'Search';
+
+  @override
+  String get searchHint => 'Search by title or artist';
+
+  @override
+  String get noSearchResults => 'No results';
+
+  @override
   String get sortBy => 'Sort';
 
   @override
@@ -73,6 +82,25 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get iconsSection => 'Icons';
+
+  @override
+  String get appIconSection => 'App icon';
+
+  @override
+  String get appIconHint => 'The new icon is applied when you leave Alloy.';
+
+  @override
+  String get iconNameDefault => 'Default';
+
+  @override
+  String get iconNameCpunk => 'cpunk';
+
+  @override
+  String get accentFromIcon => 'Icon Color';
+
+  @override
+  String get accentFromIconSubtitle =>
+      'The accent takes your app icon\'s colour and changes with it.';
 
   @override
   String appearanceSummary(String iconPack) {
