@@ -10,9 +10,64 @@
 struct _MyApplication {
   GtkApplication parent_instance;
   char** dart_entrypoint_arguments;
+  GtkWindow* window;
+  FlMethodChannel* app_icon_channel;
 };
 
 G_DEFINE_TYPE(MyApplication, my_application, GTK_TYPE_APPLICATION)
+
+// Path of a preset's legacy icon inside the Flutter asset bundle.
+static gchar* app_icon_path(const gchar* id) {
+  g_autofree gchar* exe_path = g_file_read_link("/proc/self/exe", nullptr);
+  if (exe_path == nullptr) {
+    return nullptr;
+  }
+  g_autofree gchar* exe_dir = g_path_get_dirname(exe_path);
+  return g_build_filename(exe_dir, "data", "flutter_assets", "assets", "icon",
+                          "presets", id, "icon_legacy_1024.png", nullptr);
+}
+
+// Handles the Dart side of the launcher icon channel.
+static void app_icon_method_call_cb(FlMethodChannel* channel,
+                                    FlMethodCall* method_call,
+                                    gpointer user_data) {
+  MyApplication* self = MY_APPLICATION(user_data);
+  g_autoptr(GError) error = nullptr;
+
+  if (g_strcmp0(fl_method_call_get_name(method_call), "setIcon") != 0) {
+    fl_method_call_respond_not_implemented(method_call, &error);
+    return;
+  }
+
+  FlValue* args = fl_method_call_get_args(method_call);
+  FlValue* id_value =
+      args != nullptr ? fl_value_lookup_string(args, "id") : nullptr;
+  if (id_value == nullptr || fl_value_get_type(id_value) != FL_VALUE_TYPE_STRING) {
+    fl_method_call_respond_error(method_call, "invalid", "Missing icon id",
+                                 nullptr, nullptr);
+    return;
+  }
+
+  const gchar* id = fl_value_get_string(id_value);
+  for (const gchar* cursor = id; *cursor != '\0'; cursor++) {
+    if (!g_ascii_isalnum(*cursor) && *cursor != '-' && *cursor != '_') {
+      fl_method_call_respond_error(method_call, "invalid", "Invalid icon id",
+                                   nullptr, nullptr);
+      return;
+    }
+  }
+
+  g_autofree gchar* icon_path = app_icon_path(id);
+  if (icon_path == nullptr ||
+      !gtk_window_set_icon_from_file(self->window, icon_path, &error)) {
+    fl_method_call_respond_error(
+        method_call, "icon",
+        error != nullptr ? error->message : "Could not load the icon", nullptr,
+        nullptr);
+    return;
+  }
+  fl_method_call_respond_success(method_call, nullptr, nullptr);
+}
 
 // Called when first Flutter frame received.
 static void first_frame_cb(MyApplication* self, FlView* view) {
@@ -24,6 +79,7 @@ static void my_application_activate(GApplication* application) {
   MyApplication* self = MY_APPLICATION(application);
   GtkWindow* window =
       GTK_WINDOW(gtk_application_window_new(GTK_APPLICATION(application)));
+  self->window = window;
 
   // Use a header bar when running in GNOME as this is the common style used
   // by applications and is the setup most users will be using (e.g. Ubuntu
@@ -56,12 +112,8 @@ static void my_application_activate(GApplication* application) {
 
   // The legacy launcher icon ships as a Flutter asset; resolve it next to the
   // executable so the window manager has an icon even without a .desktop file.
-  g_autofree gchar* exe_path = g_file_read_link("/proc/self/exe", nullptr);
-  if (exe_path != nullptr) {
-    g_autofree gchar* exe_dir = g_path_get_dirname(exe_path);
-    g_autofree gchar* icon_path =
-        g_build_filename(exe_dir, "data", "flutter_assets", "assets", "icon",
-                         "icon_legacy_1024.png", nullptr);
+  g_autofree gchar* icon_path = app_icon_path("default");
+  if (icon_path != nullptr) {
     gtk_window_set_icon_from_file(window, icon_path, nullptr);
   }
 
@@ -85,6 +137,16 @@ static void my_application_activate(GApplication* application) {
   gtk_widget_realize(GTK_WIDGET(view));
 
   fl_register_plugins(FL_PLUGIN_REGISTRY(view));
+
+  // Lets the Dart side switch the window icon to the selected preset.
+  FlBinaryMessenger* messenger =
+      fl_engine_get_binary_messenger(fl_view_get_engine(view));
+  g_autoptr(FlStandardMethodCodec) codec = fl_standard_method_codec_new();
+  self->app_icon_channel = fl_method_channel_new(
+      messenger, "com.dynamjobs.alloy/app_icon", FL_METHOD_CODEC(codec));
+  fl_method_channel_set_method_call_handler(self->app_icon_channel,
+                                            app_icon_method_call_cb, self,
+                                            nullptr);
 
   gtk_widget_grab_focus(GTK_WIDGET(view));
 }
@@ -132,6 +194,8 @@ static void my_application_shutdown(GApplication* application) {
 static void my_application_dispose(GObject* object) {
   MyApplication* self = MY_APPLICATION(object);
   g_clear_pointer(&self->dart_entrypoint_arguments, g_strfreev);
+  self->window = nullptr;
+  g_clear_object(&self->app_icon_channel);
   G_OBJECT_CLASS(my_application_parent_class)->dispose(object);
 }
 
