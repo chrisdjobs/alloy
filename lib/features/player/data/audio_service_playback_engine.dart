@@ -108,6 +108,7 @@ base class AudioServicePlaybackEngine implements PlaybackEngine {
       },
       queueIndex: index,
       queueLength: _queue.isEmpty ? null : _queue.length,
+      queue: _queue,
       duration: _player.duration ?? track?.duration,
       track: track,
     );

@@ -38,6 +38,7 @@ abstract class PlaybackState with _$PlaybackState {
     @Default(RepeatMode.off) RepeatMode repeatMode,
     int? queueIndex,
     int? queueLength,
+    @Default(<Track>[]) List<Track> queue,
     Duration? duration,
     Track? track,
   }) = _PlaybackState;

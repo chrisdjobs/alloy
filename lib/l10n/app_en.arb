@@ -264,6 +264,10 @@
   "@queue": {
     "description": "Now-playing action that opens the playback queue"
   },
+  "queueEmpty": "The queue is empty",
+  "@queueEmpty": {
+    "description": "Empty state of the playback queue sheet"
+  },
   "previous": "Previous",
   "@previous": {
     "description": "Playback action that goes back to the previous track"

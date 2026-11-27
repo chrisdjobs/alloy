@@ -214,6 +214,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get queue => 'Queue';
 
   @override
+  String get queueEmpty => 'The queue is empty';
+
+  @override
   String get previous => 'Previous';
 
   @override

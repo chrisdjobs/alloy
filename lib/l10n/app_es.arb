@@ -59,6 +59,7 @@
   "close": "Cerrar",
   "share": "Compartir",
   "queue": "Cola",
+  "queueEmpty": "La cola está vacía",
   "previous": "Anterior",
   "stopPlayback": "Detener la reproducción",
   "moreOptions": "Más opciones",

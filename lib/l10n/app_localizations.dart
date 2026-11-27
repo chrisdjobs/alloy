@@ -453,6 +453,12 @@ abstract class AppLocalizations {
   /// **'Queue'**
   String get queue;
 
+  /// Empty state of the playback queue sheet
+  ///
+  /// In en, this message translates to:
+  /// **'The queue is empty'**
+  String get queueEmpty;
+
   /// Playback action that goes back to the previous track
   ///
   /// In en, this message translates to:
