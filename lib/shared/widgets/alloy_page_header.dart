@@ -12,6 +12,7 @@ class AlloyPageHeader extends StatelessWidget {
     required this.title,
     this.actions = const [],
     this.leading,
+    this.center,
     super.key,
   });
 
@@ -23,6 +24,9 @@ class AlloyPageHeader extends StatelessWidget {
 
   /// Optional widget before the title.
   final Widget? leading;
+
+  /// Optional widget that replaces the title, such as a search field.
+  final Widget? center;
 
   @override
   Widget build(BuildContext context) {
@@ -37,12 +41,14 @@ class AlloyPageHeader extends StatelessWidget {
         children: [
           ?leading,
           Expanded(
-            child: Text(
-              title,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              style: AppTextStyles.headline,
-            ),
+            child:
+                center ??
+                Text(
+                  title,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: AppTextStyles.headline,
+                ),
           ),
           ...actions,
         ],
