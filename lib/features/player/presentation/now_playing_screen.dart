@@ -9,9 +9,9 @@ import 'package:alloy/features/player/domain/playback_state.dart';
 import 'package:alloy/features/player/presentation/player_notifier.dart';
 import 'package:alloy/features/player/presentation/player_panel_provider.dart';
 import 'package:alloy/features/player/presentation/widgets/cover_gradient.dart';
+import 'package:alloy/features/player/presentation/widgets/lyrics_body.dart';
 import 'package:alloy/features/player/presentation/widgets/now_playing_actions.dart';
 import 'package:alloy/features/player/presentation/widgets/queue_sheet.dart';
-import 'package:alloy/features/player/presentation/widgets/lyrics_body.dart';
 import 'package:alloy/l10n/app_localizations.dart';
 import 'package:alloy/shared/design/text_styles.dart';
 import 'package:alloy/shared/design/tokens.dart';
@@ -65,6 +65,9 @@ class _NowPlayingPanelState extends ConsumerState<NowPlayingPanel>
   var _dragStartX = 0.0;
   var _dragDeltaX = 0.0;
 
+  /// Whether the panel shows the lyrics instead of the cover and title.
+  var _showLyrics = false;
+
   /// Horizontal offset of the cover while it follows the finger.
   late final AnimationController _coverShift;
 
@@ -114,6 +117,9 @@ class _NowPlayingPanelState extends ConsumerState<NowPlayingPanel>
     );
   }
 
+  /// Swaps the cover and title for the lyrics of the loaded track.
+  void _toggleLyrics() => setState(() => _showLyrics = !_showLyrics);
+
   @override
   Widget build(BuildContext context) {
     final state = ref.watch(playerProvider).value;
@@ -149,23 +155,24 @@ class _NowPlayingPanelState extends ConsumerState<NowPlayingPanel>
             fit: StackFit.expand,
             children: [
               CoverGradient(artworkRef: track?.artworkRef),
-              Positioned(
-                left: coverLeft,
-                top: coverTop,
-                width: coverSize,
-                height: coverSize,
-                child: AnimatedBuilder(
-                  animation: _coverShift,
-                  builder: (context, child) => Transform.translate(
-                    offset: Offset(_coverShift.value, 0),
-                    child: child,
-                  ),
-                  child: _PanelCover(
-                    artworkRef: track?.artworkRef,
-                    size: coverSize,
+              if (!_showLyrics)
+                Positioned(
+                  left: coverLeft,
+                  top: coverTop,
+                  width: coverSize,
+                  height: coverSize,
+                  child: AnimatedBuilder(
+                    animation: _coverShift,
+                    builder: (context, child) => Transform.translate(
+                      offset: Offset(_coverShift.value, 0),
+                      child: child,
+                    ),
+                    child: _PanelCover(
+                      artworkRef: track?.artworkRef,
+                      size: coverSize,
+                    ),
                   ),
                 ),
-              ),
               Padding(
                 padding: EdgeInsets.only(top: safeTop),
                 child: _PanelContent(
@@ -173,6 +180,8 @@ class _NowPlayingPanelState extends ConsumerState<NowPlayingPanel>
                   track: track,
                   contentTop: contentTop,
                   bottomInset: safeBottom,
+                  showLyrics: _showLyrics,
+                  onToggleLyrics: _toggleLyrics,
                 ),
               ),
             ],
@@ -223,35 +232,33 @@ class _PanelCover extends ConsumerWidget {
   }
 }
 
-/// Header, body and overflow menu of the expanded panel.
-class _PanelContent extends ConsumerStatefulWidget {
+/// Header, body and actions of the expanded panel.
+///
+/// The lyrics replace everything above the seek bar; the transport stays put.
+class _PanelContent extends ConsumerWidget {
   const new({
     required this.state,
     required this.track,
     required this.contentTop,
     required this.bottomInset,
-    super.key,
+    required this.showLyrics,
+    required this.onToggleLyrics,
   });
 
   final PlaybackState? state;
   final Track? track;
   final double contentTop;
   final double bottomInset;
+  final bool showLyrics;
+  final VoidCallback onToggleLyrics;
 
   @override
-  ConsumerState<_PanelContent> createState() => _PanelContentState();
-}
-
-class _PanelContentState extends ConsumerState<_PanelContent> {
-  var _showLyrics = false;
-
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context);
+    final loadedState = state;
+    final loadedTrack = track;
 
     void close() => ref.read(playerPanelProvider).collapse();
-
-    void toggleLyrics() => setState(() => _showLyrics = !_showLyrics);
 
     return Center(
       child: ConstrainedBox(
@@ -264,7 +271,7 @@ class _PanelContentState extends ConsumerState<_PanelContent> {
             AppSpacing.xl,
             0,
             AppSpacing.xl,
-            AppSpacing.sm + widget.bottomInset,
+            AppSpacing.sm + bottomInset,
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -272,29 +279,56 @@ class _PanelContentState extends ConsumerState<_PanelContent> {
               SizedBox(
                 height: _headerHeight,
                 child: _Header(
-                  title: widget.track?.album ?? l10n.nowPlaying,
+                  title: loadedTrack?.album ?? l10n.nowPlaying,
                   onClose: close,
                 ),
               ),
               Expanded(
-                child: SingleChildScrollView(
-                  child: Padding(
-                    padding: EdgeInsets.only(top: widget.contentTop),
-                    child: widget.track == null || widget.state == null
-                        ? const SizedBox.shrink()
-                        : _showLyrics
-                        ? LyricsBody(track: widget.track!)
-                        : _PlayerBody(
-                            state: widget.state!,
-                            track: widget.track!,
-                          ),
-                  ),
-                ),
+                child: loadedState == null || loadedTrack == null
+                    ? const SizedBox.shrink()
+                    : SingleChildScrollView(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            // The skeleton (cover span + track info) sizes the
+                            // area above the seek bar. The lyrics fill it, so
+                            // the transport below never moves.
+                            Stack(
+                              children: [
+                                Column(
+                                  crossAxisAlignment:
+                                      CrossAxisAlignment.stretch,
+                                  children: [
+                                    SizedBox(height: contentTop),
+                                    Visibility(
+                                      visible: !showLyrics,
+                                      maintainSize: true,
+                                      maintainAnimation: true,
+                                      maintainState: true,
+                                      child: _TrackInfo(track: loadedTrack),
+                                    ),
+                                  ],
+                                ),
+                                if (showLyrics)
+                                  Positioned.fill(
+                                    child: LyricsBody(track: loadedTrack),
+                                  ),
+                              ],
+                            ),
+                            const SizedBox(height: AppSpacing.md),
+                            _PlayerTransport(
+                              state: loadedState,
+                              track: loadedTrack,
+                            ),
+                          ],
+                        ),
+                      ),
               ),
-              if (widget.track != null) ...[
+              if (loadedTrack != null) ...[
                 const SizedBox(height: AppSpacing.sm),
                 NowPlayingActions(
-                  onLyrics: toggleLyrics,
+                  lyricsSelected: showLyrics,
+                  onLyrics: onToggleLyrics,
                   onQueue: () => unawaited(showQueueSheet(context)),
                   onStop: () =>
                       unawaited(ref.read(playerProvider.notifier).stop()),
@@ -308,7 +342,48 @@ class _PanelContentState extends ConsumerState<_PanelContent> {
   }
 }
 
-class _PlayerBody extends ConsumerWidget {
+/// Title and artist of the loaded track.
+class _TrackInfo extends StatelessWidget {
+  const new({required this.track});
+
+  final Track track;
+
+  @override
+  Widget build(BuildContext context) {
+    return Align(
+      alignment: Alignment.centerLeft,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(
+            track.title,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: AppTextStyles.playerTitle.copyWith(
+              color: AppColors.textPrimary,
+            ),
+          ),
+          if (track.artist != null)
+            Text(
+              track.artist!,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: AppTextStyles.body.copyWith(
+                color: AppColors.textSecondary,
+              ),
+            ),
+        ],
+      ),
+    );
+  }
+}
+
+/// Seek bar, technical line and playback controls of the loaded track.
+///
+/// Shared by the default body and the lyrics view, so the transport never
+/// moves when the lyrics replace the cover and the title.
+class _PlayerTransport extends ConsumerWidget {
   const new({required this.state, required this.track});
 
   final PlaybackState state;
@@ -323,33 +398,6 @@ class _PlayerBody extends ConsumerWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        Align(
-          alignment: Alignment.centerLeft,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(
-                track.title,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: AppTextStyles.playerTitle.copyWith(
-                  color: AppColors.textPrimary,
-                ),
-              ),
-              if (track.artist != null)
-                Text(
-                  track.artist!,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: AppTextStyles.body.copyWith(
-                    color: AppColors.textSecondary,
-                  ),
-                ),
-            ],
-          ),
-        ),
-        const SizedBox(height: AppSpacing.md),
         SeekBar(
           position: state.position,
           duration: state.duration,

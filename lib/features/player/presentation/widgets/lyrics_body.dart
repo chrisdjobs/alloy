@@ -6,6 +6,9 @@ import 'package:alloy/shared/design/tokens.dart';
 import 'package:alloy/shared/design/visual_theme.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:material_ui/material_ui.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
+
+part 'lyrics_body.g.dart';
 
 /// Body that shows the lyrics of the current track.
 class LyricsBody extends ConsumerWidget {
@@ -18,7 +21,7 @@ class LyricsBody extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context);
-    final lyricsAsync = ref.watch(_lyricsFutureProvider(track));
+    final lyricsAsync = ref.watch(trackLyricsProvider(track));
 
     return switch (lyricsAsync) {
       AsyncData(:final value) =>
@@ -31,14 +34,13 @@ class LyricsBody extends ConsumerWidget {
   }
 }
 
-/// Future provider that fetches lyrics for a track.
-final _lyricsFutureProvider = FutureProvider.autoDispose.family<String?, Track>(
-  (ref, track) async {
-    final provider = ref.read(lyricsProvider);
-    final result = await provider.lyricsFor(track);
-    return result.valueOrNull;
-  },
-);
+/// Lyrics stored for [track], or `null` when the track has none.
+@riverpod
+Future<String?> trackLyrics(Ref ref, Track track) async {
+  final provider = ref.read(lyricsProvider);
+  final result = await provider.lyricsFor(track);
+  return result.valueOrNull;
+}
 
 class _LyricsContent extends StatelessWidget {
   const new({required this.lyrics});
@@ -52,10 +54,7 @@ class _LyricsContent extends StatelessWidget {
     final lines = isSynced ? _parseLrc(lyrics) : lyrics.split('\n');
 
     return SingleChildScrollView(
-      padding: const EdgeInsets.symmetric(
-        horizontal: AppSpacing.xl,
-        vertical: AppSpacing.lg,
-      ),
+      padding: const EdgeInsets.symmetric(vertical: AppSpacing.lg),
       child: Text(
         lines.join('\n'),
         style: AppTextStyles.body.copyWith(

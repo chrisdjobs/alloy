@@ -6,12 +6,13 @@ import 'package:material_ui/material_ui.dart';
 
 /// Bottom action row of the now-playing screen.
 ///
-/// Actions that are not built yet are drawn disabled, so the row keeps the
-/// same shape as the design while missing features stay unreachable.
+/// Actions without a callback are drawn disabled, so the row keeps the same
+/// shape as the design while missing features stay unreachable.
 class NowPlayingActions extends StatelessWidget {
   /// Creates the row.
   const new({
     required this.onStop,
+    this.lyricsSelected = false,
     this.onShare,
     this.onLyrics,
     this.onQueue,
@@ -21,10 +22,13 @@ class NowPlayingActions extends StatelessWidget {
   /// Shares the current track; disabled while sharing is not built.
   final VoidCallback? onShare;
 
-  /// Shows the lyrics of the current track; disabled until the lyrics slice.
+  /// Toggles the lyrics view of the current track.
   final VoidCallback? onLyrics;
 
-  /// Opens the playback queue; disabled until the queue sheet exists.
+  /// Whether the lyrics view is open.
+  final bool lyricsSelected;
+
+  /// Opens the playback queue.
   final VoidCallback? onQueue;
 
   /// Stops playback from the overflow menu.
@@ -45,6 +49,7 @@ class NowPlayingActions extends StatelessWidget {
           icon: context.icons.lyrics,
           tooltip: l10n.lyrics,
           onPressed: onLyrics,
+          selected: lyricsSelected,
         ),
         _Action(
           icon: context.icons.queue,
@@ -70,11 +75,13 @@ class _Action extends StatelessWidget {
     required this.icon,
     required this.tooltip,
     required this.onPressed,
+    this.selected = false,
   });
 
   final IconData icon;
   final String tooltip;
   final VoidCallback? onPressed;
+  final bool selected;
 
   @override
   Widget build(BuildContext context) {
@@ -85,8 +92,28 @@ class _Action extends StatelessWidget {
           tooltip: tooltip,
           icon: Icon(icon),
           iconSize: AppSpacing.xl,
-          color: AppColors.textSecondary,
-          disabledColor: AppColors.textMuted,
+          isSelected: selected ? true : null,
+          style: ButtonStyle(
+            foregroundColor: WidgetStateProperty.resolveWith((states) {
+              if (states.contains(WidgetState.disabled)) {
+                return AppColors.textMuted;
+              }
+              if (states.contains(WidgetState.selected)) {
+                return AppColors.accent;
+              }
+              return AppColors.textSecondary;
+            }),
+            backgroundColor: WidgetStateProperty.resolveWith((states) {
+              return states.contains(WidgetState.selected)
+                  ? AppColors.surfaceHigh
+                  : Colors.transparent;
+            }),
+            shape: const WidgetStatePropertyAll(
+              RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(AppRadii.sm)),
+              ),
+            ),
+          ),
         ),
       ),
     );
