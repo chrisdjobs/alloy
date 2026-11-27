@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:alloy/core/logger.dart';
 import 'package:alloy/core/result.dart';
 import 'package:alloy/features/library/domain/library_repository.dart';
-import 'package:alloy/features/library/domain/lyrics_provider.dart';
 import 'package:alloy/features/library/domain/music_source.dart';
 import 'package:alloy/features/library/domain/track.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -30,13 +29,6 @@ enum LibraryTab {
 final libraryRepositoryProvider = Provider<LibraryRepository>((ref) {
   throw UnimplementedError(
     'libraryRepositoryProvider must be overridden during bootstrap',
-  );
-});
-
-/// Lyrics provider; bootstrap overrides it with the local database one.
-final lyricsProvider = Provider<LyricsProvider>((ref) {
-  throw UnimplementedError(
-    'lyricsProvider must be overridden during bootstrap',
   );
 });
 
