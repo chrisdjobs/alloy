@@ -22,11 +22,13 @@ final class AppIconSet {
     required this.error,
     required this.shuffle,
     required this.refresh,
+    required this.search,
     required this.collapse,
     required this.repeat,
     required this.repeatOne,
     required this.stop,
     required this.more,
+    required this.close,
     required this.recent,
     required this.mixes,
     required this.favorite,
@@ -83,6 +85,9 @@ final class AppIconSet {
   /// Rescan the library.
   final IconData refresh;
 
+  /// Search the library.
+  final IconData search;
+
   /// Collapse the now-playing screen.
   final IconData collapse;
 
@@ -97,6 +102,9 @@ final class AppIconSet {
 
   /// Overflow menu.
   final IconData more;
+
+  /// Clears or closes a temporary UI, such as the library search.
+  final IconData close;
 
   /// Recently added shortcut.
   final IconData recent;
@@ -182,6 +190,9 @@ abstract final class AppIcons {
   /// Rescan the library (Lucide).
   static const IconData refresh = LucideIcons.refreshCw;
 
+  /// Search the library (Lucide).
+  static const IconData search = LucideIcons.search;
+
   /// Collapse the now-playing screen (Lucide).
   static const IconData collapse = LucideIcons.chevronDown;
 
@@ -196,6 +207,9 @@ abstract final class AppIcons {
 
   /// Overflow menu (Lucide).
   static const IconData more = LucideIcons.ellipsisVertical;
+
+  /// Clears or closes a temporary UI (Lucide).
+  static const IconData close = LucideIcons.x;
 
   /// Recently added shortcut (Lucide).
   static const IconData recent = LucideIcons.clock;
@@ -249,11 +263,13 @@ abstract final class AppIcons {
     error: AppIcons.error,
     shuffle: AppIcons.shuffle,
     refresh: AppIcons.refresh,
+    search: AppIcons.search,
     collapse: AppIcons.collapse,
     repeat: AppIcons.repeat,
     repeatOne: AppIcons.repeatOne,
     stop: AppIcons.stop,
     more: AppIcons.more,
+    close: AppIcons.close,
     recent: AppIcons.recent,
     mixes: AppIcons.mixes,
     favorite: AppIcons.favorite,
@@ -284,11 +300,13 @@ abstract final class AppIcons {
     error: Icons.error_outline_rounded,
     shuffle: Icons.shuffle_rounded,
     refresh: Icons.refresh_rounded,
+    search: Icons.search_rounded,
     collapse: Icons.keyboard_arrow_down_rounded,
     repeat: Icons.repeat_rounded,
     repeatOne: Icons.repeat_one_rounded,
     stop: Icons.stop_rounded,
     more: Icons.more_vert_rounded,
+    close: Icons.close_rounded,
     recent: Icons.schedule_rounded,
     mixes: Icons.layers_outlined,
     favorite: Icons.favorite_border_rounded,
