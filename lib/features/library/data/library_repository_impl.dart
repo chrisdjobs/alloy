@@ -5,6 +5,8 @@ import 'package:alloy/core/platform/audio_permission.dart';
 import 'package:alloy/core/platform/folder_picker.dart';
 import 'package:alloy/core/platform/folder_store.dart';
 import 'package:alloy/core/result.dart';
+import 'package:alloy/features/library/domain/album.dart';
+import 'package:alloy/features/library/domain/artist.dart';
 import 'package:alloy/features/library/domain/library_repository.dart';
 import 'package:alloy/features/library/domain/music_source.dart';
 import 'package:alloy/features/library/domain/track.dart';
@@ -37,6 +39,12 @@ final class LibraryRepositoryImpl implements LibraryRepository {
 
   @override
   Stream<List<Track>> tracksStream() => source.listTracks();
+
+  @override
+  Stream<List<Artist>> artistsStream() => tracksStream().map(artistsFromTracks);
+
+  @override
+  Stream<List<Album>> albumsStream() => tracksStream().map(albumsFromTracks);
 
   @override
   Stream<ScanProgress> get scanProgress => _scanProgress.stream;

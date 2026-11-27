@@ -1,4 +1,6 @@
 import 'package:alloy/core/result.dart';
+import 'package:alloy/features/library/domain/album.dart';
+import 'package:alloy/features/library/domain/artist.dart';
 import 'package:alloy/features/library/domain/music_source.dart';
 import 'package:alloy/features/library/domain/track.dart';
 
@@ -9,6 +11,12 @@ import 'package:alloy/features/library/domain/track.dart';
 abstract interface class LibraryRepository {
   /// Emits the stored tracks on subscribe and after every change.
   Stream<List<Track>> tracksStream();
+
+  /// Emits the distinct artists of the stored tracks, sorted by name.
+  Stream<List<Artist>> artistsStream();
+
+  /// Emits the distinct albums of the stored tracks, sorted by title.
+  Stream<List<Album>> albumsStream();
 
   /// Emits scan progress for the whole session.
   Stream<ScanProgress> get scanProgress;

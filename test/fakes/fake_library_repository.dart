@@ -1,6 +1,8 @@
 import 'dart:async';
 
 import 'package:alloy/core/result.dart';
+import 'package:alloy/features/library/domain/album.dart';
+import 'package:alloy/features/library/domain/artist.dart';
 import 'package:alloy/features/library/domain/library_repository.dart';
 import 'package:alloy/features/library/domain/music_source.dart';
 import 'package:alloy/features/library/domain/track.dart';
@@ -43,6 +45,12 @@ final class FakeLibraryRepository implements LibraryRepository {
     if (!neverEmits) yield tracks;
     yield* _tracks.stream;
   }
+
+  @override
+  Stream<List<Artist>> artistsStream() => tracksStream().map(artistsFromTracks);
+
+  @override
+  Stream<List<Album>> albumsStream() => tracksStream().map(albumsFromTracks);
 
   @override
   Stream<ScanProgress> get scanProgress => _progress.stream;
